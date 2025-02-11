@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import type { Tag } from '@/types/types';
 import { getAllTags } from '@/lib/fetchData';
+import { generateSlug } from '@/lib/helpers';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import DateField from '@/components/DateField';
@@ -29,14 +30,6 @@ export default function New() {
       .then(setTags)
       .catch(() => setTags([]));
   }, []);
-
-  // Function to generate a slug from the title
-  const generateSlug = (text: string) => 
-    text
-      .toLowerCase()
-      .replace(/[^a-z0-9 ]/g, '') // Remove non-alphanumeric characters
-      .trim()
-      .replace(/\s+/g, '-'); // Replace spaces with hyphens
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
