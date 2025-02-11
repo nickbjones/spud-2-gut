@@ -1,11 +1,24 @@
 /**
  * Recipes page
  */
+'use client';
+
+import { useEffect, useState } from 'react';
 import type { Recipe } from '@/types/types';
-import { recipes } from '@/lib/mock';
+import { getAllRecipes } from '@/lib/fetchData';
 import Link from 'next/link';
 
 export default function Recipes() {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+
+  useEffect(() => {
+    getAllRecipes()
+      .then(setRecipes)
+      .catch(() => setRecipes([]));
+  }, []);
+
+  // TODO: add loading state
+
   return (
     <div>
       <Link href="/recipes/new" className="float-right px-3 py-2 text-white rounded-md transition bg-blue-500 hover:bg-blue-400">+ New Recipe</Link>

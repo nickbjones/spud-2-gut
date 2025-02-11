@@ -1,33 +1,37 @@
 /**
  * Recipe page
  */
-import type { Recipe } from '@/types/types';
-import { recipes } from '@/lib/mock';
-import { notFound } from 'next/navigation';
+'use client';
+
+import { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
+import type { Recipe } from '@/types/types';
+import { getOneRecipe } from '@/lib/fetchData';
+import { useParams, notFound } from 'next/navigation';
 import Tag from '@/components/Tag';
 
-// async function getRecipe(uid: string) {
-function getRecipe(uid: string) {
-  // const res = await fetch(`https://example.com/api/blog/${uid}`, { cache: 'no-store' });
-  // if (!res.ok) return null;
-  // return res.json();
-  const recipe: Recipe | undefined = recipes.find((p) => p.uid === uid);
-  console.log(recipe);
-  if (!recipe) return null;
-  return recipe;
-}
+export default function Recipe() {
+  const params = useParams();
+  const uid = params.id as string;
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export default async function Recipe({ params }: { params: { id: string } }) {
-  if (!params.id) return notFound();
-  const recipe = getRecipe(params.id);
+  useEffect(() => {
+    if (typeof uid !== 'string') return;
+    getOneRecipe(uid)
+      .then(setRecipe)
+      .catch(() => setRecipe(null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
   if (!recipe) return notFound();
 
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold">{recipe.title}</h1>
       <div className="mt-4">
-        {recipe.tags.map((tag: string) => <Tag tag={tag} />)}
+        {recipe.tags.map((tag: string) => <Tag tag={tag} key={tag} />)}
       </div>
       <div className="mt-4">
         <h2>Description</h2>
