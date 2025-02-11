@@ -1,5 +1,5 @@
 import type { Recipe, Tag } from '@/types/types';
-import { tags, recipes } from '@/lib/mockData';
+import { tags, recipes } from '@/lib/mock';
 import { notFound } from 'next/navigation';
 import Markdown from 'react-markdown';
 import Link from 'next/link';

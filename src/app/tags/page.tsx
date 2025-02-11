@@ -1,5 +1,5 @@
 import type { Tag } from '@/types/types';
-import { tags } from '@/lib/mockData';
+import { tags } from '@/lib/mock';
 import Link from 'next/link';
 
 export default function Tags() {

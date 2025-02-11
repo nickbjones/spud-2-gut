@@ -1,5 +1,5 @@
 import type { Recipe } from '@/types/types';
-import { recipes } from '@/lib/mockData';
+import { recipes } from '@/lib/mock';
 import Link from 'next/link';
 
 export default function Recipes() {
