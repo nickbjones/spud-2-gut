@@ -16,3 +16,15 @@ export type Tag = {
   title: string; // Ex: 'Spicy'
   description: string; // Markdown
 };
+
+type FormData = {
+  id: string;
+  uid: string;
+  title: string;
+  tags: string[];
+  date: string;
+  description: string;
+  ingredients: string;
+  instructions: string;
+  reference: string;
+};

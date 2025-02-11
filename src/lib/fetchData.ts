@@ -88,3 +88,7 @@ export async function getOneTag<T>(uid: string): Promise<Tag | null> {
     throw error;
   }
 }
+
+export async function getRecipeCount<T>(): Promise<string> {
+  return String((await getAllRecipes()).length);
+}

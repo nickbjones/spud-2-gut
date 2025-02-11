@@ -4,9 +4,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { Tag } from '@/types/types';
-import { getAllTags } from '@/lib/fetchData';
+import type { Recipe, Tag } from '@/types/types';
+import { getRecipeCount, getAllTags } from '@/lib/fetchData';
 import { uidRules, generateUid } from '@/lib/helpers';
+import { errorMessages } from '@/lib/errorMessages';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import DateField from '@/components/DateField';
@@ -14,36 +15,32 @@ import TagButtons from '@/components/TagButtons';
 import SubmitButton from '@/components/SubmitButton';
 
 export default function New() {
-  type FormData = {
-    title: string;
-    uid: string;
-    tags: string[];
-    date: string;
-    description: string;
-    ingredients: string;
-    instructions: string;
-    reference: string;
-  };
-
-  const today = new Date().toISOString().split('T')[0];
-
-  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
-
-  const [formData, setFormData] = useState<FormData>({
+  const initialValues = {
+    id: '',
     title: '',
     uid: '',
     tags: [],
-    date: today,
+    date: new Date().toISOString().split('T')[0], // today
     description: '',
     ingredients: '',
     instructions: '',
     reference: '',
-  });
+  };
+
+  const [formData, setFormData] = useState<Recipe>(initialValues);
+  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     getAllTags()
       .then((tags: Tag[]) => setAvailableTags(tags))
-      .catch(() => setAvailableTags([]));
+      .catch(() => {
+        setAvailableTags([]);
+        setErrorMessage(errorMessages.cannotFetchTags);
+      });
+    getRecipeCount()
+      .then((count) => setFormData((prev) => ({ ...prev, id: count })))
+      .catch(() => setErrorMessage(errorMessages.cannotSetIndex));
   }, []);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
@@ -87,6 +84,8 @@ export default function New() {
   return (
     <div>
       <form onSubmit={handleSubmit}>
+        {errorMessage && <p className="mb-3 text-red-500">{errorMessage}</p>}
+        <input type="hidden" id="id" name="id" value={formData.id} />
         <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} />
         <InputField id="uid" name="uid" label="" value={formData.uid} onChange={handleUidChange} />
         <TagButtons id="tags" name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange} />
