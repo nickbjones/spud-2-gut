@@ -6,12 +6,16 @@
 import { useState } from 'react';
 // import type { Recipe } from '@/types/types';
 import InputField from '@/components/InputField';
+import TextAreaField from '@/components/TextAreaField';
+import DateField from '@/components/DateField';
 
 export default function New() {
+  const today = new Date().toISOString().split('T')[0];
+
   const [title, setTitle] = useState('');
   const [uid, setUid] = useState('');
   const [tags, setTags] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(today);
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState('');
   const [instructions, setInstructions] = useState('');
@@ -38,27 +42,33 @@ export default function New() {
 
   const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);
+  };
 
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {};
 
-  const handleIngredientsChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
+  const handleIngredientsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {};
 
-  const handleInstructionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
+  const handleInstructionsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {};
 
   const handleReferenceChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
 
   return (
     <div>
       <form action="">
-        <InputField id="title" label="Title" value={title} onChange={handleTitleChange} />{/* basic text */}
-        <InputField id="uid" label="uid" value={uid} onChange={handleUidChange} />{/* auto-fill with title, hyphen-separated */}
-        <InputField id="tags" label="Tags" value={tags} onChange={handleTagsChange} />{/* pre-select from list of tags or enter new */}
-        <InputField id="date" label="Date" value={date} onChange={handleDateChange} />{/* auto-fill current date; ISO string format (YYYY-MM-DD) */}
-        <InputField id="description" label="Description" value={description} onChange={handleDescriptionChange} />{/* markdown */}
-        <InputField id="ingredients" label="Ingredients" value={ingredients} onChange={handleIngredientsChange} />{/* markdown list */}
-        <InputField id="instructions" label="Instructions" value={instructions} onChange={handleInstructionsChange} />{/* markdown list */}
-        <InputField id="reference" label="Reference" value={reference} onChange={handleReferenceChange} />{/* basic text URL */}
+        <InputField id="title" label="Title" value={title} onChange={handleTitleChange} />
+        <InputField id="uid" label="uid" value={uid} onChange={handleUidChange} />
+
+        <InputField id="tags" label="Tags" value={tags} onChange={handleTagsChange} />{/* pre-select from list of tags */}
+
+        <DateField id="date" label="Date" value={date} onChange={handleDateChange} />{/* auto-fill current date; ISO string format (YYYY-MM-DD) */}
+
+        <TextAreaField id="description" label="Description" value={description} onChange={handleDescriptionChange} />
+        <TextAreaField id="ingredients" label="Ingredients" value={ingredients} onChange={handleIngredientsChange} />
+        <TextAreaField id="instructions" label="Instructions" value={instructions} onChange={handleInstructionsChange} />
+
+        <InputField id="reference" label="Reference" value={reference} onChange={handleReferenceChange} />
       </form>
     </div>
   );
