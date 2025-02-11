@@ -1,3 +1,6 @@
+/**
+ * Recipe page
+ */
 import type { Recipe } from '@/types/types';
 import { recipes } from '@/lib/mock';
 import { notFound } from 'next/navigation';

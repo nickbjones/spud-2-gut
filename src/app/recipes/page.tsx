@@ -1,3 +1,6 @@
+/**
+ * Recipes page
+ */
 import type { Recipe } from '@/types/types';
 import { recipes } from '@/lib/mock';
 import Link from 'next/link';

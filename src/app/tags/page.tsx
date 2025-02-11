@@ -1,3 +1,6 @@
+/**
+ * Tags page
+ */
 import type { Tag } from '@/types/types';
 import { tags } from '@/lib/mock';
 import Link from 'next/link';

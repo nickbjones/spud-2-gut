@@ -1,3 +1,6 @@
+/**
+ * Tag page
+ */
 import type { Recipe, Tag } from '@/types/types';
 import { tags, recipes } from '@/lib/mock';
 import { notFound } from 'next/navigation';
