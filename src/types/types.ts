@@ -16,4 +16,3 @@ export type Tag = {
   title: string; // Ex: 'Spicy'
   description: string; // Markdown
 };
-

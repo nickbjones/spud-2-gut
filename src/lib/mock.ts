@@ -83,6 +83,26 @@ export const recipes: Recipe[] = [
     `,
     reference: '',
   },
+  {
+    id: '5',
+    uid: 'tasty-spinach',
+    date: '2025-02-11',
+    title: 'Tasty Spinach',
+    tags: ['side-dishes', 'healthy'],
+    description: `
+      This is a recipe for some tasty spinach!
+    `,
+    ingredients: `
+      - Spinach
+      - Salt
+    `,
+    instructions: `
+      1. Boil spinach
+      2. Add salt
+      3. Enjoy
+    `,
+    reference: 'http://www.spinach.com',
+  },
 ];
 
 export const tags: Tag[] = [
@@ -114,6 +134,12 @@ export const tags: Tag[] = [
     id: '4',
     uid: 'potatoes',
     title: 'Potatoes',
+    description: ``,
+  },
+  {
+    id: '5',
+    uid: 'healthy',
+    title: 'Healthy',
     description: ``,
   },
 ];

@@ -2,34 +2,34 @@ import type { Tag } from '@/types/types';
 
 type TagButton = {
   id: string;
+  name: string;
   tags: Tag[];
-  selectedTags: Tag[];
-  onChange: (selected: Tag[]) => void;
+  selectedTags: string[];
+  onChange: (tagUid: string) => void;
 };
 
-export default function TagButtons({ id, tags, selectedTags, onChange }: TagButton) {
-  const toggleTag = (tag: Tag) => {
-    const updatedTags = selectedTags.includes(tag)
-      ? selectedTags.filter((t) => t !== tag)
-      : [...selectedTags, tag];
-
-    onChange(updatedTags);
-  };
-
+export default function TagButtons({ id, name, tags, selectedTags, onChange }: TagButton) {
   return (
-    <div>
-      {tags.map((tag) => (
-        <button
-          key={tag.uid}
-          type="button"
-          id={id}
-          className={`px-4 py-2 border rounded ${
-            selectedTags.includes(tag) ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
+    <div className="flex gap-2 my-3">
+      {tags.map(({ uid, title }) => (
+        <label
+          key={uid}
+          className={`cursor-pointer rounded-lg px-4 py-2 border ${
+            selectedTags.includes(uid)
+              ? "bg-blue-500 text-white border-blue-500"
+              : "bg-white text-gray-800 border-gray-300"
           }`}
-          onClick={() => toggleTag(tag)}
         >
-          {tag.title}
-        </button>
+          <input
+            type="checkbox"
+            name="tags"
+            value={uid}
+            checked={selectedTags.includes(uid)}
+            onChange={() => onChange(uid)}
+            className="hidden"
+          />
+          {title}
+        </label>
       ))}
     </div>
   );

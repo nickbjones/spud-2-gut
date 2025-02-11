@@ -9,10 +9,12 @@ export default function Navbar() {
 
   const navItems = [
     { href: '/', label: 'Home' },
-    { href: '/recipes/new', label: 'New Recipe' },
+    { href: '/new-recipe', label: 'New Recipe' },
     { href: '/recipes', label: 'Recipes' },
     { href: '/tags', label: 'Tags' },
   ];
+
+  console.log(rootPath);
 
   return (
     <nav className="p-4 bg-gray-800 text-white flex space-x-4">
