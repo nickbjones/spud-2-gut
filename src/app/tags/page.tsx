@@ -1,4 +1,4 @@
-import type { Tag } from '@/types/tag';
+import type { Tag } from '@/types/types';
 import { tags } from '@/lib/mockData';
 import Link from 'next/link';
 

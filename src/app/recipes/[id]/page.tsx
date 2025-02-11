@@ -1,4 +1,4 @@
-import type { Recipe } from '@/types/recipe';
+import type { Recipe } from '@/types/types';
 import { recipes } from '@/lib/mockData';
 import { notFound } from 'next/navigation';
 import Markdown from 'react-markdown';

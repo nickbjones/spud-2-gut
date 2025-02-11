@@ -1,5 +1,4 @@
-import type { Recipe } from '@/types/recipe';
-import type { Tag } from '@/types/tag';
+import type { Recipe, Tag } from '@/types/types';
 
 export const recipes: Recipe[] = [
   {

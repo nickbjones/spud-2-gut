@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-// import Recipe from '@/types/recipe';
+// import type { Recipe } from '@/types/types';
 import InputField from '@/components/InputField';
 
 export default function New() {

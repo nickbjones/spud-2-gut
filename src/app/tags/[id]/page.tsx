@@ -1,9 +1,7 @@
-import type { Recipe } from '@/types/recipe';
-import type { Tag } from '@/types/tag';
-import { tags } from '@/lib/mockData';
+import type { Recipe, Tag } from '@/types/types';
+import { tags, recipes } from '@/lib/mockData';
 import { notFound } from 'next/navigation';
 import Markdown from 'react-markdown';
-import { recipes } from '@/lib/mockData';
 import Link from 'next/link';
 
 // async function getTag(uid: string) {
