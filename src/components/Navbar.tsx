@@ -14,8 +14,6 @@ export default function Navbar() {
     { href: '/tags', label: 'Tags' },
   ];
 
-  console.log(rootPath);
-
   return (
     <nav className="p-4 bg-gray-800 text-white flex space-x-4">
       {navItems.map(({ href, label }) => (
