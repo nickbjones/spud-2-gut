@@ -4,8 +4,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { Tag } from '@/types/types';
-import { getAllTags } from '@/lib/fetchData';
+import type { Tag } from '@/types/tag';
+import { getAllTags } from '@/lib/api/tags';
 import Link from 'next/link';
 
 export default function Tags() {

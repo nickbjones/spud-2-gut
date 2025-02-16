@@ -5,8 +5,8 @@
 
 import { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
-import type { Recipe } from '@/types/types';
-import { getOneRecipe } from '@/lib/fetchData';
+import type { Recipe } from '@/types/recipe';
+import { getOneRecipe } from '@/lib/api/recipes';
 import { useParams, notFound } from 'next/navigation';
 import Tag from '@/components/Tag';
 

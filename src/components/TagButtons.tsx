@@ -1,4 +1,4 @@
-import type { Tag } from '@/types/types';
+import type { Tag } from '@/types/tag';
 
 type TagButton = {
   id: string;

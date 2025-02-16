@@ -4,8 +4,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { Recipe } from '@/types/types';
-import { getAllRecipes } from '@/lib/fetchData';
+import type { Recipe } from '@/types/recipe';
+import { getAllRecipes } from '@/lib/api/recipes';
 import Link from 'next/link';
 
 export default function Recipes() {

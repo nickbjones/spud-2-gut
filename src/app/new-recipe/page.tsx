@@ -4,10 +4,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { Recipe, Tag } from '@/types/types';
-import { getRecipeCount, getAllTags } from '@/lib/fetchData';
-import { uidRules, generateUid } from '@/lib/helpers';
-import { errorMessages } from '@/lib/errorMessages';
+import type { Recipe } from '@/types/recipe';
+import type { Tag } from '@/types/tag';
+import { getRecipeCount } from '@/lib/api/recipes';
+import { getAllTags } from '@/lib/api/tags';
+import { uidRules, generateUid } from '@/lib/utils/helpers';
+import { errorMessages } from '@/lib/constants/errorMessages';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import DateField from '@/components/DateField';

@@ -5,8 +5,10 @@
 
 import { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
-import type { Recipe, Tag } from '@/types/types';
-import { getOneTag, getAllRecipes } from '@/lib/fetchData';
+import type { Recipe } from '@/types/recipe';
+import type { Tag } from '@/types/tag';
+import { getAllRecipes } from '@/lib/api/recipes';
+import { getOneTag } from '@/lib/api/tags';
 import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 
