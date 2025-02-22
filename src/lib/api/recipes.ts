@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, ScanCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import type { Recipe } from '@/types/recipe';
 import { recipes } from '@/lib/mocks/mock';
 
@@ -87,19 +87,16 @@ const emptyRecipe: Recipe = {
 function formatDynamoDbRecipe(recipesRaw: DynamoDbRecipe[]): Recipe[] {
   return recipesRaw.map((recipe) => {
     try {
-      console.log('formatDynamoDbRecipe:recipe.id');
-      console.log(recipe.id);
-      const parsed = JSON.parse(recipe.id); // Parse the stringified object
       return {
-        id: parsed.id || '',
-        uid: parsed.uid || '',
-        title: parsed.title || parsed.name, // -- FIX
-        tags: Array.isArray(parsed.tags) ? parsed.tags : [],
-        date: parsed.date || '',
-        description: parsed.description || '',
-        ingredients: parsed.ingredients || '',
-        instructions: parsed.instructions || '',
-        reference: parsed.reference || '',
+        id: recipe.id || '',
+        uid: recipe.uid || '',
+        title: recipe.title || recipe.name, // -- FIX
+        tags: Array.isArray(recipe.tags) ? recipe.tags : [],
+        date: recipe.date || '',
+        description: recipe.description || '',
+        ingredients: recipe.ingredients || '',
+        instructions: recipe.instructions || '',
+        reference: recipe.reference || '',
       };
     } catch (error) {
       console.error('Error parsing recipe ID:', recipe.id, error);
@@ -112,15 +109,28 @@ export async function getAllRecipesFromDynamoDb() {
   try {
     const command = new ScanCommand({ TableName: AWS_RECIPES_TABLENAME });
     const response = await docClient.send(command);
-
     if (!response.Items) return [];
 
     const recipesRaw: DynamoDbRecipe[] = response.Items as DynamoDbRecipe[];
-    console.log('getAllRecipesFromDynamoDb:recipesRaw');
-    console.log(recipesRaw);
     return formatDynamoDbRecipe(recipesRaw);
   } catch (error) {
     console.error('Error fetching recipes:', error);
     return [];
   }
 }
+
+export async function createRecipeInDynamoDb(recipe: Recipe) {
+  try {
+    const command = new PutCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+      Item: recipe,
+    });
+
+    await docClient.send(command);
+    return recipe;
+  } catch (error) {
+    console.error('Error saving recipe:', error);
+    throw new Error('Failed to save recipe');
+  }
+}
+

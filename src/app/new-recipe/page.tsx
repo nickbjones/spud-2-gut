@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react';
 import type { Recipe } from '@/types/recipe';
 import type { Tag } from '@/types/tag';
-import { getRecipeCount } from '@/lib/api/recipes';
+import { getRecipeCount, createRecipeInDynamoDb } from '@/lib/api/recipes';
 import { getAllTags } from '@/lib/api/tags';
 import { uidRules, generateUid } from '@/lib/utils/helpers';
 import { errorMessages } from '@/lib/constants/errorMessages';
@@ -34,14 +34,16 @@ export default function New() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    // get list of tags
     getAllTags()
       .then((tags: Tag[]) => setAvailableTags(tags))
       .catch(() => {
         setAvailableTags([]);
         setErrorMessage(errorMessages.cannotFetchTags);
       });
+    // increment id
     getRecipeCount()
-      .then((count) => setFormData((prev) => ({ ...prev, id: count })))
+      .then((count) => setFormData((prev) => ({ ...prev, id: String(Number(count) + 1) })))
       .catch(() => setErrorMessage(errorMessages.cannotSetIndex));
   }, []);
 
@@ -78,9 +80,27 @@ export default function New() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+
+    try {
+      const response = await fetch('/api/recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create recipe');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error creating recipe:', error);
+      return null;
+    }
   };
 
   return (
