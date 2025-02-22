@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getAllRecipesFromDynamoDb, createRecipeInDynamoDb } from '@/lib/api/recipes';
+import { getAllRecipes, createRecipe } from '@/lib/api/recipes';
 
 export async function GET() {
   try {
-    const recipes = await getAllRecipesFromDynamoDb();
+    const recipes = await getAllRecipes();
     return NextResponse.json(recipes, { status: 200 });
   } catch (error) {
     console.error('API Error:', error);
@@ -14,7 +14,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const recipe = await req.json();
-    const newRecipe = await createRecipeInDynamoDb(recipe);
+    const newRecipe = await createRecipe(recipe);
     return NextResponse.json(newRecipe, { status: 201 });
   } catch (error) {
     console.error('API Error:', error);

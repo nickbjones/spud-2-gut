@@ -4,18 +4,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Markdown from 'react-markdown';
 import type { Recipe } from '@/types/recipe';
 import type { Tag } from '@/types/tag';
-import { getAllRecipes } from '@/lib/api/recipes';
-import { getOneTag } from '@/lib/api/tags';
+import Markdown from 'react-markdown';
 import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 
 function getRecipesByTag(recipes: Recipe[], tag: string) {
-  // const filteredRecipes: Recipe[] | undefined = recipes.filter((recipe) => recipe.tags.includes(tag));
-  // if (!filteredRecipes) return null;
-  // return recipes;
   return recipes.filter((recipe) => recipe.tags.includes(tag));
 }
   
@@ -25,24 +20,42 @@ export default function Tag() {
   const [tag, setTag] = useState<Tag | null>(null);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const fetchTag = async () => {
+    try {
+      const res = await fetch(`/api/tags/${uid}`);
+      if (!res.ok) throw new Error('Failed to fetch recipe');
+      const tagData: Tag = await res.json();
+      setTag(tagData);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchRecipes = async () => {
+    try {
+      const res = await fetch('/api/recipes');
+      if (!res.ok) throw new Error('Failed to fetch recipes');
+      const recipeData: Recipe[] = await res.json();
+      setRecipes(recipeData);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!uid) return;
-    getOneTag(uid)
-      .then(setTag)
-      .catch(() => setTag(null))
-      .finally(() => setLoading(false));
-  }, [uid]);
-
-  useEffect(() => {
-    if (!tag) return;
-    getAllRecipes()
-      .then(setRecipes)
-      .catch(() => setRecipes([]));
-  }, [tag]);
+    fetchTag();
+    fetchRecipes();
+  }, []);
 
   if (loading) return <p>Loading...</p>;
   if (!tag) return notFound();
+  if (error) return <p>{error}</p>;
 
   const filteredRecipes = getRecipesByTag(recipes, uid);
 

@@ -1,13 +1,12 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, ScanCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, ScanCommand, PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
 import type { Recipe } from '@/types/recipe';
-import { recipes } from '@/lib/mocks/mock';
+// import { recipes } from '@/lib/mocks/mock';
 
 const client = new DynamoDBClient({ region: process.env.AWS_REGION });
 const docClient = DynamoDBDocumentClient.from(client);
 
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
-
 
 
 // use?
@@ -16,60 +15,6 @@ const GET_ALL_RECIPES_ENDPT = process.env.NEXT_PUBLIC_GET_ALL_RECIPES_ENDPT ?? '
 const GET_ONE_RECIPE_ENDPT = process.env.NEXT_PUBLIC_GET_ONE_RECIPE_ENDPT ?? '';
 
 
-
-/**
- * A
- */
-export async function getAllRecipes<T>(): Promise<Recipe[]> {
-  if (USE_MOCK) {
-    console.log(`Using mock data for ${GET_ALL_RECIPES_ENDPT}`);
-    return Promise.resolve(recipes);
-  }
-
-  try {
-    const response = await fetch(GET_ALL_RECIPES_ENDPT);
-    if (!response.ok) {
-      throw new Error(`API error: ${response.statusText}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error(`Fetch failed for ${GET_ALL_RECIPES_ENDPT}:`, error);
-    throw error;
-  }
-}
-
-export async function getOneRecipe<T>(uid: string): Promise<Recipe | null> {
-  if (USE_MOCK) {
-    console.log(`Using mock data for ${GET_ONE_RECIPE_ENDPT}`);
-    const recipe: Recipe | undefined = recipes.find((p) => p.uid === uid);
-    if (!recipe) return null;
-    return Promise.resolve(recipe);
-  }
-
-  try {
-    // const response = await fetch(`https://example.com/api/blog/${uid}`, { cache: 'no-store' });
-    const response = await fetch(GET_ONE_RECIPE_ENDPT);
-    if (!response.ok) {
-      throw new Error(`API error: ${response.statusText}`);
-    }
-    const recipe: Recipe | undefined = recipes.find((p) => p.uid === uid);
-    if (!recipe) return null;
-    return await response.json();
-  } catch (error) {
-    console.error(`Fetch failed for ${GET_ONE_RECIPE_ENDPT}:`, error);
-    throw error;
-  }
-}
-
-export async function getRecipeCount<T>(): Promise<string> {
-  return String((await getAllRecipes()).length);
-}
-
-
-
-/**
- * B
- */
 type DynamoDbRecipe = Record<string, any>;
 
 const emptyRecipe: Recipe = {
@@ -84,42 +29,121 @@ const emptyRecipe: Recipe = {
   reference: '',
 };
 
-function formatDynamoDbRecipe(recipesRaw: DynamoDbRecipe[]): Recipe[] {
-  return recipesRaw.map((recipe) => {
-    try {
-      return {
-        id: recipe.id || '',
-        uid: recipe.uid || '',
-        title: recipe.title || recipe.name, // -- FIX
-        tags: Array.isArray(recipe.tags) ? recipe.tags : [],
-        date: recipe.date || '',
-        description: recipe.description || '',
-        ingredients: recipe.ingredients || '',
-        instructions: recipe.instructions || '',
-        reference: recipe.reference || '',
-      };
-    } catch (error) {
-      console.error('Error parsing recipe ID:', recipe.id, error);
-      return emptyRecipe;
-    }
+function formatDynamoDbRecipe(recipeRaw: DynamoDbRecipe): Recipe {
+  try {
+    return {
+      id: recipeRaw.id || '',
+      uid: recipeRaw.uid || '',
+      title: recipeRaw.title || recipeRaw.name, // -- FIX
+      tags: Array.isArray(recipeRaw.tags) ? recipeRaw.tags : [],
+      date: recipeRaw.date || '',
+      description: recipeRaw.description || '',
+      ingredients: recipeRaw.ingredients || '',
+      instructions: recipeRaw.instructions || '',
+      reference: recipeRaw.reference || '',
+    };
+  } catch (error) {
+    console.error('Error parsing recipe ID:', recipeRaw.id, error);
+    return emptyRecipe;
+  }
+}
+
+function formatDynamoDbRecipes(recipesRaw: DynamoDbRecipe[]): Recipe[] {
+  return recipesRaw.map((recipeRaw) => {
+    return formatDynamoDbRecipe(recipeRaw);
   });
 }
 
-export async function getAllRecipesFromDynamoDb() {
+
+
+/**
+ * A
+ */
+export async function getAllRecipes() {
+  console.log('getAllRecipes');
   try {
-    const command = new ScanCommand({ TableName: AWS_RECIPES_TABLENAME });
+    const command = new ScanCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+    });
     const response = await docClient.send(command);
+
     if (!response.Items) return [];
 
     const recipesRaw: DynamoDbRecipe[] = response.Items as DynamoDbRecipe[];
-    return formatDynamoDbRecipe(recipesRaw);
+    return formatDynamoDbRecipes(recipesRaw);
   } catch (error) {
     console.error('Error fetching recipes:', error);
     return [];
   }
 }
 
-export async function createRecipeInDynamoDb(recipe: Recipe) {
+
+/**
+ * B
+ */
+
+// export async function getOneRecipe<T>(uid: string): Promise<Recipe | null> {
+//   if (USE_MOCK) {
+//     console.log(`Using mock data for ${GET_ALL_RECIPES_ENDPT}`);
+//     const recipe: Recipe | undefined = recipes.find((p) => p.uid === uid);
+//     if (!recipe) return null;
+//     return Promise.resolve(recipe);
+//   }
+//   console.log('getOneRecipe');
+
+//   try {
+//     // const response = await fetch(`https://example.com/api/blog/${uid}`, { cache: 'no-store' });
+//     const response = await fetch(`api/recipes/${uid}`);
+//     if (!response.ok) {
+//       throw new Error(`API error: ${response.statusText}`);
+//     }
+//     const recipe: Recipe | undefined = recipes.find((p) => p.uid === uid);
+//     if (!recipe) return null;
+//     return await response.json();
+//   } catch (error) {
+//     console.error(`Fetch failed for ${GET_ALL_RECIPES_ENDPT}:`, error);
+//     throw error;
+//   }
+// }
+
+// // come back to:
+// export async function getOneRecipe(uid: string) {
+//   try {
+//     const command = new GetCommand({
+//       TableName: AWS_RECIPES_TABLENAME,
+//       Key: { uid },
+//     });
+
+//     console.log('command');
+//     console.log(command);
+
+//     const response = await docClient.send(command);
+
+//     console.log('response');
+//     console.log(response);
+
+//     if (!response.Item) return null;
+
+//     const recipeRaw: DynamoDbRecipe = response.Item as DynamoDbRecipe;
+//     return formatDynamoDbRecipe(recipeRaw);
+//   } catch (error) {
+//     console.error('DynamoDB Error:', error);
+//     return null;
+//   }
+// }
+
+// temporary fix (fetch ALL recipes, then find the correct one)
+export async function getOneRecipe(uid: string): Promise<Recipe | undefined> {
+  try {
+    const recipes = await getAllRecipes();
+    return recipes.find((p) => p.uid === uid);
+  } catch (error) {
+    console.error('API Error:', error);
+    return undefined;
+  }  
+}
+
+export async function createRecipe(recipe: Recipe) {
   try {
     const command = new PutCommand({
       TableName: AWS_RECIPES_TABLENAME,
@@ -133,4 +157,3 @@ export async function createRecipeInDynamoDb(recipe: Recipe) {
     throw new Error('Failed to save recipe');
   }
 }
-

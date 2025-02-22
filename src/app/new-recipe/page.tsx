@@ -4,11 +4,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import type { Recipe } from '@/types/recipe';
 import type { Tag } from '@/types/tag';
-import { getRecipeCount, createRecipeInDynamoDb } from '@/lib/api/recipes';
-import { getAllTags } from '@/lib/api/tags';
 import { uidRules, generateUid } from '@/lib/utils/helpers';
+// FIX
 import { errorMessages } from '@/lib/constants/errorMessages';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
@@ -17,6 +17,8 @@ import TagButtons from '@/components/TagButtons';
 import SubmitButton from '@/components/SubmitButton';
 
 export default function New() {
+  const router = useRouter();
+
   const initialValues = {
     id: '',
     title: '',
@@ -31,20 +33,44 @@ export default function New() {
 
   const [formData, setFormData] = useState<Recipe>(initialValues);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const fetchTags = async () => {
+    try {
+      const res = await fetch(`/api/tags`);
+      if (!res.ok) throw new Error('Failed to fetch tags');
+      const tagData: Tag[] = await res.json();
+      setAvailableTags(tagData);
+    } catch (err) {
+      setAvailableTags([]);
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchRecipes = async () => {
+    try {
+      const res = await fetch('/api/recipes');
+      if (!res.ok) throw new Error('Failed to fetch recipes');
+      const recipeData: Recipe[] = await res.json();
+      setRecipes(recipeData);
+      const newId = String(recipeData.length + 1);
+      setFormData((prev) => ({ ...prev, id: newId }))
+
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // get list of tags
-    getAllTags()
-      .then((tags: Tag[]) => setAvailableTags(tags))
-      .catch(() => {
-        setAvailableTags([]);
-        setErrorMessage(errorMessages.cannotFetchTags);
-      });
-    // increment id
-    getRecipeCount()
-      .then((count) => setFormData((prev) => ({ ...prev, id: String(Number(count) + 1) })))
-      .catch(() => setErrorMessage(errorMessages.cannotSetIndex));
+    fetchTags();
+    fetchRecipes();
   }, []);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
@@ -96,17 +122,21 @@ export default function New() {
         throw new Error('Failed to create recipe');
       }
 
-      return await response.json();
+      const newRecipe = await response.json();
+      router.push(`/recipes/${newRecipe.uid}`);
     } catch (error) {
       console.error('Error creating recipe:', error);
       return null;
     }
   };
 
+  if (loading) return <p>Loading...</p>;
+  if (recipes.length < 1) return <p>No recipes!</p>;
+  if (error) return <p>{error}</p>;
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        {errorMessage && <p className="mb-3 text-red-500">{errorMessage}</p>}
         <input type="hidden" id="id" name="id" value={formData.id} />
         <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} />
         <InputField id="uid" name="uid" label="" value={formData.uid} onChange={handleUidChange} />

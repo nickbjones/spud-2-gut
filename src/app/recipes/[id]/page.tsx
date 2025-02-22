@@ -4,9 +4,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Markdown from 'react-markdown';
 import type { Recipe } from '@/types/recipe';
-import { getOneRecipe } from '@/lib/api/recipes';
+import Markdown from 'react-markdown';
 import { useParams, notFound } from 'next/navigation';
 import Tag from '@/components/Tag';
 
@@ -15,17 +14,28 @@ export default function Recipe() {
   const uid = params.id as string;
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const fetchRecipe = async () => {
+    try {
+      const res = await fetch(`/api/recipes/${uid}`);
+      if (!res.ok) throw new Error('Failed to fetch recipe');
+      const recipeData: Recipe = await res.json();
+      setRecipe(recipeData);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (typeof uid !== 'string') return;
-    getOneRecipe(uid)
-      .then(setRecipe)
-      .catch(() => setRecipe(null))
-      .finally(() => setLoading(false));
+    fetchRecipe();
   }, []);
 
   if (loading) return <p>Loading...</p>;
   if (!recipe) return notFound();
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="p-6">
