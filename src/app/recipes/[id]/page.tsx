@@ -16,22 +16,23 @@ export default function Recipe() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const fetchRecipe = async () => {
-    try {
-      const res = await fetch(`/api/recipes/${uid}`);
-      if (!res.ok) throw new Error('Failed to fetch recipe');
-      const recipeData: Recipe = await res.json();
-      setRecipe(recipeData);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  
   useEffect(() => {
+    // TODO: clean up
+    const fetchRecipe = async () => {
+      try {
+        const res = await fetch(`/api/recipes/${uid}`);
+        if (!res.ok) throw new Error('Failed to fetch recipe');
+        const recipeData: Recipe = await res.json();
+        setRecipe(recipeData);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchRecipe();
-  }, []);
+  }, [uid]);
 
   if (loading) return <p>Loading...</p>;
   if (!recipe) return notFound();

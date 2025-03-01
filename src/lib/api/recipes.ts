@@ -1,5 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, ScanCommand, PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, ScanCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+// import { DynamoDBDocumentClient, ScanCommand, PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
 import type { Recipe } from '@/types/recipe';
 // import { recipes } from '@/lib/mocks/mock';
 
@@ -8,14 +9,22 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
 
-
 // use?
-const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
-const GET_ALL_RECIPES_ENDPT = process.env.NEXT_PUBLIC_GET_ALL_RECIPES_ENDPT ?? '';
-const GET_ONE_RECIPE_ENDPT = process.env.NEXT_PUBLIC_GET_ONE_RECIPE_ENDPT ?? '';
+// const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
+// const GET_ALL_RECIPES_ENDPT = process.env.NEXT_PUBLIC_GET_ALL_RECIPES_ENDPT ?? '';
+// const GET_ONE_RECIPE_ENDPT = process.env.NEXT_PUBLIC_GET_ONE_RECIPE_ENDPT ?? '';
 
-
-type DynamoDbRecipe = Record<string, any>;
+export type DynamoDbRecipe = {
+  id: string,
+  uid: string,
+  title: string,
+  tags: string[],
+  date: string,
+  description: string,
+  ingredients: string,
+  instructions: string,
+  reference: string,
+};
 
 const emptyRecipe: Recipe = {
   id: '',
@@ -34,7 +43,7 @@ function formatDynamoDbRecipe(recipeRaw: DynamoDbRecipe): Recipe {
     return {
       id: recipeRaw.id || '',
       uid: recipeRaw.uid || '',
-      title: recipeRaw.title || recipeRaw.name, // -- FIX
+      title: recipeRaw.title || '', // || recipeRaw.name, // -- FIX
       tags: Array.isArray(recipeRaw.tags) ? recipeRaw.tags : [],
       date: recipeRaw.date || '',
       description: recipeRaw.description || '',

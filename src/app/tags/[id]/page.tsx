@@ -22,36 +22,36 @@ export default function Tag() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const fetchTag = async () => {
-    try {
-      const res = await fetch(`/api/tags/${uid}`);
-      if (!res.ok) throw new Error('Failed to fetch recipe');
-      const tagData: Tag = await res.json();
-      setTag(tagData);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchRecipes = async () => {
-    try {
-      const res = await fetch('/api/recipes');
-      if (!res.ok) throw new Error('Failed to fetch recipes');
-      const recipeData: Recipe[] = await res.json();
-      setRecipes(recipeData);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchTag = async () => {
+      try {
+        const res = await fetch(`/api/tags/${uid}`);
+        if (!res.ok) throw new Error('Failed to fetch recipe');
+        const tagData: Tag = await res.json();
+        setTag(tagData);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    const fetchRecipes = async () => {
+      try {
+        const res = await fetch('/api/recipes');
+        if (!res.ok) throw new Error('Failed to fetch recipes');
+        const recipeData: Recipe[] = await res.json();
+        setRecipes(recipeData);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchTag();
     fetchRecipes();
-  }, []);
+  }, [uid]);
 
   if (loading) return <p>Loading...</p>;
   if (!tag) return notFound();

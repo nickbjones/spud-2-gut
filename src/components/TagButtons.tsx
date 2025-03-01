@@ -22,7 +22,8 @@ export default function TagButtons({ id, name, tags, selectedTags, onChange }: T
         >
           <input
             type="checkbox"
-            name="tags"
+            id={id}
+            name={name}
             value={uid}
             checked={selectedTags.includes(uid)}
             onChange={() => onChange(uid)}

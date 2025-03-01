@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getOneTag } from '@/lib/api/tags';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
-  const { id } = await params;
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const id = (await params).id;
 
   if (!id) {
     return NextResponse.json({ error: 'Recipe ID is required' }, { status: 400 });

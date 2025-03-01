@@ -5,7 +5,7 @@ const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const getAllTagsEndpoint = process.env.NEXT_PUBLIC_GET_ALL_TAGS_ENDPT ?? '';
 const getOneTagEndpoint = process.env.NEXT_PUBLIC_GET_ONE_TAG_ENDPT ?? '';
 
-export async function getAllTags<T>(): Promise<Tag[]> {
+export async function getAllTags(): Promise<Tag[]> {
   if (useMock) {
     console.log(`Using mock data for ${getAllTagsEndpoint}`);
     return Promise.resolve(mockTags);
@@ -27,7 +27,7 @@ export async function getAllTags<T>(): Promise<Tag[]> {
   // }
 }
 
-export async function getOneTag<T>(uid: string): Promise<Tag | null> {
+export async function getOneTag(uid: string): Promise<Tag | null> {
   if (useMock) {
     console.log(`Using mock data for ${getOneTagEndpoint}`);
     const tag: Tag | undefined = mockTags.find((p) => p.uid === uid);
