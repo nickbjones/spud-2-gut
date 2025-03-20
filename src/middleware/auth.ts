@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const protectedRoutes = [
-  // '/',
   '/api/',
   '/new-recipe',
   '/recipes/',
@@ -30,6 +29,6 @@ export default function authenticate(req: NextRequest): NextResponse | null {
     });
   }
 
-  console.warn(`[AUTH SUCCESS] ${req.nextUrl.pathname}`);
+  console.log(`[AUTH SUCCESS] ${req.nextUrl.pathname}`);
   return null;
 }
