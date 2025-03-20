@@ -6,7 +6,7 @@
 import { useEffect, useState } from 'react';
 import type { Tag } from '@/types/tag';
 import Link from 'next/link';
-import Loading from '@/components/Loading';
+import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 
 export default function Tags() {
@@ -31,7 +31,7 @@ export default function Tags() {
     fetchTags();
   }, []);
 
-  if (loading) return <Loading />;
+  if (loading) return <LoadingMessage />;
   if (tags.length < 1) return <p>No tags!</p>;
   if (error) return <ErrorMessage text={error} />;
 

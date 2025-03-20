@@ -6,7 +6,7 @@
 import { useEffect, useState } from 'react';
 import type { Recipe } from '@/types/recipe';
 import Link from 'next/link';
-import Loading from '@/components/Loading';
+import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 
 export default function Recipes() {
@@ -31,7 +31,7 @@ export default function Recipes() {
     fetchRecipes();
   }, []);
 
-  if (loading) return <Loading />;
+  if (loading) return <LoadingMessage />;
   if (recipes.length < 1) return <p>No recipes!</p>;
   if (error) return <ErrorMessage text={error} />;
 

@@ -9,7 +9,7 @@ import type { Tag } from '@/types/tag';
 import Markdown from 'react-markdown';
 import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
-import Loading from '@/components/Loading';
+import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 
 function getRecipesByTag(recipes: Recipe[], tag: string) {
@@ -55,7 +55,7 @@ export default function Tag() {
     fetchRecipes();
   }, [uid]);
 
-  if (loading) return <Loading />;
+  if (loading) return <LoadingMessage />;
   if (!tag) return notFound();
   if (error) return <ErrorMessage text={error} />;
 

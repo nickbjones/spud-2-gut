@@ -8,7 +8,7 @@ import type { Recipe } from '@/types/recipe';
 import Markdown from 'react-markdown';
 import { useParams, notFound } from 'next/navigation';
 import Tag from '@/components/Tag';
-import Loading from '@/components/Loading';
+import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 
 export default function Recipe() {
@@ -36,7 +36,7 @@ export default function Recipe() {
     fetchRecipe();
   }, [uid]);
 
-  if (loading) return <Loading />;
+  if (loading) return <LoadingMessage />;
   if (!recipe) return notFound();
   if (error) return <ErrorMessage text={error} />;
 

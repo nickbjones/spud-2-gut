@@ -15,7 +15,7 @@ import TextAreaField from '@/components/TextAreaField';
 import DateField from '@/components/DateField';
 import TagButtons from '@/components/TagButtons';
 import SubmitButton from '@/components/SubmitButton';
-import Loading from '@/components/Loading';
+import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 
 export default function New() {
@@ -132,7 +132,7 @@ export default function New() {
     }
   };
 
-  if (loading) return <Loading />;
+  if (loading) return <LoadingMessage />;
   if (recipes.length < 1) return <p>No recipes!</p>;
   if (error) return <ErrorMessage text={error} />;
 
