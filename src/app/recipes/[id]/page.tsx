@@ -9,6 +9,7 @@ import Markdown from 'react-markdown';
 import { useParams, notFound } from 'next/navigation';
 import Tag from '@/components/Tag';
 import Loading from '@/components/Loading';
+import ErrorMessage from '@/components/ErrorMessage';
 
 export default function Recipe() {
   const params = useParams();
@@ -37,7 +38,7 @@ export default function Recipe() {
 
   if (loading) return <Loading />;
   if (!recipe) return notFound();
-  if (error) return <p>{error}</p>;
+  if (error) return <ErrorMessage text={error} />;
 
   return (
     <div className="p-6">

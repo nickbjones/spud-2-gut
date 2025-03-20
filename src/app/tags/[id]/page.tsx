@@ -10,6 +10,7 @@ import Markdown from 'react-markdown';
 import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 import Loading from '@/components/Loading';
+import ErrorMessage from '@/components/ErrorMessage';
 
 function getRecipesByTag(recipes: Recipe[], tag: string) {
   return recipes.filter((recipe) => recipe.tags.includes(tag));
@@ -56,7 +57,7 @@ export default function Tag() {
 
   if (loading) return <Loading />;
   if (!tag) return notFound();
-  if (error) return <p>{error}</p>;
+  if (error) return <ErrorMessage text={error} />;
 
   const filteredRecipes = getRecipesByTag(recipes, uid);
 

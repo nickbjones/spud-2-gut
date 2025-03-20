@@ -16,6 +16,7 @@ import DateField from '@/components/DateField';
 import TagButtons from '@/components/TagButtons';
 import SubmitButton from '@/components/SubmitButton';
 import Loading from '@/components/Loading';
+import ErrorMessage from '@/components/ErrorMessage';
 
 export default function New() {
   const router = useRouter();
@@ -133,7 +134,7 @@ export default function New() {
 
   if (loading) return <Loading />;
   if (recipes.length < 1) return <p>No recipes!</p>;
-  if (error) return <p>{error}</p>;
+  if (error) return <ErrorMessage text={error} />;
 
   return (
     <div className="p-6">
