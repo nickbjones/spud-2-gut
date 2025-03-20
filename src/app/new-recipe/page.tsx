@@ -135,7 +135,7 @@ export default function New() {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
+    <div className="p-6">
       <form onSubmit={handleSubmit}>
         <input type="hidden" id="id" name="id" value={formData.id} />
         <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} />

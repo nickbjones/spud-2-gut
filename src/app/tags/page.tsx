@@ -34,7 +34,7 @@ export default function Tags() {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
+    <div className="p-6">
       <h1 className="text-3xl font-bold">Tags</h1>
       <ul>
         {tags.map((tag: Tag) => (
