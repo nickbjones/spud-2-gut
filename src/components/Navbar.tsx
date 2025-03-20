@@ -8,7 +8,7 @@ export default function Navbar() {
   const rootPath = `/${pathname.split('/')[1]}`;
 
   const navItems = [
-    { href: '/', label: 'Home' },
+    { href: '/home', label: 'Home' },
     { href: '/new-recipe', label: 'New Recipe' },
     { href: '/recipes', label: 'Recipes' },
     { href: '/tags', label: 'Tags' },

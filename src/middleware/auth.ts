@@ -3,7 +3,8 @@ import type { NextRequest } from 'next/server';
 
 const protectedRoutes = [
   '/api/',
-  '/new-recipe',
+  '/home/',
+  '/new-recipe/',
   '/recipes/',
   '/tags/',
 ];
