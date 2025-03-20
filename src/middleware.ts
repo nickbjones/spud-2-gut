@@ -2,7 +2,6 @@ import type { NextRequest } from 'next/server';
 import authenticate from '@/middleware/auth';
 
 export function middleware(req: NextRequest) {
-  console.log(`[MIDDLEWARE] ${req.nextUrl.pathname}`);
   return authenticate(req);
 }
 
