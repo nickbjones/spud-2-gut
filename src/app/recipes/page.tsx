@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 import type { Recipe } from '@/types/recipe';
 import Link from 'next/link';
+import Loading from '@/components/Loading';
 
 export default function Recipes() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -29,7 +30,7 @@ export default function Recipes() {
     fetchRecipes();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />;
   if (recipes.length < 1) return <p>No recipes!</p>;
   if (error) return <p>{error}</p>;
 

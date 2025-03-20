@@ -8,6 +8,7 @@ import type { Recipe } from '@/types/recipe';
 import Markdown from 'react-markdown';
 import { useParams, notFound } from 'next/navigation';
 import Tag from '@/components/Tag';
+import Loading from '@/components/Loading';
 
 export default function Recipe() {
   const params = useParams();
@@ -34,7 +35,7 @@ export default function Recipe() {
     fetchRecipe();
   }, [uid]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />;
   if (!recipe) return notFound();
   if (error) return <p>{error}</p>;
 

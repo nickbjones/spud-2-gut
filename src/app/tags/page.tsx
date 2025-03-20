@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 import type { Tag } from '@/types/tag';
 import Link from 'next/link';
+import Loading from '@/components/Loading';
 
 export default function Tags() {
   const [tags, setTags] = useState<Tag[]>([]);
@@ -29,7 +30,7 @@ export default function Tags() {
     fetchTags();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />;
   if (tags.length < 1) return <p>No tags!</p>;
   if (error) return <p>{error}</p>;
 

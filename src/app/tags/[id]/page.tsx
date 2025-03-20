@@ -9,6 +9,7 @@ import type { Tag } from '@/types/tag';
 import Markdown from 'react-markdown';
 import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
+import Loading from '@/components/Loading';
 
 function getRecipesByTag(recipes: Recipe[], tag: string) {
   return recipes.filter((recipe) => recipe.tags.includes(tag));
@@ -53,7 +54,7 @@ export default function Tag() {
     fetchRecipes();
   }, [uid]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />;
   if (!tag) return notFound();
   if (error) return <p>{error}</p>;
 
