@@ -138,11 +138,11 @@ export default function New() {
   if (error) return <ErrorMessage text={error} />;
 
   return (
-    <div className="p-6">
+    <div className="max-w-2xl mx-auto p-6">
       <form onSubmit={handleSubmit}>
         <input type="hidden" id="id" name="id" value={formData.id} />
         <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} />
-        <InputField id="uid" name="uid" label="" value={formData.uid} onChange={handleUidChange} />
+        <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} />
         <TagButtons id="tags" name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange} />
         <DateField id="date" name="date" label="Date" value={formData.date} onChange={handleGeneralFieldChange} />
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} />
