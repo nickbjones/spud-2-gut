@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import type { Tag } from '@/types/tag';
-import Link from 'next/link';
+import CustomLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 
@@ -41,7 +41,7 @@ export default function Tags() {
       <ul>
         {tags.map((tag: Tag) => (
           <li key={tag.uid}>
-            <Link href={`tags/${tag.uid}`}>{tag.title}</Link>
+            <CustomLink href={`tags/${tag.uid}`} text={tag.title} />
           </li>
         ))}
       </ul>

@@ -8,7 +8,7 @@ import type { Recipe } from '@/types/recipe';
 import type { Tag } from '@/types/tag';
 import Markdown from 'react-markdown';
 import { useParams, notFound } from 'next/navigation';
-import Link from 'next/link';
+import CustomLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 
@@ -70,9 +70,13 @@ export default function Tag() {
       </div>
       <div className="mt-4">
         <h2 className="text-xl font-bold">{tag.title} recipes</h2>
-        <div>{filteredRecipes && filteredRecipes.map((recipe) => (
-          <Link key={recipe.id} className="bg-gray-800 text-white space-x-4 m-1 p-1" href={`/recipes/${recipe.uid}`}>{recipe.uid}</Link>
-        ))}</div>
+        <div>
+          {filteredRecipes && filteredRecipes.map((recipe) => (
+            <p>
+              <CustomLink key={recipe.id} href={`/recipes/${recipe.uid}`} text={recipe.uid} />
+            </p>
+          ))}
+        </div>
       </div>
     </div>
   );
