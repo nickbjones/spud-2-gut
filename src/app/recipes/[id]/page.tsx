@@ -10,6 +10,7 @@ import { useParams, notFound } from 'next/navigation';
 import Tag from '@/components/Tag';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
+import Link from 'next/link';
 
 export default function Recipe() {
   const params = useParams();
@@ -42,7 +43,11 @@ export default function Recipe() {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold">{recipe.title}</h1>
+      <Link
+        href="/recipes"
+        className="text-blue-800 hover:text-blue-400"
+      >⇽ Recipes</Link>
+      <h1 className="text-3xl mt-4 font-bold">{recipe.title}</h1>
       <div className="mt-4">
         {recipe.tags.map((tag: string) => <Tag tag={tag} key={tag} />)}
       </div>
