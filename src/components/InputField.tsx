@@ -1,4 +1,4 @@
-import { labelStyles, inputStyles } from './sharedStyles';
+import { labelStyles, inputStyles } from './sharedFormStyles';
 
 type InputField = {
   id: string;
