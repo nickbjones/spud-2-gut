@@ -10,7 +10,7 @@ export default function Home() {
           <Link href="/recipes" className="bg-orange-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-orange-600 transition-all">
             View Recipes
           </Link>
-          <Link href="/new-recipe" className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600 transition-all">
+          <Link href="/recipes/new" className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600 transition-all">
             + New Recipe
           </Link>
         </div>
