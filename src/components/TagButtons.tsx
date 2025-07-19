@@ -8,17 +8,36 @@ type TagButton = {
   onChange: (tagUid: string) => void;
 };
 
+const labelStyles = `
+  flex
+  items-center
+  justify-center
+  text-center
+  px-4
+  py-2
+  text-sm
+  border
+  rounded-lg
+  cursor-pointer
+`;
+const selectedTagStyles = `
+  bg-blue-500
+  text-white
+  border-blue-500
+`;
+const unselectedTagStyles = `
+  bg-white
+  text-gray-800
+  border-gray-300
+`;
+
 export default function TagButtons({ id, name, tags, selectedTags, onChange }: TagButton) {
   return (
     <div className="flex gap-2 my-3">
       {tags.map(({ uid, title }) => (
         <label
           key={uid}
-          className={`cursor-pointer rounded-lg px-4 py-2 border ${
-            selectedTags.includes(uid)
-              ? "bg-blue-500 text-white border-blue-500"
-              : "bg-white text-gray-800 border-gray-300"
-          }`}
+          className={`${labelStyles} ${selectedTags.includes(uid) ? selectedTagStyles : unselectedTagStyles}`}
         >
           <input
             type="checkbox"
