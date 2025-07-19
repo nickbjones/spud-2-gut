@@ -8,6 +8,7 @@ import type { Tag } from '@/types/tag';
 import CustomLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
+import SharedHeading from '@/components/SharedHeading';
 
 export default function Tags() {
   const [tags, setTags] = useState<Tag[]>([]);
@@ -37,7 +38,7 @@ export default function Tags() {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold">Tags</h1>
+      <SharedHeading text="Tags" />
       <ul>
         {tags.map((tag: Tag) => (
           <li key={tag.uid}>

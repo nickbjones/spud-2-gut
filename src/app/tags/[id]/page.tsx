@@ -11,6 +11,7 @@ import { useParams, notFound } from 'next/navigation';
 import CustomLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
+import SharedHeading from '@/components/SharedHeading';
 
 function getRecipesByTag(recipes: Recipe[], tag: string) {
   return recipes.filter((recipe) => recipe.tags.includes(tag));
@@ -64,7 +65,7 @@ export default function Tag() {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold">{tag.title}</h1>
+      <SharedHeading text={tag.title} />
       <div className="mt-4">
         <Markdown>{tag.description}</Markdown>
       </div>

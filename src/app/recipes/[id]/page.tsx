@@ -11,6 +11,7 @@ import Tag from '@/components/Tag';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import CustomLink from '@/components/SharedLink';
+import SharedHeading from '@/components/SharedHeading';
 
 export default function Recipe() {
   const params = useParams();
@@ -44,7 +45,7 @@ export default function Recipe() {
   return (
     <div className="p-6">
       <CustomLink href="/recipes" text="⇽ Recipes" />
-      <h1 className="text-3xl mt-4 font-bold">{recipe.title}</h1>
+      <SharedHeading text={recipe.title} styles="mt-4" />
       <div className="mt-4">
         {recipe.tags.map((tag: string) => <Tag tag={tag} key={tag} />)}
       </div>
