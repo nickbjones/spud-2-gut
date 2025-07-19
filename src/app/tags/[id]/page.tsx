@@ -21,7 +21,8 @@ export default function Tag() {
   const uid = params.id as string;
   const [tag, setTag] = useState<Tag | null>(null);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingTags, setLoadingTags] = useState(true);
+  const [loadingRecipes, setLoadingRecipes] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function Tag() {
       } catch (err) {
         setError((err as Error).message);
       } finally {
-        setLoading(false);
+        setLoadingTags(false);
       }
     };
   
@@ -47,7 +48,7 @@ export default function Tag() {
       } catch (err) {
         setError((err as Error).message);
       } finally {
-        setLoading(false);
+        setLoadingRecipes(false);
       }
     };
 
@@ -55,7 +56,7 @@ export default function Tag() {
     fetchRecipes();
   }, [uid]);
 
-  if (loading) return <LoadingMessage />;
+  if (loadingTags || loadingRecipes) return <LoadingMessage />;
   if (!tag) return notFound();
   if (error) return <ErrorMessage text={error} />;
 
