@@ -37,7 +37,8 @@ export default function New() {
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
-  const [loading, setLoading] = useState(true);
+  const [loadingTags, setLoadingTags] = useState(true);
+  const [loadingRecipes, setLoadingRecipes] = useState(true);
   const [error, setError] = useState('');
 
   const fetchTags = async () => {
@@ -50,7 +51,7 @@ export default function New() {
       setAvailableTags([]);
       setError((err as Error).message);
     } finally {
-      setLoading(false);
+      setLoadingTags(false);
     }
   };
 
@@ -66,7 +67,7 @@ export default function New() {
     } catch (err) {
       setError((err as Error).message);
     } finally {
-      setLoading(false);
+      setLoadingRecipes(false);
     }
   };
 
@@ -132,7 +133,7 @@ export default function New() {
     }
   };
 
-  if (loading) return <LoadingMessage />;
+  if (loadingTags || loadingRecipes) return <LoadingMessage />;
   if (recipes.length < 1) return <p>No recipes!</p>;
   if (error) return <ErrorMessage text={error} />;
 
