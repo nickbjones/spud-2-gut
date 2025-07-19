@@ -44,7 +44,7 @@ export default function Recipes() {
           <li key={recipe.id} className="my-2">
             <Link
               href={`recipes/${recipe.uid}`}
-              className="py-1 px-3 transition bg-blue-500 hover:bg-blue-400"
+              className="py-1 transition text-blue-800 hover:text-blue-400"
             >{recipe.title}</Link>
           </li>
         ))}
