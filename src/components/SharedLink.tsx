@@ -7,9 +7,20 @@ const sharedLinkStyles = `
   transition-all
 `;
 
-export default function SharedLink({href, text, styles}: {href: string, text: string, styles?: string}) {
+type SharedLinkProps = {
+  text: string;
+  href?: string;
+  styles?: string;
+  onClick?: () => void;
+};
+
+export default function SharedLink({ text, href, styles, onClick}: SharedLinkProps) {
   return (
-    <Link href={href} className={sharedLinkStyles + (styles ? ` ${styles}` : '')}>
+    <Link
+      href={href || ''}
+      className={sharedLinkStyles + (styles ? ` ${styles}` : '')}
+      onClick={onClick}
+    >
       {text}
     </Link>
   );
