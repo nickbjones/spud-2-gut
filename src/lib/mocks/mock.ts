@@ -3,7 +3,7 @@ import type { Tag } from '@/types/tag';
 
 export const recipes: Recipe[] = [
   {
-    id: '0',
+    id: 'TAG#01',
     uid: 'mashed-potatoes',
     date: '2025-02-09',
     title: 'Mashed Potatoes',
@@ -14,7 +14,7 @@ export const recipes: Recipe[] = [
     reference: '',
   },
   {
-    id: '1',
+    id: 'TAG#02',
     uid: 'lemon-cream-chicken',
     date: '2025-02-09',
     title: 'Lemon Cream Chicken',
@@ -25,7 +25,7 @@ export const recipes: Recipe[] = [
     reference: '',
   },
   {
-    id: '2',
+    id: 'TAG#03',
     uid: 'ao-togarashi-pickles',
     date: '2025-02-08',
     title: '青唐辛子 Pickles',
@@ -36,7 +36,7 @@ export const recipes: Recipe[] = [
     reference: 'https://nomadette.com/pickled-green-chillies/',
   },
   {
-    id: '3',
+    id: 'TAG#04',
     uid: 'roasted-potatoes',
     date: '2025-02-07',
     title: 'Roasted Potatoes',
@@ -47,7 +47,7 @@ export const recipes: Recipe[] = [
     reference: '',
   },
   {
-    id: '4',
+    id: 'TAG#05',
     uid: 'spicy-roasted-potatoes',
     date: '2025-02-07',
     title: 'Spicy Roasted Potatoes',
@@ -58,7 +58,7 @@ export const recipes: Recipe[] = [
     reference: '',
   },
   {
-    id: '5',
+    id: 'TAG#06',
     uid: 'tasty-spinach',
     date: '2025-02-11',
     title: 'Tasty Spinach',
@@ -72,43 +72,43 @@ export const recipes: Recipe[] = [
 
 export const tags: Tag[] = [
   {
-    id: '0',
+    id: 'TAG#01',
     uid: 'main-dishes',
     title: 'Main Dishes',
     description: '',
   },
   {
-    id: '1',
+    id: 'TAG#02',
     uid: 'side-dishes',
     title: 'Side Dishes',
     description: '',
   },
   {
-    id: '2',
+    id: 'TAG#03',
     uid: 'spicy',
     title: 'Spicy',
     description: '',
   },
   {
-    id: '3',
+    id: 'TAG#04',
     uid: 'sweet',
     title: 'Sweet',
     description: '',
   },
   {
-    id: '4',
+    id: 'TAG#05',
     uid: 'potatoes',
     title: 'Potatoes',
     description: '',
   },
   {
-    id: '5',
+    id: 'TAG#06',
     uid: 'healthy',
     title: 'Healthy',
     description: '',
   },
   {
-    id: '6',
+    id: 'TAG#07',
     uid: 'dessert',
     title: 'Dessert',
     description: '',
