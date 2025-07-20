@@ -144,8 +144,9 @@ export async function getAllRecipes() {
 // temporary fix (fetch ALL recipes, then find the correct one)
 export async function getOneRecipe(uid: string): Promise<Recipe | undefined> {
   try {
-    const recipes = await getAllRecipes();
-    return recipes.find((p) => p.uid === uid);
+    const allRecipes = await getAllRecipes();
+    const recipe: Recipe | undefined = allRecipes.find((p) => p.uid === uid);
+    return recipe;
   } catch (error) {
     console.error('API Error:', error);
     return undefined;
