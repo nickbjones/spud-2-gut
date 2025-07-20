@@ -144,8 +144,9 @@ export async function getAllRecipes() {
 // temporary fix (fetch ALL recipes, then find the correct one)
 export async function getOneRecipe(uid: string): Promise<Recipe | undefined> {
   try {
-    const recipes = await getAllRecipes();
-    return recipes.find((p) => p.uid === uid);
+    const allRecipes = await getAllRecipes();
+    const recipe: Recipe | undefined = allRecipes.find((p) => p.uid === uid);
+    return recipe;
   } catch (error) {
     console.error('API Error:', error);
     return undefined;
@@ -164,5 +165,22 @@ export async function createRecipe(recipe: Recipe) {
   } catch (error) {
     console.error('Error saving recipe:', error);
     throw new Error('Failed to save recipe');
+  }
+}
+
+import { DeleteCommand } from '@aws-sdk/lib-dynamodb';
+
+export async function deleteRecipe(id: string) {
+  try {
+    const command = new DeleteCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+      Key: { id },
+    });
+
+    await docClient.send(command);
+    return true;
+  } catch (error) {
+    console.error('Error deleting recipe:', error);
+    throw new Error('Failed to delete recipe');
   }
 }
