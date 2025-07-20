@@ -6,7 +6,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Tag } from '@/types/tag';
-import CustomLink from '@/components/SharedLink';
+import SharedButton from '@/components/SharedButton';
+import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
@@ -102,11 +103,12 @@ export default function Tags() {
 
   return (
     <div className="p-6">
+      <SharedButton href="/tags/new" text="+ New Tag" styles="float-right" />
       <SharedHeading text="Tags" />
       <ul>
         {tags.map((tag: Tag) => (
-          <li key={tag.uid} className="mt-2">
-            <CustomLink href={`tags/${tag.uid}`} text={tag.title} />
+          <li key={tag.uid} className="my-2">
+            <SharedLink href={`tags/${tag.uid}`} text={tag.title} />
           </li>
         ))}
       </ul>
@@ -126,7 +128,7 @@ export default function Tags() {
             <SubmitButton text={isSaving ? 'Saving...' : 'Save'} disabled={isSaving} />
           </form>
         ) : (
-          <CustomLink text="+ New Tag" onClick={handleToggleNewTagClick} />
+          <SharedLink text="+ New Tag" onClick={handleToggleNewTagClick} />
         )}
       </div>
     </div>

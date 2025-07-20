@@ -5,8 +5,8 @@
 
 import { useEffect, useState } from 'react';
 import type { Recipe } from '@/types/recipe';
-import Link from 'next/link';
-import CustomLink from '@/components/SharedLink';
+import SharedButton from '@/components/SharedButton';
+import SharedLink from '@/components/SharedLink';
 import SharedHeading from '@/components/SharedHeading';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
@@ -39,13 +39,12 @@ export default function Recipes() {
 
   return (
     <div className="p-6">
-      {/* change to shared button */}
-      <Link href="/recipes/new" className="float-right px-3 py-2 text-white rounded-md transition bg-blue-500 hover:bg-blue-400">+ New Recipe</Link>
+      <SharedButton href="/recipes/new" text="+ New Recipe" styles="float-right" />
       <SharedHeading text="Recipes" />
       <ul>
         {recipes.map((recipe: Recipe) => (
           <li key={recipe.id} className="my-2">
-            <CustomLink href={`recipes/${recipe.uid}`} text={recipe.title} />
+            <SharedLink href={`recipes/${recipe.uid}`} text={recipe.title} />
           </li>
         ))}
       </ul>
