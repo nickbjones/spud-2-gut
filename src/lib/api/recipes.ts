@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, ScanCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, ScanCommand, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 // import { DynamoDBDocumentClient, ScanCommand, PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
 import type { Recipe } from '@/types/recipe';
 // import { recipes } from '@/lib/mocks/mock';
@@ -69,10 +69,17 @@ function formatDynamoDbRecipes(recipesRaw: DynamoDbRecipe[]): Recipe[] {
  * A
  */
 export async function getAllRecipes() {
-  console.log('getAllRecipes');
   try {
+    // QueryCommand is more efficient for fetching items with a specific partition key
     const command = new ScanCommand({
       TableName: AWS_RECIPES_TABLENAME,
+      FilterExpression: 'begins_with(#id, :prefix)',
+      ExpressionAttributeNames: {
+        '#id': 'id',
+      },
+      ExpressionAttributeValues: {
+        ':prefix': 'RECIPE#',
+      },
     });
     const response = await docClient.send(command);
 

@@ -41,7 +41,7 @@ export default function Tags() {
       <SharedHeading text="Tags" />
       <ul>
         {tags.map((tag: Tag) => (
-          <li key={tag.uid}>
+          <li key={tag.uid} className="mt-2">
             <CustomLink href={`tags/${tag.uid}`} text={tag.title} />
           </li>
         ))}

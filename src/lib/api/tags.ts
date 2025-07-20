@@ -1,57 +1,86 @@
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, ScanCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import type { Tag } from '@/types/tag';
-import { tags as mockTags } from '@/lib/mocks/mock';
+// import { tags as mockTags } from '@/lib/mocks/mock';
 
-const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
-const getAllTagsEndpoint = process.env.NEXT_PUBLIC_GET_ALL_TAGS_ENDPT ?? '';
-const getOneTagEndpoint = process.env.NEXT_PUBLIC_GET_ONE_TAG_ENDPT ?? '';
+const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+const docClient = DynamoDBDocumentClient.from(client);
 
-export async function getAllTags(): Promise<Tag[]> {
-  if (useMock) {
-    console.log(`Using mock data for ${getAllTagsEndpoint}`);
-    return Promise.resolve(mockTags);
+// const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
+const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
+
+export type DynamoDbTag = {
+  id: string,
+  uid: string,
+  title: string,
+  description: string,
+};
+
+const emptyTag: Tag = {
+  id: '',
+  uid: '',
+  title: '',
+  description: '',
+};
+
+function formatDynamoDbTag(tagRaw: DynamoDbTag): Tag {
+  try {
+    return {
+      id: tagRaw.id || '',
+      uid: tagRaw.uid || '',
+      title: tagRaw.title || '', // || tagRaw.name, // -- FIX
+      description: tagRaw.description || '',
+    };
+  } catch (error) {
+    console.error('Error parsing tag ID:', tagRaw.id, error);
+    return emptyTag;
   }
-
-  // temporarily use mock data until the tags are in the db
-  console.log(`Using mock data for ${getAllTagsEndpoint}`);
-  return Promise.resolve(mockTags);
-
-  // try {
-  //   const response = await fetch(getAllTagsEndpoint);
-  //   if (!response.ok) {
-  //     throw new Error(`API error: ${response.statusText}`);
-  //   }
-  //   return await response.json();
-  // } catch (error) {
-  //   console.error(`Fetch failed for ${getAllTagsEndpoint}:`, error);
-  //   throw error;
-  // }
 }
 
-export async function getOneTag(uid: string): Promise<Tag | null> {
-  if (useMock) {
-    console.log(`Using mock data for ${getOneTagEndpoint}`);
-    const tag: Tag | undefined = mockTags.find((p) => p.uid === uid);
-    if (!tag) return null;
-    return Promise.resolve(tag);
+function formatDynamoDbTags(tagsRaw: DynamoDbTag[]): Tag[] {
+  return tagsRaw.map((tagRaw) => {
+    return formatDynamoDbTag(tagRaw);
+  });
+}
+
+
+/**
+ * Fetches all tags from the DynamoDB table.
+ */
+export async function getAllTags(): Promise<Tag[]> {
+  try {
+    // QueryCommand is more efficient for fetching items with a specific partition key
+    const command = new ScanCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+      FilterExpression: 'begins_with(#id, :prefix)',
+      ExpressionAttributeNames: {
+        '#id': 'id',
+      },
+      ExpressionAttributeValues: {
+        ':prefix': 'TAG#',
+      },
+    });
+    const response = await docClient.send(command);
+
+    if (!response.Items) return [];
+
+    const tagsRaw: DynamoDbTag[] = response.Items as DynamoDbTag[];
+    return formatDynamoDbTags(tagsRaw);
+  } catch (error) {
+    console.error('Error fetching tags:', error);
+    return [];
   }
+}
 
-  // temporarily use mock data until the tags are in the db
-  console.log(`Using mock data for ${getOneTagEndpoint}`);
-  const tag: Tag | undefined = mockTags.find((p) => p.uid === uid);
-  if (!tag) return null;
-  return Promise.resolve(tag);
-
-  // try {
-  //   // const response = await fetch(`https://example.com/api/blog/${uid}`, { cache: 'no-store' });
-  //   const response = await fetch(getOneTagEndpoint);
-  //   if (!response.ok) {
-  //     throw new Error(`API error: ${response.statusText}`);
-  //   }
-  //   const tag: Tag | undefined = mockTags.find((p) => p.uid === uid);
-  //   if (!tag) return null;
-  //   return await response.json();
-  // } catch (error) {
-  //   console.error(`Fetch failed for ${getOneTagEndpoint}:`, error);
-  //   throw error;
-  // }
+// temporary fix (fetch ALL tags, then find the correct one)
+export async function getOneTag(uid: string): Promise<Tag | undefined> {
+  console.log('getOneTag', uid);
+  try {
+    const allTags = await getAllTags();
+    const tag: Tag | undefined = allTags.find((p) => p.uid === uid);
+    return tag;
+  } catch (error) {
+    console.error('API Error:', error);
+    return undefined;
+  }  
 }

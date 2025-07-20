@@ -28,9 +28,10 @@ export default function Tag() {
 
   useEffect(() => {
     const fetchTag = async () => {
+      console.log(`Fetching tag with uid: ${uid}`);
       try {
         const res = await fetch(`/api/tags/${uid}`);
-        if (!res.ok) throw new Error('Failed to fetch recipe');
+        if (!res.ok) throw new Error('Failed to fetch tag');
         const tagData: Tag = await res.json();
         setTag(tagData);
       } catch (err) {
@@ -70,10 +71,10 @@ export default function Tag() {
         <Markdown>{tag.description}</Markdown>
       </div>
       <div className="mt-4">
-        <h2 className="text-xl font-bold">{tag.title} recipes</h2>
+        <p>Recipes with the tag "{tag.title}":</p>
         <div>
           {filteredRecipes && filteredRecipes.map((recipe) => (
-            <p>
+            <p key={recipe.id} className="mt-2">
               <CustomLink key={recipe.id} href={`/recipes/${recipe.uid}`} text={recipe.uid} />
             </p>
           ))}
