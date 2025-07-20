@@ -62,7 +62,7 @@ export default function Edit() {
 
   async function fetchRecipe() {
     try {
-      const res = await fetch(`/api/recipes/${uid}`);
+      const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
       if (!res.ok) throw new Error('Failed to fetch recipe');
       const recipeData: Recipe = await res.json();
       setFormData(recipeData);
@@ -102,7 +102,7 @@ export default function Edit() {
     setError('');
 
     try {
-      const res = await fetch(`/api/recipes/${formData.id}`, {
+      const res = await fetch(`/api/recipes/${encodeURIComponent(formData.id)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

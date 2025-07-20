@@ -30,7 +30,7 @@ export default function Tag() {
     const fetchTag = async () => {
       console.log(`Fetching tag with uid: ${uid}`);
       try {
-        const res = await fetch(`/api/tags/${uid}`);
+        const res = await fetch(`/api/tags/${encodeURIComponent(uid)}`);
         if (!res.ok) throw new Error('Failed to fetch tag');
         const tagData: Tag = await res.json();
         setTag(tagData);

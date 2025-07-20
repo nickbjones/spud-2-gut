@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, ScanCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import type { Tag } from '@/types/tag';
 // import { tags as mockTags } from '@/lib/mocks/mock';
 
@@ -98,5 +98,21 @@ export async function createTag(tag: Tag) {
   } catch (error) {
     console.error('Error saving tag:', error);
     throw new Error('Failed to save tag');
+  }
+}
+
+export async function deleteTag(id: string) {
+  console.log('deleteTag', id);
+  try {
+    const command = new DeleteCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+      Key: { id },
+    });
+
+    await docClient.send(command);
+    return true;
+  } catch (error) {
+    console.error('Error deleting tag:', error);
+    throw new Error('Failed to delete tag');
   }
 }

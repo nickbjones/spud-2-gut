@@ -97,6 +97,30 @@ export default function Tags() {
     }
   };
 
+  const handleDelete = async (tag: Tag) => {
+    // check here if this tag is used in any recipes
+    // if so, show a warning and do not delete
+    // for now, just confirm deletion
+
+    if (!confirm(`Are you sure you want to delete the tag "${tag.title}"?`)) return;
+
+    console.log('Deleting tag:', tag);
+
+    try {
+      const response = await fetch(`/api/tags/${encodeURIComponent(tag.id)}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete tag');
+      }
+
+      await fetchTags();
+    } catch (error) {
+      setError('Error deleting tag.');
+    }
+  };
+
   if (loading) return <LoadingMessage />;
   if (tags.length < 1) return <p>No tags!</p>;
   if (error) return <ErrorMessage text={error} />;
@@ -107,8 +131,15 @@ export default function Tags() {
       <SharedHeading text="Tags" />
       <ul>
         {tags.map((tag: Tag) => (
-          <li key={tag.uid} className="my-2">
+          <li key={tag.uid} className="my-2 group flex items-center justify-between">
             <SharedLink href={`tags/${tag.uid}`} text={tag.title} />
+            <button
+              onClick={() => handleDelete(tag)}
+              className="opacity-0 group-hover:opacity-100 text-red-500 ml-2 transition-opacity"
+              aria-label={`Delete ${tag.title}`}
+            >
+              ❌
+            </button>
           </li>
         ))}
       </ul>

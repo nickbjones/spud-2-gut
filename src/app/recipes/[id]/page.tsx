@@ -24,7 +24,9 @@ export default function Recipe() {
     // TODO: clean up
     const fetchRecipe = async () => {
       try {
-        const res = await fetch(`/api/recipes/${uid}`);
+        // TODO: use a custom hook for fetching data
+        // TODO: use id instead of uid
+        const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
         if (!res.ok) throw new Error('Failed to fetch recipe');
         const recipeData: Recipe = await res.json();
         setRecipe(recipeData);
@@ -45,10 +47,16 @@ export default function Recipe() {
 
   const deleteRecipe = async () => {
     try {
-      const res = await fetch(`/api/recipes/${recipe?.id}`, {
+      if (!recipe) throw new Error('Recipe not found');
+
+      const res = await fetch(`/api/recipes/${encodeURIComponent(recipe.id)}`, {
         method: 'DELETE',
       });
-      if (!res.ok) throw new Error('Failed to delete recipe');
+
+      if (!res.ok) {
+        throw new Error('Failed to delete recipe');
+      };
+
       // Redirect to recipes list after deletion
       window.location.href = '/recipes';
     } catch (err) {
