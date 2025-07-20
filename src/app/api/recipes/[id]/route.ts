@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getOneRecipe, deleteRecipe } from '@/lib/api/recipes';
+import { getOneRecipe, deleteRecipe, updateRecipe } from '@/lib/api/recipes';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const id = (await params).id;
@@ -39,5 +39,30 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   } catch (error) {
     console.error('Error deleting recipe:', error);
     return NextResponse.json({ error: 'Failed to delete recipe' }, { status: 500 });
+  }
+}
+
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const id = (await params).id;
+
+  if (!id) {
+    return NextResponse.json({ error: 'Recipe ID is required' }, { status: 400 });
+  }
+
+  try {
+    const recipeData = await req.json();
+    if (!recipeData.title) {
+      return NextResponse.json({ error: 'Title is required' }, { status: 400 });
+    }
+
+    const updated = await updateRecipe(recipeData);
+    if (!updated) {
+      return NextResponse.json({ error: 'Recipe not found' }, { status: 404 });
+    }
+
+    return NextResponse.json(updated, { status: 200 });
+  } catch (error) {
+    console.error('Error updating recipe:', error);
+    return NextResponse.json({ error: 'Failed to update recipe' }, { status: 500 });
   }
 }

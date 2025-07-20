@@ -64,6 +64,8 @@ export default function Recipe() {
     <div className="p-6">
       <SharedLink href="/recipes" text="⇽ Recipes" />
       <SharedHeading text={recipe.title} styles="mt-4" />
+      <SharedLink href={`${recipe.uid}/edit`} text="Edit" styles="text-sm" />
+      &nbsp;|&nbsp;
       <SharedLink text="Delete" styles="text-sm text-red-800 hover:text-red-400" onClick={confirmDeletion} />
       <div className="mt-4">
         {recipe.tags.map((tag: string) => <Tag tag={tag} key={tag} />)}

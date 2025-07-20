@@ -184,3 +184,18 @@ export async function deleteRecipe(id: string) {
     throw new Error('Failed to delete recipe');
   }
 }
+
+export async function updateRecipe(recipe: Recipe) {
+  try {
+    const command = new PutCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+      Item: recipe,
+    });
+
+    await docClient.send(command);
+    return recipe;
+  } catch (error) {
+    console.error('Error updating recipe:', error);
+    throw new Error('Failed to update recipe');
+  }
+}
