@@ -21,7 +21,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 export default function New() {
   const router = useRouter();
 
-  const initialValues = {
+  const initialValues: Recipe = {
     id: '',
     title: '',
     uid: '',
@@ -36,9 +36,9 @@ export default function New() {
   const [formData, setFormData] = useState<Recipe>(initialValues);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-
   const [loadingTags, setLoadingTags] = useState(true);
   const [loadingRecipes, setLoadingRecipes] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
 
   const fetchTags = async () => {
@@ -111,13 +111,13 @@ export default function New() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSaving(true);
+    setError('');
 
     try {
       const response = await fetch('/api/recipes', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
@@ -128,8 +128,9 @@ export default function New() {
       const newRecipe = await response.json();
       router.push(`/recipes/${newRecipe.uid}`);
     } catch (error) {
-      console.error('Error creating recipe:', error);
-      return null;
+      setError('Error saving recipe.');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -149,7 +150,7 @@ export default function New() {
         <TextAreaField id="ingredients" name="ingredients" label="Ingredients" value={formData.ingredients} onChange={handleGeneralFieldChange} />
         <TextAreaField id="instructions" name="instructions" label="Instructions" value={formData.instructions} onChange={handleGeneralFieldChange} />
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
-        <SubmitButton text="Save" />
+        <SubmitButton text={isSaving ? 'Saving...' : 'Save Changes'} disabled={isSaving} />
       </form>
     </div>
   );
