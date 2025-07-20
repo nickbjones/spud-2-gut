@@ -10,8 +10,8 @@ import { useParams, notFound } from 'next/navigation';
 import Tag from '@/components/Tag';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
-import CustomLink from '@/components/SharedLink';
 import SharedHeading from '@/components/SharedHeading';
+import SharedLink from '@/components/SharedLink';
 
 export default function Recipe() {
   const params = useParams();
@@ -20,7 +20,6 @@ export default function Recipe() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  
   useEffect(() => {
     // TODO: clean up
     const fetchRecipe = async () => {
@@ -38,14 +37,34 @@ export default function Recipe() {
     fetchRecipe();
   }, [uid]);
 
+  const confirmDeletion = () => {
+    if (confirm('Are you sure you want to delete this recipe?')) {
+      deleteRecipe();
+    }
+  };
+
+  const deleteRecipe = async () => {
+    try {
+      const res = await fetch(`/api/recipes/${recipe?.id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw new Error('Failed to delete recipe');
+      // Redirect to recipes list after deletion
+      window.location.href = '/recipes';
+    } catch (err) {
+      setError((err as Error).message);
+    }
+  };
+
   if (loading) return <LoadingMessage />;
   if (!recipe) return notFound();
   if (error) return <ErrorMessage text={error} />;
 
   return (
     <div className="p-6">
-      <CustomLink href="/recipes" text="⇽ Recipes" />
+      <SharedLink href="/recipes" text="⇽ Recipes" />
       <SharedHeading text={recipe.title} styles="mt-4" />
+      <SharedLink text="Delete" styles="text-sm text-red-800 hover:text-red-400" onClick={confirmDeletion} />
       <div className="mt-4">
         {recipe.tags.map((tag: string) => <Tag tag={tag} key={tag} />)}
       </div>

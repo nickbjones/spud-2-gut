@@ -166,3 +166,20 @@ export async function createRecipe(recipe: Recipe) {
     throw new Error('Failed to save recipe');
   }
 }
+
+import { DeleteCommand } from '@aws-sdk/lib-dynamodb';
+
+export async function deleteRecipe(id: string) {
+  try {
+    const command = new DeleteCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+      Key: { id },
+    });
+
+    await docClient.send(command);
+    return true;
+  } catch (error) {
+    console.error('Error deleting recipe:', error);
+    throw new Error('Failed to delete recipe');
+  }
+}
