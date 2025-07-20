@@ -55,15 +55,25 @@ export default function New() {
     }
   };
 
+  // move to shared library
+  function getNewId(prefix: string, data: { id: string }[]): string {
+    const maxId = data.reduce((max, item) => {
+      const num = parseInt(item.id.replace(`${prefix}#`, ''), 10);
+      return num > max ? num : max;
+    }, 0);
+
+    const nextId = (maxId + 1).toString().padStart(3, '0');
+    return `${prefix}#${nextId}`;
+  }
+
   const fetchRecipes = async () => {
     try {
       const res = await fetch('/api/recipes');
       if (!res.ok) throw new Error('Failed to fetch recipes');
       const recipeData: Recipe[] = await res.json();
       setRecipes(recipeData);
-      const newId = String(recipeData.length + 1);
+      const newId = getNewId('RECIPE', recipeData);
       setFormData((prev) => ({ ...prev, id: newId }))
-
     } catch (err) {
       setError((err as Error).message);
     } finally {

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getAllTags } from '@/lib/api/tags';
+import { getAllTags, createTag } from '@/lib/api/tags';
 
 export async function GET() {
   try {
@@ -8,5 +8,16 @@ export async function GET() {
   } catch (error) {
     console.error('API Error:', error);
     return NextResponse.json({ error: 'Failed to fetch tags' }, { status: 500 });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const tag = await req.json();
+    const newTag = await createTag(tag);
+    return NextResponse.json(newTag, { status: 201 });
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json({ error: 'Failed to create tag' }, { status: 500 });
   }
 }

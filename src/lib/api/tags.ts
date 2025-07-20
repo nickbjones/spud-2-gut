@@ -84,3 +84,19 @@ export async function getOneTag(uid: string): Promise<Tag | undefined> {
     return undefined;
   }  
 }
+
+export async function createTag(tag: Tag) {
+  console.log('createTag', tag);
+  try {
+    const command = new PutCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+      Item: tag,
+    });
+
+    await docClient.send(command);
+    return tag;
+  } catch (error) {
+    console.error('Error saving tag:', error);
+    throw new Error('Failed to save tag');
+  }
+}
