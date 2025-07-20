@@ -23,10 +23,12 @@ export default function Tags() {
   const [error, setError] = useState('');
 
   const [isEditingNewTag, setIsEditingNewTag] = useState<boolean>(false);
+  const [editingTagId, setEditingTagId] = useState<string | null>(null);
   const [id, setId] = useState('');
   const [uid, setUid] = useState('');
   const [title, setTitle] = useState<string>('');
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [editedTitle, setEditedTitle] = useState<string>('');
 
   // move to shared library
   function getNewId(prefix: string, data: { id: string }[]): string {
@@ -121,6 +123,42 @@ export default function Tags() {
     }
   };
 
+  const startEditing = (tag: Tag) => {
+    setEditingTagId(tag.id);
+    setEditedTitle(tag.title);
+  };
+
+  const stopEditing = () => {
+    setEditingTagId(null);
+    setEditedTitle('');
+  };
+
+  const handleSave = async () => {
+    if (!editingTagId || !editedTitle.trim()) return;
+    try {
+      await fetch(`/api/tags/${encodeURIComponent(editingTagId)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: editingTagId, title: editedTitle }),
+      });
+      // optionally trigger revalidation or refresh local state
+      stopEditing();
+      await fetchTags();
+    } catch (error) {
+      console.error('Error saving tag:', error);
+    }
+  };
+
+  // TODO: used for what?
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSave();
+    } else if (e.key === 'Escape') {
+      stopEditing();
+    }
+  };
+
   if (loading) return <LoadingMessage />;
   if (tags.length < 1) return <p>No tags!</p>;
   if (error) return <ErrorMessage text={error} />;
@@ -132,14 +170,43 @@ export default function Tags() {
       <ul>
         {tags.map((tag: Tag) => (
           <li key={tag.uid} className="my-2 group flex items-center justify-between">
-            <SharedLink href={`tags/${tag.uid}`} text={tag.title} />
-            <button
-              onClick={() => handleDelete(tag)}
-              className="opacity-0 group-hover:opacity-100 text-red-500 ml-2 transition-opacity"
-              aria-label={`Delete ${tag.title}`}
-            >
-              ❌
-            </button>
+            {editingTagId === tag.id ? (
+              <>
+                <input
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="border px-2 py-1 rounded w-full max-w-xs"
+                  autoFocus
+                />
+                <button onClick={handleSave} className="ml-2 text-green-600 hover:text-green-800" aria-label="Save edit">
+                  💾
+                </button>
+                <button onClick={stopEditing} className="ml-1 text-gray-500 hover:text-gray-700" aria-label="Cancel edit">
+                  ❌
+                </button>
+              </>
+            ) : (
+              <>
+                <SharedLink href={`tags/${tag.uid}`} text={tag.title} />
+                <div className="invisible group-hover:visible flex gap-2 ml-2">
+                  <button
+                    onClick={() => startEditing(tag)}
+                    className="text-blue-500 hover:text-blue-700"
+                    aria-label="Edit tag"
+                  >
+                    ✎
+                  </button>
+                  <button
+                    onClick={() => handleDelete(tag)}
+                    className="text-red-500 hover:text-red-700"
+                    aria-label="Delete tag"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </>
+            )}
           </li>
         ))}
       </ul>
@@ -152,7 +219,7 @@ export default function Tags() {
               label="New Tag"
               value={title}
               onChange={handleTitleChange}
-              // autocomplete="off"
+              // TODO: autocomplete="off"
             />
             <input type="hidden" id="id" name="id" value={id} />
             <input type="hidden" id="uid" name="uid" value={uid} />

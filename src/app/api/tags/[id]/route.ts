@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getOneTag, deleteTag } from '@/lib/api/tags';
+import { getOneTag, deleteTag, updateTag } from '@/lib/api/tags';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const id = (await params).id;
@@ -41,5 +41,33 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   } catch (error) {
     console.error('Error deleting tag:', error);
     return NextResponse.json({ error: 'Failed to delete tag' }, { status: 500 });
+  }
+}
+
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const id = (await params).id;
+  console.log(`PUT /api/tags/[ ${id} ]`);
+
+  if (!id) {
+    return NextResponse.json({ error: 'Tag ID is required' }, { status: 400 });
+  }
+
+  try {
+    const tagData = await req.json();
+    console.log('Updating tag with data:', tagData);
+
+    if (!tagData.title) {
+      return NextResponse.json({ error: 'Title is required' }, { status: 400 });
+    }
+
+    const updated = await updateTag(tagData);
+    if (!updated) {
+      return NextResponse.json({ error: 'Tag not found' }, { status: 404 });
+    }
+
+    return NextResponse.json(updated, { status: 200 });
+  } catch (error) {
+    console.error('Error updating tag:', error);
+    return NextResponse.json({ error: 'Failed to update tag' }, { status: 500 });
   }
 }

@@ -102,7 +102,7 @@ export async function createTag(tag: Tag) {
 }
 
 export async function deleteTag(id: string) {
-  console.log('deleteTag', id);
+  console.log('deleteTag', { id });
   try {
     const command = new DeleteCommand({
       TableName: AWS_RECIPES_TABLENAME,
@@ -114,5 +114,21 @@ export async function deleteTag(id: string) {
   } catch (error) {
     console.error('Error deleting tag:', error);
     throw new Error('Failed to delete tag');
+  }
+}
+
+export async function updateTag(tag: Tag) {
+  console.log('updateTag', tag);
+  try {
+    const command = new PutCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+      Item: tag,
+    });
+
+    await docClient.send(command);
+    return tag;
+  } catch (error) {
+    console.error('Error updating tag:', error);
+    throw new Error('Failed to update tag');
   }
 }
