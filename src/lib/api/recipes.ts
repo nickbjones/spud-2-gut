@@ -1,6 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, ScanCommand, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
-// import { DynamoDBDocumentClient, ScanCommand, PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, ScanCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import type { Recipe } from '@/types/recipe';
 // import { recipes } from '@/lib/mocks/mock';
 
@@ -63,11 +62,6 @@ function formatDynamoDbRecipes(recipesRaw: DynamoDbRecipe[]): Recipe[] {
   });
 }
 
-
-
-/**
- * A
- */
 export async function getAllRecipes() {
   try {
     // QueryCommand is more efficient for fetching items with a specific partition key
@@ -92,61 +86,6 @@ export async function getAllRecipes() {
     return [];
   }
 }
-
-
-/**
- * B
- */
-
-// export async function getOneRecipe<T>(uid: string): Promise<Recipe | null> {
-//   if (USE_MOCK) {
-//     console.log(`Using mock data for ${GET_ALL_RECIPES_ENDPT}`);
-//     const recipe: Recipe | undefined = recipes.find((p) => p.uid === uid);
-//     if (!recipe) return null;
-//     return Promise.resolve(recipe);
-//   }
-//   console.log('getOneRecipe');
-
-//   try {
-//     // const response = await fetch(`https://example.com/api/blog/${uid}`, { cache: 'no-store' });
-//     const response = await fetch(`api/recipes/${uid}`);
-//     if (!response.ok) {
-//       throw new Error(`API error: ${response.statusText}`);
-//     }
-//     const recipe: Recipe | undefined = recipes.find((p) => p.uid === uid);
-//     if (!recipe) return null;
-//     return await response.json();
-//   } catch (error) {
-//     console.error(`Fetch failed for ${GET_ALL_RECIPES_ENDPT}:`, error);
-//     throw error;
-//   }
-// }
-
-// // come back to:
-// export async function getOneRecipe(uid: string) {
-//   try {
-//     const command = new GetCommand({
-//       TableName: AWS_RECIPES_TABLENAME,
-//       Key: { uid },
-//     });
-
-//     console.log('command');
-//     console.log(command);
-
-//     const response = await docClient.send(command);
-
-//     console.log('response');
-//     console.log(response);
-
-//     if (!response.Item) return null;
-
-//     const recipeRaw: DynamoDbRecipe = response.Item as DynamoDbRecipe;
-//     return formatDynamoDbRecipe(recipeRaw);
-//   } catch (error) {
-//     console.error('DynamoDB Error:', error);
-//     return null;
-//   }
-// }
 
 // temporary fix (fetch ALL recipes, then find the correct one)
 export async function getOneRecipe(uid: string): Promise<Recipe | undefined> {

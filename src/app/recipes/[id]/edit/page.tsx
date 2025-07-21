@@ -54,7 +54,7 @@ export default function Edit() {
       setAvailableTags(tagData);
     } catch (err) {
       setAvailableTags([]);
-      setError((err as Error).message);
+      setError(`Failed to load tags. ${(err as Error).message}`);
     } finally {
       setLoadingTags(false);
     }
@@ -67,7 +67,7 @@ export default function Edit() {
       const recipeData: Recipe = await res.json();
       setFormData(recipeData);
     } catch (err) {
-      setError('Failed to load recipe.');
+      setError(`Failed to load recipe. ${(err as Error).message}`);
     } finally {
       setLoadingRecipe(false);
     }
@@ -114,7 +114,7 @@ export default function Edit() {
 
       router.push(`/recipes/${uid}`);
     } catch (err) {
-      setError('Error saving recipe.');
+      setError(`Error saving recipe. ${(err as Error).message}`);
     } finally {
       setIsSaving(false);
     }

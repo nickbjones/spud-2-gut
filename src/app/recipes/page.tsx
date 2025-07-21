@@ -5,7 +5,6 @@
 
 import { useEffect, useState } from 'react';
 import type { Recipe } from '@/types/recipe';
-import SharedButton from '@/components/SharedButton';
 import SharedLink from '@/components/SharedLink';
 import SharedHeading from '@/components/SharedHeading';
 import LoadingMessage from '@/components/LoadingMessage';
@@ -23,7 +22,7 @@ export default function Recipes() {
       const recipeData: Recipe[] = await res.json();
       setRecipes(recipeData);
     } catch (err) {
-      setError((err as Error).message);
+      setError(`Failed to load recipes. ${(err as Error).message}`);
     } finally {
       setLoading(false);
     }

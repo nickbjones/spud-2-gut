@@ -67,7 +67,7 @@ export default function Tag() {
     <div className="p-6">
       <SharedHeading text={tag.title} />
       <div className="mt-4">
-        <p className="mb-3">Recipes with the tag "{tag.title}":</p>
+        <p className="mb-3">Recipes with the tag &quot;{tag.title}&quot;:</p>
         <ul>
           {filteredRecipes && filteredRecipes.map((recipe) => (
             <li key={recipe.id} className="flex my-2">

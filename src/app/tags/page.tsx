@@ -3,8 +3,7 @@
  */
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import type { Tag as TagType} from '@/types/tag';
 import Tag from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
@@ -16,8 +15,6 @@ import SubmitButton from '@/components/SubmitButton';
 import { generateUid } from '@/lib/utils/helpers';
 
 export default function Tags() {
-  const router = useRouter();
-
   const [tags, setTags] = useState<TagType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -42,7 +39,7 @@ export default function Tags() {
     return `${prefix}#${nextId}`;
   }
 
-  const fetchTags = async () => {
+  const fetchTags = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch('/api/tags');
@@ -52,15 +49,15 @@ export default function Tags() {
       const newId = getNewId('TAG', recipeData);
       setId(newId);
     } catch (err) {
-      setError((err as Error).message);
+      setError(`Failed to load tags. ${(err as Error).message}`);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchTags();
-  }, []);
+  }, [fetchTags]);
 
   const handleToggleNewTagClick = () => {
     setIsEditingNewTag(true);
@@ -93,8 +90,8 @@ export default function Tags() {
       setTitle('');
       setUid('');
       await fetchTags();
-    } catch (error) {
-      setError('Error saving tag.');
+    } catch (err) {
+      setError(`Failed to save tag. ${(err as Error).message}`);
     } finally {
       setIsSaving(false);
     }
@@ -119,8 +116,8 @@ export default function Tags() {
       }
 
       await fetchTags();
-    } catch (error) {
-      setError('Error deleting tag.');
+    } catch (err) {
+      setError(`Failed to delete tag. ${(err as Error).message}`);
     }
   };
 
@@ -147,8 +144,8 @@ export default function Tags() {
       // optionally trigger revalidation or refresh local state
       stopEditing();
       await fetchTags();
-    } catch (error) {
-      console.error('Error saving tag:', error);
+    } catch (err) {
+      setError(`Failed to save tag. ${(err as Error).message}`);
     }
   };
 

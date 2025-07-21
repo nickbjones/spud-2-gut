@@ -46,7 +46,7 @@ export default function New() {
       setAvailableTags(tagData);
     } catch (err) {
       setAvailableTags([]);
-      setError((err as Error).message);
+      setError(`Failed to load tags. ${(err as Error).message}`);
     } finally {
       setLoadingTags(false);
     }
@@ -72,7 +72,7 @@ export default function New() {
       const newId = getNewId('RECIPE', recipeData);
       setFormData((prev) => ({ ...prev, id: newId }))
     } catch (err) {
-      setError((err as Error).message);
+      setError(`Failed to load recipes. ${(err as Error).message}`);
     } finally {
       setLoadingRecipes(false);
     }
@@ -134,8 +134,8 @@ export default function New() {
 
       const newRecipe = await response.json();
       router.push(`/recipes/${newRecipe.uid}`);
-    } catch (error) {
-      setError('Error saving recipe.');
+    } catch (err) {
+      setError(`Error saving recipe. ${(err as Error).message}`);
     } finally {
       setIsSaving(false);
     }
