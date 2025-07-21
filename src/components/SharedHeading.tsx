@@ -1,5 +1,6 @@
 const sharedHeadingStyles = `
   mt-4
+  mb-4
   text-3xl
   font-bold
 `;
