@@ -8,11 +8,8 @@ import { useRouter } from 'next/navigation';
 import type { Recipe } from '@/types/recipe';
 import type { Tag } from '@/types/tag';
 import { uidRules, generateUid } from '@/lib/utils/helpers';
-// FIX
-// import { errorMessages } from '@/lib/constants/errorMessages';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
-import DateField from '@/components/DateField';
 import TagButtons from '@/components/TagButtons';
 import SubmitButton from '@/components/SubmitButton';
 import LoadingMessage from '@/components/LoadingMessage';
@@ -98,7 +95,7 @@ export default function New() {
     setFormData((prev) => ({
       ...prev,
       title: newTitle,
-      uid: generateUid(newTitle),
+      uid: generateUid(newTitle, recipes),
     }));
   };
 

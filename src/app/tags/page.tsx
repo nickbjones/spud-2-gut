@@ -67,7 +67,7 @@ export default function Tags() {
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
-    const newUid = generateUid(newTitle);
+    const newUid = generateUid(newTitle, tags);
     setTitle(newTitle);
     setUid(newUid);
   };
