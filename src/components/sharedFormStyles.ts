@@ -4,7 +4,6 @@ export const labelStyles = `
   text-sm
   font-medium
   text-gray-600
-  dark:text-white
 `;
 
 export const inputStyles = `
@@ -20,10 +19,4 @@ export const inputStyles = `
   bg-gray-50
   focus:ring-blue-500
   focus:border-blue-500
-  dark:text-white
-  dark:border-gray-600
-  dark:bg-gray-700
-  dark:focus:ring-blue-500
-  dark:focus:border-blue-500
-  dark:placeholder-gray-400
 `;
