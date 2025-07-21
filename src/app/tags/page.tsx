@@ -18,13 +18,14 @@ export default function Tags() {
   const router = useRouter();
 
   const [tags, setTags] = useState<Tag[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
   const [isEditingNewTag, setIsEditingNewTag] = useState<boolean>(false);
   const [editingTagId, setEditingTagId] = useState<string | null>(null);
-  const [id, setId] = useState('');
-  const [uid, setUid] = useState('');
+  const [editingTagUid, setEditingTagUid] = useState<string | null>(null);
+  const [id, setId] = useState<string>('');
+  const [uid, setUid] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>('');
@@ -124,11 +125,13 @@ export default function Tags() {
 
   const startEditing = (tag: Tag) => {
     setEditingTagId(tag.id);
+    setEditingTagUid(tag.uid);
     setEditedTitle(tag.title);
   };
 
   const stopEditing = () => {
     setEditingTagId(null);
+    setEditingTagUid(null);
     setEditedTitle('');
   };
 
@@ -138,7 +141,7 @@ export default function Tags() {
       await fetch(`/api/tags/${encodeURIComponent(editingTagId)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: editingTagId, title: editedTitle }),
+        body: JSON.stringify({ id: editingTagId, uid: editingTagUid, title: editedTitle }),
       });
       // optionally trigger revalidation or refresh local state
       stopEditing();
