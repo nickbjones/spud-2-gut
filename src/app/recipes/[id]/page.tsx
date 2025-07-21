@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import type { Recipe } from '@/types/recipe';
-import Markdown from 'react-markdown';
+import Md from '@/components/Markdown';
 import { useParams, notFound } from 'next/navigation';
 import Tag from '@/components/Tag';
 import LoadingMessage from '@/components/LoadingMessage';
@@ -68,6 +68,8 @@ export default function Recipe() {
   if (!recipe) return notFound();
   if (error) return <ErrorMessage text={error} />;
 
+  console.log(JSON.stringify(recipe.ingredients));
+
   return (
     <div className="p-6">
       <SharedLink href="/recipes" text="⇽ Recipes" />
@@ -80,15 +82,15 @@ export default function Recipe() {
       </div>
       <div className="mt-4">
         <h2>Description</h2>
-        <Markdown>{recipe.description}</Markdown>
+        <Md>{recipe.description}</Md>
       </div>
       <div className="mt-4">
         <h2>Ingredients</h2>
-        <Markdown>{recipe.ingredients}</Markdown>
+        <Md>{recipe.ingredients}</Md>
       </div>
       <div className="mt-4">
         <h2>Instructions</h2>
-        <Markdown>{recipe.instructions}</Markdown>
+        <Md>{recipe.instructions}</Md>
       </div>
       <div className="mt-4">
         <span>Reference: </span><a href={recipe.reference}>{recipe.reference}</a>

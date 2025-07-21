@@ -6,7 +6,7 @@
 import { useEffect, useState } from 'react';
 import type { Recipe } from '@/types/recipe';
 import type { Tag } from '@/types/tag';
-import Markdown from 'react-markdown';
+import Md from '@/components/Markdown';
 import { useParams, notFound } from 'next/navigation';
 import CustomLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
@@ -67,9 +67,6 @@ export default function Tag() {
   return (
     <div className="p-6">
       <SharedHeading text={tag.title} />
-      <div className="mt-4">
-        <Markdown>{tag.description}</Markdown>
-      </div>
       <div className="mt-4">
         <p>Recipes with the tag "{tag.title}":</p>
         <div>
