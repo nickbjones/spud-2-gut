@@ -39,7 +39,6 @@ export default function Recipes() {
 
   return (
     <div className="p-6">
-      <SharedButton href="/recipes/new" text="+ New Recipe" styles="float-right" />
       <SharedHeading text="Recipes" />
       <ul>
         {recipes.map((recipe: Recipe) => (
