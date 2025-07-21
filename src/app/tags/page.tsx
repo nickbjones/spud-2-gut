@@ -163,13 +163,30 @@ export default function Tags() {
   if (tags.length < 1) return <p>No tags!</p>;
   if (error) return <ErrorMessage text={error} />;
 
+  const inputStyles = `
+    h-10
+    text-gray-900
+    text-sm
+    rounded-lg
+    border
+    border-gray-300
+    bg-gray-50
+    focus:ring-blue-500
+    focus:border-blue-500
+    dark:text-white
+    dark:border-gray-600
+    dark:bg-gray-700
+    dark:focus:ring-blue-500
+    dark:focus:border-blue-500
+    dark:placeholder-gray-400
+  `;
+
   return (
     <div className="p-6">
-      <SharedButton href="/tags/new" text="+ New Tag" styles="float-right" />
       <SharedHeading text="Tags" />
       <ul>
         {tags.map((tag: Tag) => (
-          <li key={tag.uid} className="my-2 group flex items-center justify-between">
+          <li key={tag.uid} className="my-2 group flex">
             {editingTagId === tag.id ? (
               <>
                 <input
@@ -179,17 +196,25 @@ export default function Tags() {
                   className="border px-2 py-1 rounded w-full max-w-xs"
                   autoFocus
                 />
-                <button onClick={handleSave} className="ml-2 text-green-600 hover:text-green-800" aria-label="Save edit">
+                <button
+                  onClick={handleSave}
+                  className="ml-2 text-green-600 hover:text-green-800"
+                  aria-label="Save edit"
+                >
                   💾
                 </button>
-                <button onClick={stopEditing} className="ml-1 text-gray-500 hover:text-gray-700" aria-label="Cancel edit">
+                <button
+                  onClick={stopEditing}
+                  className="ml-2 text-gray-500 hover:text-gray-700"
+                  aria-label="Cancel edit"
+                >
                   ❌
                 </button>
               </>
             ) : (
               <>
                 <SharedLink href={`tags/${tag.uid}`} text={tag.title} />
-                <div className="invisible group-hover:visible flex gap-2 ml-2">
+                <div className="invisible group-hover:visible flex gap-2 ml-2 mr-auto">
                   <button
                     onClick={() => startEditing(tag)}
                     className="text-blue-500 hover:text-blue-700"
@@ -210,25 +235,23 @@ export default function Tags() {
           </li>
         ))}
       </ul>
-      <div className="mt-4">
-        {isEditingNewTag ? (
-          <form onSubmit={handleSubmit}>
-            <InputField
-              id="newTag"
-              name="newTag"
-              label="New Tag"
-              value={title}
-              onChange={handleTitleChange}
-              // TODO: autocomplete="off"
-            />
-            <input type="hidden" id="id" name="id" value={id} />
-            <input type="hidden" id="uid" name="uid" value={uid} />
-            <SubmitButton text={isSaving ? 'Saving...' : 'Save'} disabled={isSaving} />
-          </form>
-        ) : (
-          <SharedLink text="+ New Tag" onClick={handleToggleNewTagClick} />
-        )}
-      </div>
+      {isEditingNewTag ? (
+        <form onSubmit={handleSubmit} className="mt-4 flex items-center gap-2">
+          <input type="hidden" id="id" name="id" value={id} />
+          <input type="hidden" id="uid" name="uid" value={uid} />
+          <input
+            type="text"
+            id="newTag"
+            name="newTag"
+            value={title}
+            onChange={handleTitleChange}
+            className={inputStyles}
+          />
+          <SubmitButton text={isSaving ? 'Saving...' : 'Save'} disabled={isSaving} />
+        </form>
+      ) : (
+        <SharedLink text="+ New Tag" onClick={handleToggleNewTagClick} />
+      )}
     </div>
   );
 }
