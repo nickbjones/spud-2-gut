@@ -36,6 +36,8 @@ export default function Recipes() {
   if (recipes.length < 1) return <p>No recipes!</p>;
   if (error) return <ErrorMessage text={error} />;
 
+  recipes.sort((a, b) => a.uid.localeCompare(b.uid));
+
   return (
     <div className="p-6">
       <SharedHeading text="Recipes" />

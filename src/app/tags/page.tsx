@@ -101,7 +101,6 @@ export default function Tags() {
     // check here if this tag is used in any recipes
     // if so, show a warning and do not delete
     // for now, just confirm deletion
-
     if (!confirm(`Are you sure you want to delete the tag "${tag.title}"?`)) return;
 
     console.log('Deleting tag:', tag);
@@ -162,6 +161,8 @@ export default function Tags() {
   if (loading) return <LoadingMessage />;
   if (tags.length < 1) return <p>No tags!</p>;
   if (error) return <ErrorMessage text={error} />;
+
+  tags.sort((a, b) => a.uid.localeCompare(b.uid));
 
   return (
     <div className="p-6">
