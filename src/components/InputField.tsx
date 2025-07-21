@@ -6,19 +6,22 @@ type InputField = {
   label?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
 };
 
 export default function InputField(input: InputField) {
   return (
     <>
-      {input.label && <label htmlFor={input.id} className={labelStyles}>{input.label}</label>}
+      {input.label && (
+        <label htmlFor={input.id} className={labelStyles}>{input.label}</label>
+      )}
       <input
         type="text"
         id={input.id}
         name={input.name}
         value={input.value}
         onChange={input.onChange}
-        className={inputStyles}
+        className={inputStyles + (input.className ? ` ${input.className}` : '')}
       />
     </>
   );
