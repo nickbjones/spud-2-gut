@@ -43,7 +43,7 @@ export default function Recipes() {
       <SharedHeading text="Recipes" />
       <ul>
         {recipes.map((recipe: Recipe) => (
-          <li key={recipe.id} className="my-2">
+          <li key={recipe.id} className="flex my-2">
             <SharedLink href={`recipes/${recipe.uid}`} text={recipe.title} />
           </li>
         ))}
