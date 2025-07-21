@@ -1,16 +1,20 @@
 import Link from 'next/link';
 
 const tagStyles = `
-  space-x-4
-  m-1
-  p-1
-  text-xs
+  text-center
+  mr-2
+  px-4
+  py-2
+  text-sm
+  border
+  rounded-lg
+  bg-blue-500
   text-white
-  bg-gray-800
+  border-blue-500
 `;
 
-export default function Tag({tag}: {tag: string}) {
+export default function Tag({uid, text}: {uid: string, text: string}) {
   return (
-    <Link href={`/tags/${tag}`} className={tagStyles}>{tag}</Link>
+    <Link href={`/tags/${uid}`} className={tagStyles}>{text}</Link>
   );
 }
