@@ -12,6 +12,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
+import SharedButton from '@/components/SharedButton';
 
 export default function Recipe() {
   const params = useParams();
@@ -68,32 +69,53 @@ export default function Recipe() {
   if (!recipe) return notFound();
   if (error) return <ErrorMessage text={error} />;
 
-  console.log(JSON.stringify(recipe.ingredients));
-
   return (
     <div className="p-6">
       <SharedLink href="/recipes" text="⇽ Recipes" />
       <SharedHeading text={recipe.title} styles="mt-4" />
-      <SharedLink href={`${recipe.uid}/edit`} text="Edit" styles="text-sm" />
-      &nbsp;|&nbsp;
-      <SharedLink text="Delete" styles="text-sm text-red-800 hover:text-red-400" onClick={confirmDeletion} />
       <div className="mt-4">
-        {recipe.tags.map((tag: string) => <Tag tag={tag} key={tag} />)}
+        {recipe.tags.map((uid: string) => <Tag key={uid} uid={uid} text={uid} />)}
       </div>
-      <div className="mt-4">
-        <h2>Description</h2>
-        <Md>{recipe.description}</Md>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="mt-4 mb-4">
+          <SharedHeading type="h3" text="Ingredients" />
+          {recipe.ingredients ? (
+            <Md>{recipe.ingredients}</Md>
+          ) : (
+            <>
+              <p className="mb-2">No ingredients yet!</p>
+              <SharedButton href={`${recipe.uid}/edit`} text="Add ingredients" styles="text-sm" />
+            </>
+          )}
+        </div>
+        <div className="mt-4 mb-4">
+          <SharedHeading type="h3" text="Instructions" />
+          {recipe.instructions ? (
+            <Md>{recipe.instructions}</Md>
+          ) : (
+            <>
+              <p className="mb-2">No instructions yet!</p>
+              <SharedButton href={`${recipe.uid}/edit`} text="Add instructions" styles="text-sm" />
+            </>
+          )}
+        </div>
       </div>
-      <div className="mt-4">
-        <h2>Ingredients</h2>
-        <Md>{recipe.ingredients}</Md>
-      </div>
-      <div className="mt-4">
-        <h2>Instructions</h2>
-        <Md>{recipe.instructions}</Md>
-      </div>
-      <div className="mt-4">
-        <span>Reference: </span><a href={recipe.reference}>{recipe.reference}</a>
+      {recipe.description && (
+        <div className="mt-4">
+          <SharedHeading type="h3" text="Description" />
+          <Md>{recipe.description}</Md>
+        </div>
+      )}
+      {recipe.reference && (
+        <div className="mt-4">
+          <span>Reference: </span>
+          <a href={recipe.reference}>{recipe.reference}</a>
+        </div>
+      )}
+      <div className="mt-8">
+        <SharedLink href={`${recipe.uid}/edit`} text="Edit" styles="text-sm" />
+        &nbsp;|&nbsp;
+        <SharedLink text="Delete" styles="text-sm text-red-800 hover:text-red-400" onClick={confirmDeletion} />
       </div>
     </div>
   );

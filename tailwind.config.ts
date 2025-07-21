@@ -12,6 +12,18 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            'ol > li > p:first-child': {
+              margin: '0',
+            },
+            'p + ol': {
+              margin: '0',
+            },
+          },
+        },
+      },
       animation: {
         blink: 'blink 1.4s steps(3) infinite',
       },
