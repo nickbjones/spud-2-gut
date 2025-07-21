@@ -156,9 +156,9 @@ export default function New() {
         </div>
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
         <TagButtons id="tags" name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange} />
-        <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} />
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
-        <SubmitButton text={isSaving ? 'Saving...' : 'Save'} disabled={isSaving} />
+        <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} />
+        <SubmitButton text={isSaving ? 'Saving...' : 'Save Recipe'} disabled={isSaving} />
       </form>
     </div>
   );
