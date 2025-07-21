@@ -149,7 +149,7 @@ export default function New() {
     <div className="max-w-2xl mx-auto p-6">
       <form onSubmit={handleSubmit}>
         <input type="hidden" id="id" name="id" value={formData.id} />
-        <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} />
+        <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} required />
         <div className="sm:grid grid-cols-2 gap-4">
           <TextAreaField id="ingredients" name="ingredients" label="Ingredients" value={formData.ingredients} onChange={handleGeneralFieldChange} className="h-32" />
           <TextAreaField id="instructions" name="instructions" label="Instructions" value={formData.instructions} onChange={handleGeneralFieldChange} className="h-32" />
@@ -157,7 +157,7 @@ export default function New() {
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
         <TagButtons id="tags" name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange} />
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
-        <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} />
+        <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} required />
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Recipe'} disabled={isSaving} />
       </form>
     </div>
