@@ -160,7 +160,7 @@ export default function New() {
         <TextAreaField id="ingredients" name="ingredients" label="Ingredients" value={formData.ingredients} onChange={handleGeneralFieldChange} />
         <TextAreaField id="instructions" name="instructions" label="Instructions" value={formData.instructions} onChange={handleGeneralFieldChange} />
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
-        <SubmitButton text={isSaving ? 'Saving...' : 'Save Changes'} disabled={isSaving} />
+        <SubmitButton text={isSaving ? 'Saving...' : 'Save'} disabled={isSaving} />
       </form>
     </div>
   );
