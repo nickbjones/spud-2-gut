@@ -11,6 +11,9 @@ export const generateUid = (title: string, objects: (Recipe | Tag)[]): string =>
     .trim()
     .replace(/\s+/g, '-'); // replace spaces with hyphens
 
+  // return blank if everything gets filtered out (including Japanese characters), and let the frontend handle it
+  if (!base) return '';
+
   // check if the UID already exists in the recipes
   const existingUids = new Set(objects.map(r => r.uid));
   if (!existingUids.has(base)) return base;
