@@ -9,24 +9,29 @@ export default function Navbar() {
 
   const navItems = [
     { href: '/home', label: 'Home' },
-    { href: '/recipes/new', label: 'New Recipe' },
     { href: '/recipes', label: 'Recipes' },
     { href: '/tags', label: 'Tags' },
   ];
 
   return (
-    <nav className="p-4 bg-gray-800 text-white flex space-x-4">
+    <nav className="p-4 bg-gray-800 text-white flex">
       {navItems.map(({ href, label }) => (
-        <Link 
+        <Link
           key={href} 
           href={href} 
-          className={`px-3 py-2 rounded-md transition ${
+          className={`mr-2 px-3 py-2 rounded-md transition ${
             rootPath === href ? 'bg-blue-500' : 'hover:bg-gray-700'
           }`}
         >
           {label}
         </Link>
       ))}
+      <Link
+        href="/recipes/new" 
+        className="ml-auto px-3 py-2 rounded-md transition bg-green-600 hover:bg-green-500"
+      >
+        + New Recipe
+      </Link>
     </nav>
   );
 }
