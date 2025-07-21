@@ -33,7 +33,7 @@ const unselectedTagStyles = `
 
 export default function TagButtons({ id, name, tags, selectedTags, onChange }: TagButton) {
   return (
-    <div className="flex gap-2 my-3">
+    <div className="flex gap-2 my-3 overflow-x-auto whitespace-nowrap pb-1">
       {tags.map(({ uid, title }) => (
         <label
           key={uid}

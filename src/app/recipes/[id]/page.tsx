@@ -71,12 +71,11 @@ export default function Recipe() {
 
   return (
     <div className="p-6">
-      <SharedLink href="/recipes" text="⇽ Recipes" />
       <SharedHeading text={recipe.title} styles="mt-4" />
-      <div className="mt-4">
+      <div className="overflow-x-auto whitespace-nowrap h-10 mt-4 pt-2">
         {recipe.tags.map((uid: string) => <Tag key={uid} uid={uid} text={uid} />)}
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="sm:grid grid-cols-2 gap-4">
         <div className="mt-4 mb-4">
           <SharedHeading type="h3" text="Ingredients" />
           {recipe.ingredients ? (
