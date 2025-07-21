@@ -150,7 +150,7 @@ export default function New() {
       <form onSubmit={handleSubmit}>
         <input type="hidden" id="id" name="id" value={formData.id} />
         <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} required />
-        <div className="sm:grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <TextAreaField id="ingredients" name="ingredients" label="Ingredients" value={formData.ingredients} onChange={handleGeneralFieldChange} className="h-32" />
           <TextAreaField id="instructions" name="instructions" label="Instructions" value={formData.instructions} onChange={handleGeneralFieldChange} className="h-32" />
         </div>
