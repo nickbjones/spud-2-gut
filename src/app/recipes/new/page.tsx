@@ -153,12 +153,13 @@ export default function New() {
       <form onSubmit={handleSubmit}>
         <input type="hidden" id="id" name="id" value={formData.id} />
         <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} />
-        <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} />
+        <div className="grid grid-cols-2 gap-4">
+          <TextAreaField id="ingredients" name="ingredients" label="Ingredients" value={formData.ingredients} onChange={handleGeneralFieldChange} className="h-32" />
+          <TextAreaField id="instructions" name="instructions" label="Instructions" value={formData.instructions} onChange={handleGeneralFieldChange} className="h-32" />
+        </div>
+        <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
         <TagButtons id="tags" name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange} />
-        <DateField id="date" name="date" label="Date" value={formData.date} onChange={handleGeneralFieldChange} />
-        <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} />
-        <TextAreaField id="ingredients" name="ingredients" label="Ingredients" value={formData.ingredients} onChange={handleGeneralFieldChange} />
-        <TextAreaField id="instructions" name="instructions" label="Instructions" value={formData.instructions} onChange={handleGeneralFieldChange} />
+        <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} />
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
         <SubmitButton text={isSaving ? 'Saving...' : 'Save'} disabled={isSaving} />
       </form>
