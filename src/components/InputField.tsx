@@ -3,7 +3,7 @@ import { labelStyles, inputStyles } from './sharedFormStyles';
 type InputField = {
   id: string;
   name: string;
-  label: string;
+  label?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -11,7 +11,7 @@ type InputField = {
 export default function InputField(input: InputField) {
   return (
     <>
-      <label htmlFor={input.id} className={labelStyles}>{input.label}</label>
+      {input.label && <label htmlFor={input.id} className={labelStyles}>{input.label}</label>}
       <input
         type="text"
         id={input.id}
