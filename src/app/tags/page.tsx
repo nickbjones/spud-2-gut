@@ -6,7 +6,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Tag } from '@/types/tag';
-import SharedButton from '@/components/SharedButton';
 import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
@@ -163,24 +162,6 @@ export default function Tags() {
   if (tags.length < 1) return <p>No tags!</p>;
   if (error) return <ErrorMessage text={error} />;
 
-  const inputStyles = `
-    h-10
-    text-gray-900
-    text-sm
-    rounded-lg
-    border
-    border-gray-300
-    bg-gray-50
-    focus:ring-blue-500
-    focus:border-blue-500
-    dark:text-white
-    dark:border-gray-600
-    dark:bg-gray-700
-    dark:focus:ring-blue-500
-    dark:focus:border-blue-500
-    dark:placeholder-gray-400
-  `;
-
   return (
     <div className="p-6">
       <SharedHeading text="Tags" />
@@ -239,13 +220,12 @@ export default function Tags() {
         <form onSubmit={handleSubmit} className="mt-4 flex items-center gap-2">
           <input type="hidden" id="id" name="id" value={id} />
           <input type="hidden" id="uid" name="uid" value={uid} />
-          <input
-            type="text"
+          <InputField
             id="newTag"
             name="newTag"
             value={title}
             onChange={handleTitleChange}
-            className={inputStyles}
+            className="w-auto mb-0 h-10"
           />
           <SubmitButton text={isSaving ? 'Saving...' : 'Save'} disabled={isSaving} />
         </form>
