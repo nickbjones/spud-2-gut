@@ -5,7 +5,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Tag } from '@/types/tag';
+import type { Tag as TagType} from '@/types/tag';
+import Tag from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
@@ -17,7 +18,7 @@ import { generateUid } from '@/lib/utils/helpers';
 export default function Tags() {
   const router = useRouter();
 
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [tags, setTags] = useState<TagType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
@@ -46,7 +47,7 @@ export default function Tags() {
     try {
       const res = await fetch('/api/tags');
       if (!res.ok) throw new Error('Failed to fetch tags');
-      const recipeData: Tag[] = await res.json();
+      const recipeData: TagType[] = await res.json();
       setTags(recipeData);
       const newId = getNewId('TAG', recipeData);
       setId(newId);
@@ -99,7 +100,7 @@ export default function Tags() {
     }
   };
 
-  const handleDelete = async (tag: Tag) => {
+  const handleDelete = async (tag: TagType) => {
     // check here if this tag is used in any recipes
     // if so, show a warning and do not delete
     // for now, just confirm deletion
@@ -123,7 +124,7 @@ export default function Tags() {
     }
   };
 
-  const startEditing = (tag: Tag) => {
+  const startEditing = (tag: TagType) => {
     setEditingTagId(tag.id);
     setEditingTagUid(tag.uid);
     setEditedTitle(tag.title);
@@ -168,9 +169,9 @@ export default function Tags() {
   return (
     <div className="p-6">
       <SharedHeading text="Tags" />
-      <ul>
-        {tags.map((tag: Tag) => (
-          <li key={tag.uid} className="my-2 group flex">
+      <ul className="flex flex-wrap gap-1">
+        {tags.map((tag: TagType) => (
+          <li key={tag.uid} className="my-1 group">
             {editingTagId === tag.id ? (
               <>
                 <input
@@ -197,7 +198,7 @@ export default function Tags() {
               </>
             ) : (
               <>
-                <SharedLink href={`tags/${tag.uid}`} text={tag.title} />
+                <Tag uid={tag.uid} text={tag.title} />
                 <div className="invisible group-hover:visible flex gap-2 ml-2 mr-auto">
                   <button
                     onClick={() => startEditing(tag)}
