@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Recipe } from '@/types/recipe';
 import type { Tag } from '@/types/tag';
-import { uidRules, generateUid } from '@/lib/utils/helpers';
+import { uidRules, generateUid, getNewId } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import TagButtons from '@/components/TagButtons';
@@ -51,17 +51,6 @@ export default function New() {
       setLoadingTags(false);
     }
   };
-
-  // move to shared library
-  function getNewId(prefix: string, data: { id: string }[]): string {
-    const maxId = data.reduce((max, item) => {
-      const num = parseInt(item.id.replace(`${prefix}#`, ''), 10);
-      return num > max ? num : max;
-    }, 0);
-
-    const nextId = (maxId + 1).toString().padStart(3, '0');
-    return `${prefix}#${nextId}`;
-  }
 
   const fetchRecipes = async () => {
     try {
