@@ -6,9 +6,8 @@
 import { useEffect, useState } from 'react';
 import type { Recipe } from '@/types/recipe';
 import type { Tag } from '@/types/tag';
-import Md from '@/components/Markdown';
 import { useParams, notFound } from 'next/navigation';
-import CustomLink from '@/components/SharedLink';
+import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
@@ -68,14 +67,14 @@ export default function Tag() {
     <div className="p-6">
       <SharedHeading text={tag.title} />
       <div className="mt-4">
-        <p>Recipes with the tag "{tag.title}":</p>
-        <div>
+        <p className="mb-3">Recipes with the tag "{tag.title}":</p>
+        <ul>
           {filteredRecipes && filteredRecipes.map((recipe) => (
-            <p key={recipe.id} className="mt-2">
-              <CustomLink key={recipe.id} href={`/recipes/${recipe.uid}`} text={recipe.uid} />
-            </p>
+            <li key={recipe.id} className="flex my-2">
+              <SharedLink key={recipe.id} href={`/recipes/${recipe.uid}`} text={recipe.title} />
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </div>
   );
