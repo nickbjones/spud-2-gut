@@ -20,7 +20,7 @@ export default function Navbar() {
           key={href} 
           href={href} 
           className={`mr-2 px-3 py-2 rounded-md transition ${
-            rootPath === href ? 'bg-blue-500' : 'hover:bg-gray-700'
+            rootPath === href ? 'bg-orange-500' : 'hover:bg-gray-700'
           }`}
         >
           {label}
