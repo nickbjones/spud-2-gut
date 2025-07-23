@@ -41,10 +41,10 @@ export default function Edit() {
 
   const [formData, setFormData] = useState<RecipeEditable>(initialValues);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
-  const [loadingTags, setLoadingTags] = useState(true);
-  const [loadingRecipe, setLoadingRecipe] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [loadingTags, setLoadingTags] = useState<boolean>(true);
+  const [loadingRecipe, setLoadingRecipe] = useState<boolean>(true);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const fetchTags = async () => {
     try {

@@ -33,10 +33,10 @@ export default function New() {
   const [formData, setFormData] = useState<Recipe>(initialValues);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loadingTags, setLoadingTags] = useState(true);
-  const [loadingRecipes, setLoadingRecipes] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [loadingTags, setLoadingTags] = useState<boolean>(true);
+  const [loadingRecipes, setLoadingRecipes] = useState<boolean>(true);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const fetchTags = async () => {
     try {

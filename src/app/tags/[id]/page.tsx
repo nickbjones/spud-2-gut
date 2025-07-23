@@ -21,9 +21,9 @@ export default function Tag() {
   const uid = params.id as string;
   const [tag, setTag] = useState<Tag | null>(null);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loadingTags, setLoadingTags] = useState(true);
-  const [loadingRecipes, setLoadingRecipes] = useState(true);
-  const [error, setError] = useState('');
+  const [loadingTags, setLoadingTags] = useState<boolean>(true);
+  const [loadingRecipes, setLoadingRecipes] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchTag = async () => {
