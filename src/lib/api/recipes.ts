@@ -2,17 +2,9 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import type { Recipe } from '@/types/recipe';
 
-// import { recipes } from '@/lib/mocks/mock';
-
 const client = new DynamoDBClient({ region: process.env.AWS_REGION });
 const docClient = DynamoDBDocumentClient.from(client);
-
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
-
-// use?
-// const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
-// const GET_ALL_RECIPES_ENDPT = process.env.NEXT_PUBLIC_GET_ALL_RECIPES_ENDPT ?? '';
-// const GET_ONE_RECIPE_ENDPT = process.env.NEXT_PUBLIC_GET_ONE_RECIPE_ENDPT ?? '';
 
 export type DynamoDbRecipe = {
   id: string,
@@ -88,8 +80,8 @@ export async function getAllRecipes() {
   }
 }
 
-// temporary fix (fetch ALL recipes, then find the correct one)
 export async function getOneRecipe(uid: string): Promise<Recipe | undefined> {
+  // temporary fix (fetch ALL recipes, then find the correct one)
   try {
     const allRecipes = await getAllRecipes();
     const recipe: Recipe | undefined = allRecipes.find((p) => p.uid === uid);

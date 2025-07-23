@@ -1,12 +1,10 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import type { Tag } from '@/types/tag';
-// import { tags as mockTags } from '@/lib/mocks/mock';
 
 const client = new DynamoDBClient({ region: process.env.AWS_REGION });
 const docClient = DynamoDBDocumentClient.from(client);
 
-// const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
 
 export type DynamoDbTag = {
@@ -43,10 +41,6 @@ function formatDynamoDbTags(tagsRaw: DynamoDbTag[]): Tag[] {
   });
 }
 
-
-/**
- * Fetches all tags from the DynamoDB table.
- */
 export async function getAllTags(): Promise<Tag[]> {
   try {
     // QueryCommand is more efficient for fetching items with a specific partition key
@@ -72,8 +66,8 @@ export async function getAllTags(): Promise<Tag[]> {
   }
 }
 
-// temporary fix (fetch ALL tags, then find the correct one)
 export async function getOneTag(uid: string): Promise<Tag | undefined> {
+  // temporary fix (fetch ALL tags, then find the correct one)
   try {
     const allTags = await getAllTags();
     const tag: Tag | undefined = allTags.find((p) => p.uid === uid);
