@@ -111,8 +111,8 @@ export default function Recipe() {
       )}
       {recipe.reference && (
         <div className="mt-4">
-          <span>Reference: </span>
-          <a href={recipe.reference}>{recipe.reference}</a>
+          <SharedHeading type="h3" text="Reference" />
+          <SharedLink href={recipe.reference} text={recipe.reference} />
         </div>
       )}
       <div className="mt-8">
