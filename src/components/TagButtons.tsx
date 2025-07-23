@@ -1,17 +1,9 @@
 import { generateUid, getNewId } from '@/lib/utils/helpers';
 import type { Tag } from '@/types/tag';
 import { useRef, useState } from 'react';
-
-type TagButtonType = {
-  uid: string;
-  name: string;
-  title: string;
-  isSelected?: boolean;
-  onChange: (tagUid: string) => void;
-};
+import TagButton from './TagButton';
 
 type TagButtonsType = {
-  id: string;
   name: string;
   tags: Tag[];
   selectedTags: string[];
@@ -41,23 +33,7 @@ const unselectedTagStyles = `
   border-gray-300
 `;
 
-const TagButton = ({ uid, name, title, isSelected = false, onChange }: TagButtonType) => (
-  <label
-    className={`${labelStyles} ${isSelected ? selectedTagStyles : unselectedTagStyles}`}
-  >
-    <input
-      type="checkbox"
-      name={name}
-      value={uid}
-      checked={isSelected}
-      onChange={() => onChange(uid)}
-      className="hidden"
-    />
-    {title}
-  </label>
-);
-
-export default function TagButtons({ id, name, tags, selectedTags, onChange }: TagButtonsType) {
+export default function TagButtons({ name, tags, selectedTags, onChange }: TagButtonsType) {
   const [tagsList, setTagsList] = useState<Tag[]>(tags);
   const [isEditingNewTag, setIsEditingNewTag] = useState<boolean>(false);
   const [newUid, setNewUid] = useState<string>('');

@@ -136,7 +136,7 @@ export default function Edit() {
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
         {loadingTags
           ? <LoadingMessage />
-          : <TagButtons id="tags" name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange}
+          : <TagButtons name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange}
         />}
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
         <p className="text-gray-600 font-medium text-sm">UID</p>
