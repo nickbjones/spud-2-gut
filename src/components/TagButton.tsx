@@ -6,7 +6,7 @@ type TagButtonType = {
   onChange: (tagUid: string) => void;
 };
 
-const labelStyles = `
+export const labelStyles = `
   flex
   items-center
   justify-center
@@ -18,12 +18,12 @@ const labelStyles = `
   rounded-lg
   cursor-pointer
 `;
-const selectedTagStyles = `
+export const selectedTagStyles = `
   bg-blue-500
   text-white
   border-blue-500
 `;
-const unselectedTagStyles = `
+export const unselectedTagStyles = `
   bg-white
   text-gray-800
   border-gray-300
