@@ -96,6 +96,7 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
             className="w-28 px-4 py-2 border rounded-lg text-sm"
             value={newTitle}
             onChange={handleNewTitleChange}
+            autoFocus
           />
           <button
             type="button"

@@ -217,6 +217,7 @@ export default function Tags() {
             value={title}
             onChange={handleTitleChange}
             className="w-auto mb-0 h-10"
+            autoFocus
           />
           <SubmitButton text={isSaving ? 'Saving...' : 'Save'} disabled={isSaving} />
         </form>
