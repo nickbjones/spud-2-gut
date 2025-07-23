@@ -106,7 +106,7 @@ export default function Recipe() {
       {recipe.description && (
         <div className="mt-4">
           <SharedHeading type="h3" text="Description" />
-          <Md>{recipe.description}</Md>
+          <Md className="max-w-full">{recipe.description}</Md>
         </div>
       )}
       {recipe.reference && (
