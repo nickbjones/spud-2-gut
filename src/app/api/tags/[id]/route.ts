@@ -54,7 +54,6 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
   try {
     const tagData = await req.json();
-    console.log('Updating tag with data:', tagData);
 
     if (!tagData.title) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });

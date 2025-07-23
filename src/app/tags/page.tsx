@@ -103,8 +103,6 @@ export default function Tags() {
     // for now, just confirm deletion
     if (!confirm(`Are you sure you want to delete the tag "${tag.title}"?`)) return;
 
-    console.log('Deleting tag:', tag);
-
     try {
       const response = await fetch(`/api/tags/${encodeURIComponent(tag.id)}`, {
         method: 'DELETE',

@@ -27,7 +27,6 @@ export default function Tag() {
 
   useEffect(() => {
     const fetchTag = async () => {
-      console.log(`Fetching tag with uid: ${uid}`);
       try {
         const res = await fetch(`/api/tags/${encodeURIComponent(uid)}`);
         if (!res.ok) throw new Error('Failed to fetch tag');

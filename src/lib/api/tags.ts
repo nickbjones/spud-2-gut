@@ -74,7 +74,6 @@ export async function getAllTags(): Promise<Tag[]> {
 
 // temporary fix (fetch ALL tags, then find the correct one)
 export async function getOneTag(uid: string): Promise<Tag | undefined> {
-  console.log('getOneTag', uid);
   try {
     const allTags = await getAllTags();
     const tag: Tag | undefined = allTags.find((p) => p.uid === uid);
@@ -86,7 +85,6 @@ export async function getOneTag(uid: string): Promise<Tag | undefined> {
 }
 
 export async function createTag(tag: Tag) {
-  console.log('createTag', tag);
   try {
     const command = new PutCommand({
       TableName: AWS_RECIPES_TABLENAME,
@@ -102,7 +100,6 @@ export async function createTag(tag: Tag) {
 }
 
 export async function deleteTag(id: string) {
-  console.log('deleteTag', { id });
   try {
     const command = new DeleteCommand({
       TableName: AWS_RECIPES_TABLENAME,
@@ -118,7 +115,6 @@ export async function deleteTag(id: string) {
 }
 
 export async function updateTag(tag: Tag) {
-  console.log('updateTag', tag);
   try {
     const command = new PutCommand({
       TableName: AWS_RECIPES_TABLENAME,

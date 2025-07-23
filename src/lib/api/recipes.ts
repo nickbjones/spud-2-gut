@@ -1,6 +1,7 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, ScanCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import type { Recipe } from '@/types/recipe';
+
 // import { recipes } from '@/lib/mocks/mock';
 
 const client = new DynamoDBClient({ region: process.env.AWS_REGION });
@@ -113,8 +114,6 @@ export async function createRecipe(recipe: Recipe) {
     throw new Error('Failed to save recipe');
   }
 }
-
-import { DeleteCommand } from '@aws-sdk/lib-dynamodb';
 
 export async function deleteRecipe(id: string) {
   try {
