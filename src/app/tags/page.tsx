@@ -3,7 +3,7 @@
  */
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Tag as TagType} from '@/types/tag';
 import Tag from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
@@ -12,7 +12,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import InputField from '@/components/InputField';
 import SubmitButton from '@/components/SubmitButton';
-import { generateUid } from '@/lib/utils/helpers';
+import { generateUid, getNewId } from '@/lib/utils/helpers';
 
 export default function Tags() {
   const [tags, setTags] = useState<TagType[]>([]);
@@ -27,17 +27,6 @@ export default function Tags() {
   const [title, setTitle] = useState<string>('');
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>('');
-
-  // move to shared library
-  function getNewId(prefix: string, data: { id: string }[]): string {
-    const maxId = data.reduce((max, item) => {
-      const num = parseInt(item.id.replace(`${prefix}#`, ''), 10);
-      return num > max ? num : max;
-    }, 0);
-
-    const nextId = (maxId + 1).toString().padStart(3, '0');
-    return `${prefix}#${nextId}`;
-  }
 
   const fetchTags = useCallback(async () => {
     setLoading(true);
@@ -228,6 +217,8 @@ export default function Tags() {
             value={title}
             onChange={handleTitleChange}
             className="w-auto mb-0 h-10"
+            autoFocus
+            autoComplete="off"
           />
           <SubmitButton text={isSaving ? 'Saving...' : 'Save'} disabled={isSaving} />
         </form>

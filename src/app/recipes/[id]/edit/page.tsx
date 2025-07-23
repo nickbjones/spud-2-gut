@@ -3,7 +3,7 @@
  */
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams, notFound } from 'next/navigation';
 import type { Recipe } from '@/types/recipe';
 import type { Tag } from '@/types/tag';
@@ -46,7 +46,7 @@ export default function Edit() {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const fetchTags = async () => {
+  const fetchTags = useCallback(async () => {
     try {
       const res = await fetch(`/api/tags`);
       if (!res.ok) throw new Error('Failed to fetch tags');
@@ -58,9 +58,9 @@ export default function Edit() {
     } finally {
       setLoadingTags(false);
     }
-  };
+  }, []);
 
-  async function fetchRecipe() {
+  const fetchRecipe = useCallback(async () => {
     try {
       const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
       if (!res.ok) throw new Error('Failed to fetch recipe');
@@ -71,14 +71,14 @@ export default function Edit() {
     } finally {
       setLoadingRecipe(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     if (uid) {
       fetchRecipe();
       fetchTags();
     }
-  }, [uid]);
+  }, [uid, fetchRecipe]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -136,7 +136,7 @@ export default function Edit() {
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
         {loadingTags
           ? <LoadingMessage />
-          : <TagButtons id="tags" name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange}
+          : <TagButtons name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange}
         />}
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
         <p className="text-gray-600 font-medium text-sm">UID</p>

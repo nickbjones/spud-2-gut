@@ -26,3 +26,13 @@ export const generateUid = (title: string, objects: (Recipe | Tag)[]): string =>
   }
   return newUid;
 };
+
+export const getNewId = (prefix: string, data: { id: string }[]): string => {
+  const maxId = data.reduce((max, item) => {
+    const num = parseInt(item.id.replace(`${prefix}#`, ''), 10);
+    return num > max ? num : max;
+  }, 0);
+
+  const nextId = (maxId + 1).toString().padStart(3, '0');
+  return `${prefix}#${nextId}`;
+}
