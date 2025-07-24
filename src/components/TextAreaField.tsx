@@ -29,4 +29,7 @@ const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
   }
 );
 
+// Set display name because React.forwardRef creates an anonymous component unless you explicitly assign a displayName
+TextAreaField.displayName = 'TextAreaField';
+
 export default TextAreaField;

@@ -75,14 +75,14 @@ export default function Edit() {
     } finally {
       setLoadingRecipe(false);
     }
-  }, []);
+  }, [uid]);
 
   useEffect(() => {
     if (uid) {
       fetchRecipe();
       fetchTags();
     }
-  }, [uid, fetchRecipe]);
+  }, [uid, fetchRecipe, fetchTags]);
 
   useEffect(() => {
     const focusParam = searchParams.get('focus');
@@ -95,7 +95,7 @@ export default function Edit() {
         instructionsTextareaRef.current?.focus();
       }
     }, 1000);
-  }, [searchParams.toString()]);
+  }, [searchParams]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({

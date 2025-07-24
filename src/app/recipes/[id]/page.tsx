@@ -37,7 +37,7 @@ export default function Recipe() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [uid]);
 
   const fetchTags = useCallback(async () => {
     try {
@@ -59,7 +59,7 @@ export default function Recipe() {
   useEffect(() => {
     fetchRecipe();
     fetchTags();
-  }, [uid, fetchRecipe]);
+  }, [uid, fetchRecipe, fetchTags]);
 
   const confirmDeletion = () => {
     if (confirm('Are you sure you want to delete this recipe?')) {
