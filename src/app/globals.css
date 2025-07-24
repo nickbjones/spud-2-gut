@@ -26,3 +26,10 @@ body {
 .prose :where(ol > li > p:first-child):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   margin: 0;
 }
+.prose :where(ul > li):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  padding-inline-start: 0;
+}
+.prose :where(ul > li):not(:where([class~="not-prose"], [class~="not-prose"] *))::marker,
+.prose :where(ol > li):not(:where([class~="not-prose"], [class~="not-prose"] *))::marker {
+  color: #000000;
+}
