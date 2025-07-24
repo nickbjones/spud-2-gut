@@ -24,8 +24,6 @@ export default function Recipe() {
   const [error, setError] = useState<string>('');
 
   const fetchRecipe = useCallback(async () => {
-    // TODO: use a custom hook for fetching data
-    // TODO: use id instead of uid
     try {
       const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
       if (!res.ok) throw new Error('Failed to fetch recipe');
