@@ -93,8 +93,8 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
         <div className="flex items-center">
           <input
             type="text"
-            placeholder="New tag title"
-            className={`w-28 ${sharedTagStyles}`}
+            placeholder="New tag name"
+            className={`${sharedTagStyles} w-28 !text-left`}
             value={newTitle}
             onChange={handleNewTitleChange}
             autoFocus

@@ -6,7 +6,6 @@ export default function Home() {
       <div className="bg-white shadow-lg rounded-xl p-8 text-center">
         <h1 className="text-5xl font-extrabold mb-6 text-orange-600">Delicious Recipes</h1>
         <p className="text-lg text-gray-700 mb-6">Save and lookup amazing dishes effortlessly.</p>
-        {/* <div className="flex flex-col items-center space-x-6"> */}
         <div className="flex flex-col items-center sm:justify-center sm:flex-row">
           <Link href="/recipes" className="m-2 bg-orange-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-orange-600 transition-all">
             View Recipes
