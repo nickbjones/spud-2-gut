@@ -19,7 +19,10 @@ export default {
               margin: '0',
             },
             'p + ol': {
-              margin: '0',
+              marginTop: '-1rem',
+            },
+            'p + ul': {
+              marginTop: '-1rem',
             },
           },
         },
