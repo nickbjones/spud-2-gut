@@ -115,10 +115,9 @@ export default function Recipe() {
           <SharedLink href={recipe.reference} text={recipe.reference} />
         </div>
       )}
-      <div className="mt-8">
-        <SharedLink href={`${recipe.uid}/edit`} text="Edit" styles="text-sm" />
-        &nbsp;|&nbsp;
-        <SharedLink text="Delete" styles="text-sm text-red-800 hover:text-red-400" onClick={confirmDeletion} />
+      <div className="flex flex-col justify-center items-center mt-10">
+        <SharedButton href={`${recipe.uid}/edit`} text="Edit recipe" />
+        <SharedLink text="Delete recipe" styles="mt-3 text-red-800 hover:text-red-400" onClick={confirmDeletion} />
       </div>
     </div>
   );
