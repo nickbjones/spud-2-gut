@@ -1,7 +1,8 @@
 import { generateUid, getNewId } from '@/lib/utils/helpers';
 import type { Tag } from '@/types/tag';
 import { useRef, useState } from 'react';
-import TagButton, { labelStyles, unselectedTagStyles } from './TagButton';
+import TagButton from './TagButton';
+import { sharedTagStyles, selectedTagStyles, unselectedTagStyles } from "./Tag";
 
 type TagButtonsType = {
   name: string;
@@ -77,7 +78,7 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
   };
 
   return (
-    <div ref={containerRef} className="flex gap-2 my-3 overflow-x-auto whitespace-nowrap pb-1">
+    <div ref={containerRef} className="flex my-3 overflow-x-auto whitespace-nowrap pb-1">
       {tagsList.map(({ uid, title }) => (
         <TagButton
           key={uid + title}
@@ -93,7 +94,7 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
           <input
             type="text"
             placeholder="New tag title"
-            className="w-28 px-4 py-2 border rounded-lg text-sm"
+            className={`w-28 ${sharedTagStyles}`}
             value={newTitle}
             onChange={handleNewTitleChange}
             autoFocus
@@ -101,7 +102,7 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
           <button
             type="button"
             onClick={handleNewTagSubmit}
-            className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm"
+            className={`${sharedTagStyles} ${selectedTagStyles} hover:bg-blue-600`}
             disabled={!newTitle}
           >
             Save
@@ -110,7 +111,7 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
         </div>
       ) : (
         <span
-          className={`${labelStyles} ${unselectedTagStyles}`}
+          className={`${sharedTagStyles} ${unselectedTagStyles}`}
           onClick={openNewTagEditor}
         >
           + New
