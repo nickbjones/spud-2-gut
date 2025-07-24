@@ -14,7 +14,6 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
-import SharedButton from '@/components/SharedButton';
 
 export default function Recipe() {
   const params = useParams();
