@@ -12,21 +12,6 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
-      typography: {
-        DEFAULT: {
-          css: {
-            'ol > li > p:first-child': {
-              margin: '0',
-            },
-            'p + ol': {
-              marginTop: '-1rem',
-            },
-            'p + ul': {
-              marginTop: '-1rem',
-            },
-          },
-        },
-      },
       animation: {
         blink: 'blink 1.4s steps(3) infinite',
       },
