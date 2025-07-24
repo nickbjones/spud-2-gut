@@ -70,7 +70,7 @@ export default function Recipe() {
   if (error) return <ErrorMessage text={error} />;
 
   return (
-    <div className="p-6">
+    <div className="p-3 sm:p-6">
       <SharedHeading text={recipe.title} styles="mt-4" />
       {recipe.tags.length > 0 &&
         <div className="overflow-x-auto whitespace-nowrap h-10 mt-4 pt-2">
@@ -79,7 +79,7 @@ export default function Recipe() {
           ))}
         </div>
       }
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4">
         <div className="mt-4 mb-4">
           <SharedHeading type="h3" text="Ingredients" />
           {recipe.ingredients ? (
