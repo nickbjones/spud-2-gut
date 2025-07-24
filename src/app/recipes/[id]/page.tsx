@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import type { Recipe } from '@/types/recipe';
 import Md from '@/components/Markdown';
 import { useParams, notFound } from 'next/navigation';
-import Tag from '@/components/Tag';
+import Tag, { selectedTagStyles } from '@/components/Tag';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
@@ -73,9 +73,9 @@ export default function Recipe() {
     <div className="p-3 sm:p-6">
       <SharedHeading text={recipe.title} styles="mt-4" />
       {recipe.tags.length > 0 &&
-        <div className="overflow-x-auto whitespace-nowrap h-10 mt-4 pt-2">
+        <div className="overflow-x-auto whitespace-nowrap h-10 mt-2 pt-2">
           {recipe.tags.map((uid: string) => (
-            <Tag key={uid} uid={uid} text={uid} />
+            <Tag key={uid} uid={uid} text={uid} className={selectedTagStyles} />
           ))}
         </div>
       }
