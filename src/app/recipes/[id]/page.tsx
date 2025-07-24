@@ -8,7 +8,6 @@ import type { Recipe } from '@/types/recipe';
 import Md from '@/components/Markdown';
 import { useParams, notFound } from 'next/navigation';
 import Tag, { selectedTagStyles } from '@/components/Tag';
-// TODO: globally rename type Tag to TagType
 import type { Tag as TagType } from '@/types/tag';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
