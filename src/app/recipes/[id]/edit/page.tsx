@@ -3,8 +3,8 @@
  */
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter, useParams, notFound } from 'next/navigation';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter, useParams, useSearchParams, notFound } from 'next/navigation';
 import type { Recipe } from '@/types/recipe';
 import type { Tag } from '@/types/tag';
 import InputField from '@/components/InputField';
@@ -24,20 +24,24 @@ type RecipeEditable = {
   reference: string;
 };
 
+const initialValues: RecipeEditable = {
+  id: '',
+  title: '',
+  tags: [],
+  description: '',
+  ingredients: '',
+  instructions: '',
+  reference: '',
+};
+
 export default function Edit() {
   const router = useRouter();
   const params = useParams();
   const uid = params.id as string;
 
-  const initialValues: RecipeEditable = {
-    id: '',
-    title: '',
-    tags: [],
-    description: '',
-    ingredients: '',
-    instructions: '',
-    reference: '',
-  };
+  const ingredientsTextareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const instructionsTextareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const searchParams = useSearchParams();
 
   const [formData, setFormData] = useState<RecipeEditable>(initialValues);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
@@ -79,6 +83,19 @@ export default function Edit() {
       fetchTags();
     }
   }, [uid, fetchRecipe]);
+
+  useEffect(() => {
+    const focusParam = searchParams.get('focus');
+
+    // stupid temporary fix to wait for the DOM to be loaded
+    setTimeout(() => {
+      if (focusParam === 'ingredients') {
+        ingredientsTextareaRef.current?.focus();
+      } else if (focusParam === 'instructions') {
+        instructionsTextareaRef.current?.focus();
+      }
+    }, 1000);
+  }, [searchParams.toString()]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -130,8 +147,24 @@ export default function Edit() {
         <input type="hidden" id="id" name="id" value={formData.id} />
         <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleGeneralFieldChange} />
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
-          <TextAreaField id="ingredients" name="ingredients" label="Ingredients" value={formData.ingredients} onChange={handleGeneralFieldChange} className="h-32" />
-          <TextAreaField id="instructions" name="instructions" label="Instructions" value={formData.instructions} onChange={handleGeneralFieldChange} className="h-32" />
+          <TextAreaField
+            ref={ingredientsTextareaRef}
+            id="ingredients"
+            name="ingredients"
+            label="Ingredients"
+            value={formData.ingredients}
+            onChange={handleGeneralFieldChange}
+            className="h-32"
+          />
+         <TextAreaField
+            ref={instructionsTextareaRef}
+            id="instructions"
+            name="instructions"
+            label="Instructions"
+            value={formData.instructions}
+            onChange={handleGeneralFieldChange}
+            className="h-32"
+          />
         </div>
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
         {loadingTags

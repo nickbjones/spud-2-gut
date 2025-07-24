@@ -108,7 +108,7 @@ export default function Recipe() {
           ) : (
             <>
               <p className="mb-2">No ingredients yet!</p>
-              <SharedButton href={`${recipe.uid}/edit`} text="Add ingredients" styles="text-sm" />
+              <SharedButton href={`${recipe.uid}/edit?focus=ingredients`} text="Add ingredients" styles="text-sm" />
             </>
           )}
         </div>
@@ -119,7 +119,7 @@ export default function Recipe() {
           ) : (
             <>
               <p className="mb-2">No instructions yet!</p>
-              <SharedButton href={`${recipe.uid}/edit`} text="Add instructions" styles="text-sm" />
+              <SharedButton href={`${recipe.uid}/edit?focus=instructions`} text="Add instructions" styles="text-sm" />
             </>
           )}
         </div>

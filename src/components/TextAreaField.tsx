@@ -1,26 +1,32 @@
+import React from 'react';
 import { labelStyles, inputStyles } from './sharedFormStyles';
 
-type TextAreaField = {
+type TextAreaFieldProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
   id: string;
   name: string;
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   className?: string;
-
 };
 
-export default function TextAreaField(input: TextAreaField) {
-  return (
-    <div>
-      <label htmlFor={input.id} className={labelStyles}>{input.label}</label>
-      <textarea
-        id={input.id}
-        name={input.name}
-        value={input.value}
-        onChange={input.onChange}
-        className={inputStyles + (input.className ? ` ${input.className}` : '')}
-      />
-    </div>
-  );
-}
+const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
+  ({ id, name, label, value, onChange, className, ...rest }, ref) => {
+    return (
+      <div>
+        <label htmlFor={id} className={labelStyles}>{label}</label>
+        <textarea
+          ref={ref}
+          id={id}
+          name={name}
+          value={value}
+          onChange={onChange}
+          className={inputStyles + (className ? ` ${className}` : '')}
+          {...rest}
+        />
+      </div>
+    );
+  }
+);
+
+export default TextAreaField;
