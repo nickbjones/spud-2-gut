@@ -135,7 +135,6 @@ export default function Tags() {
     }
   };
 
-  // TODO: used for what?
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
