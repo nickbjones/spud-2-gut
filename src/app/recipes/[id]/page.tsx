@@ -94,7 +94,7 @@ export default function Recipe() {
     <div className="p-3 sm:p-6">
       <SharedHeading text={recipe.title} styles="mt-4" />
       {recipe.tags.length > 0 &&
-        <div className="overflow-x-auto whitespace-nowrap h-10 mt-2 pt-2">
+        <div className="overflow-x-auto whitespace-nowrap h-8 mt-0 pt-0 sm:h-10 sm:mt-2 sm:pt-2">
           {recipe.tags.map((uid: string) => (
             <Tag key={uid} uid={uid} text={getTitleByUid(uid)} className={selectedTagStyles} />
           ))}
