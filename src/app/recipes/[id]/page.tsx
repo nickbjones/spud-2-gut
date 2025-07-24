@@ -102,7 +102,7 @@ export default function Recipe() {
       }
       <div className="grid grid-cols-2 gap-3 sm:gap-4">
         <div className="mt-4 mb-4">
-          <SharedHeading type="h3" text="Ingredients" />
+          {/* <SharedHeading type="h3" text="Ingredients" /> */}
           {recipe.ingredients ? (
             <Md>{recipe.ingredients}</Md>
           ) : (
@@ -113,7 +113,7 @@ export default function Recipe() {
           )}
         </div>
         <div className="mt-4 mb-4">
-          <SharedHeading type="h3" text="Instructions" />
+          {/* <SharedHeading type="h3" text="Instructions" /> */}
           {recipe.instructions ? (
             <Md>{recipe.instructions}</Md>
           ) : (
@@ -126,7 +126,7 @@ export default function Recipe() {
       </div>
       {recipe.description && (
         <div className="mt-4">
-          <SharedHeading type="h3" text="Description" />
+          <SharedHeading type="h3" text="More info" />
           <Md className="max-w-full">{recipe.description}</Md>
         </div>
       )}
