@@ -179,8 +179,10 @@ export default function Edit() {
           : <TagButtons name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange}
         />}
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
-        <p className="text-gray-600 font-medium text-sm">UID</p>
-        <p className="text-gray-600 font-medium text-sm my-2">{uid}</p>
+        <p className="text-sm mt-6 mb-3">
+          <span className="text-gray-600 font-medium mr-2">UID:</span>
+          <span className="text-gray-400">{uid}</span>
+        </p>
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Changes'} disabled={isSaving} />
       </form>
       <SharedLink text="Delete recipe" styles="text-red-800 hover:text-red-400" onClick={confirmDeletion} />
