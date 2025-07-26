@@ -66,7 +66,7 @@ export default function Recipe() {
       <SharedHeading text={recipe.title} styles="inline-block mt-4 px-3 sm:px-0" />
       <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="float-right mt-6 mr-3 text-sm" />
       {recipe.tags.length > 0 &&
-        <div className="overflow-x-auto whitespace-nowrap h-8 sm:h-10 mt-0 sm:mt-2 px-3 sm:px-0 pt-0 sm:pt-2">
+        <div className="h-8 sm:h-10 mt-0 sm:mt-2 px-3 sm:px-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
           {recipe.tags.map((uid: string) => (
             <Tag key={uid} uid={uid} text={getTitleByUid(uid)} className={selectedTagStyles} />
           ))}
