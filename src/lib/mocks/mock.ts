@@ -1,7 +1,7 @@
-import type { Recipe } from '@/types/recipe';
-import type { Tag } from '@/types/tag';
+import type { RecipeType } from '@/types/recipe';
+import type { TagType } from '@/types/tag';
 
-export const recipes: Recipe[] = [
+export const recipes: RecipeType[] = [
   {
     id: 'TAG#01',
     uid: 'mashed-potatoes',
@@ -70,7 +70,7 @@ export const recipes: Recipe[] = [
   },
 ];
 
-export const tags: Tag[] = [
+export const tags: TagType[] = [
   {
     id: 'TAG#01',
     uid: 'main-dishes',

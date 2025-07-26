@@ -4,11 +4,11 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import type { Recipe } from '@/types/recipe';
+import type { RecipeType } from '@/types/recipe';
 import Md from '@/components/Markdown';
 import { useParams, notFound } from 'next/navigation';
 import Tag, { selectedTagStyles } from '@/components/Tag';
-import type { Tag as TagType } from '@/types/tag';
+import type { TagType } from '@/types/tag';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
@@ -17,7 +17,7 @@ import SharedLink from '@/components/SharedLink';
 export default function Recipe() {
   const params = useParams();
   const uid = params.id as string;
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [recipe, setRecipe] = useState<RecipeType | null>(null);
   const [tags, setTags] = useState<TagType[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -26,7 +26,7 @@ export default function Recipe() {
     try {
       const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
       if (!res.ok) throw new Error('Failed to fetch recipe.');
-      const recipeData: Recipe = await res.json();
+      const recipeData: RecipeType = await res.json();
       setRecipe(recipeData);
     } catch (err) {
       setError((err as Error).message);

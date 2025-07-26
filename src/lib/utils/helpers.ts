@@ -1,9 +1,9 @@
-import { Recipe } from "@/types/recipe";
-import { Tag } from "@/types/tag";
+import { RecipeType } from "@/types/recipe";
+import { TagType } from "@/types/tag";
 
 export const uidRules = /[^a-z0-9 ]/g;
 
-export const generateUid = (title: string, objects: (Recipe | Tag)[]): string => {
+export const generateUid = (title: string, objects: (RecipeType | TagType)[]): string => {
   // generate a new uid from the title
   const base = title
     .toLowerCase()

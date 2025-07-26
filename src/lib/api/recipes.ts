@@ -1,6 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
-import type { Recipe } from '@/types/recipe';
+import type { RecipeType } from '@/types/recipe';
 
 const client = new DynamoDBClient({ region: process.env.AWS_REGION });
 const docClient = DynamoDBDocumentClient.from(client);
@@ -18,7 +18,7 @@ export type DynamoDbRecipe = {
   reference: string,
 };
 
-const emptyRecipe: Recipe = {
+const emptyRecipe: RecipeType = {
   id: '',
   uid: '',
   title: '',
@@ -30,7 +30,7 @@ const emptyRecipe: Recipe = {
   reference: '',
 };
 
-function formatDynamoDbRecipe(recipeRaw: DynamoDbRecipe): Recipe {
+function formatDynamoDbRecipe(recipeRaw: DynamoDbRecipe): RecipeType {
   try {
     return {
       id: recipeRaw.id || '',
@@ -49,7 +49,7 @@ function formatDynamoDbRecipe(recipeRaw: DynamoDbRecipe): Recipe {
   }
 }
 
-function formatDynamoDbRecipes(recipesRaw: DynamoDbRecipe[]): Recipe[] {
+function formatDynamoDbRecipes(recipesRaw: DynamoDbRecipe[]): RecipeType[] {
   return recipesRaw.map((recipeRaw) => {
     return formatDynamoDbRecipe(recipeRaw);
   });
@@ -80,11 +80,11 @@ export async function getAllRecipes() {
   }
 }
 
-export async function getOneRecipe(uid: string): Promise<Recipe | undefined> {
+export async function getOneRecipe(uid: string): Promise<RecipeType | undefined> {
   // temporary fix (fetch ALL recipes, then find the correct one)
   try {
     const allRecipes = await getAllRecipes();
-    const recipe: Recipe | undefined = allRecipes.find((p) => p.uid === uid);
+    const recipe: RecipeType | undefined = allRecipes.find((p) => p.uid === uid);
     return recipe;
   } catch (error) {
     console.error('API Error:', error);
@@ -92,7 +92,7 @@ export async function getOneRecipe(uid: string): Promise<Recipe | undefined> {
   }  
 }
 
-export async function createRecipe(recipe: Recipe) {
+export async function createRecipe(recipe: RecipeType) {
   try {
     const command = new PutCommand({
       TableName: AWS_RECIPES_TABLENAME,
@@ -122,7 +122,7 @@ export async function deleteRecipe(id: string) {
   }
 }
 
-export async function updateRecipe(recipe: Recipe) {
+export async function updateRecipe(recipe: RecipeType) {
   try {
     const command = new PutCommand({
       TableName: AWS_RECIPES_TABLENAME,
