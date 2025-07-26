@@ -33,7 +33,7 @@ export default function Recipes() {
   }, []);
 
   if (loading) return <LoadingMessage />;
-  if (recipes.length < 1) return <p>No recipes!</p>;
+  if (recipes.length < 1) return <ErrorMessage text="No recipes!" />;
   if (error) return <ErrorMessage text={error} />;
 
   recipes.sort((a, b) => a.uid.localeCompare(b.uid));

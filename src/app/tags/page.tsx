@@ -145,7 +145,7 @@ export default function Tags() {
   };
 
   if (loading) return <LoadingMessage />;
-  if (tags.length < 1) return <p>No tags!</p>;
+  if (tags.length < 1) return <ErrorMessage text="No tags!" />;
   if (error) return <ErrorMessage text={error} />;
 
   tags.sort((a, b) => a.uid.localeCompare(b.uid));

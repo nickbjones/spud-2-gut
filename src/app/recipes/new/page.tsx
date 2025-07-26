@@ -131,7 +131,7 @@ export default function New() {
   };
 
   if (loadingTags || loadingRecipes) return <LoadingMessage />;
-  if (recipes.length < 1) return <p>No recipes!</p>;
+  if (recipes.length < 1) return <ErrorMessage text="No recipes!" />;
   if (error) return <ErrorMessage text={error} />;
 
   return (
