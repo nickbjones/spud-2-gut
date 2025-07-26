@@ -38,7 +38,7 @@ export default function Tags() {
       const newId = getNewId('TAG', recipeData);
       setId(newId);
     } catch (err) {
-      setError(`Failed to load tags. ${(err as Error).message}`);
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }

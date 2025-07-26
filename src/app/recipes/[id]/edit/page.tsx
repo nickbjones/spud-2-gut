@@ -58,7 +58,7 @@ export default function Edit() {
       setAvailableTags(tagData);
     } catch (err) {
       setAvailableTags([]);
-      setError(`Failed to load tags. ${(err as Error).message}`);
+      setError((err as Error).message);
     } finally {
       setLoadingTags(false);
     }
@@ -67,11 +67,11 @@ export default function Edit() {
   const fetchRecipe = useCallback(async () => {
     try {
       const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
-      if (!res.ok) throw new Error('Failed to fetch recipe');
+      if (!res.ok) throw new Error('Failed to fetch recipe.');
       const recipeData: Recipe = await res.json();
       setFormData(recipeData);
     } catch (err) {
-      setError(`Failed to load recipe. ${(err as Error).message}`);
+      setError((err as Error).message);
     } finally {
       setLoadingRecipe(false);
     }

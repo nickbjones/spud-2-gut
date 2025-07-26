@@ -25,7 +25,7 @@ export default function Recipe() {
   const fetchRecipe = useCallback(async () => {
     try {
       const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
-      if (!res.ok) throw new Error('Failed to fetch recipe');
+      if (!res.ok) throw new Error('Failed to fetch recipe.');
       const recipeData: Recipe = await res.json();
       setRecipe(recipeData);
     } catch (err) {
@@ -43,7 +43,7 @@ export default function Recipe() {
       setTags(tagData);
     } catch (err) {
       setTags([]);
-      setError(`Failed to load tags. ${(err as Error).message}`);
+      setError((err as Error).message);
     }
   }, []);
 
