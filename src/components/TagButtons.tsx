@@ -3,6 +3,7 @@ import type { Tag } from '@/types/tag';
 import { useRef, useState } from 'react';
 import TagButton from './TagButton';
 import { sharedTagStyles, selectedTagStyles, unselectedTagStyles } from "./Tag";
+import SharedButton from './SharedButton';
 
 type TagButtonsType = {
   name: string;
@@ -14,6 +15,7 @@ type TagButtonsType = {
 export default function TagButtons({ name, tags, selectedTags, onChange }: TagButtonsType) {
   const [tagsList, setTagsList] = useState<Tag[]>(tags);
   const [isEditingNewTag, setIsEditingNewTag] = useState<boolean>(false);
+  const [isSavingNewTag, setIsSavingNewTag] = useState<boolean>(false);
   const [newUid, setNewUid] = useState<string>('');
   const [newTitle, setNewTitle] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -22,6 +24,7 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
 
   const handleNewTagSubmit = async () => {
     if (!newTitle) return;
+    setIsSavingNewTag(true);
 
     const newTag = {
       id: getNewId('TAG', tagsList),
@@ -29,9 +32,6 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
       title: newTitle,
       description: '',
     };
-
-    setTagsList(prev => [...prev, newTag]);
-    onChange(newUid);
 
     try {
       const response = await fetch('/api/tags', {
@@ -44,31 +44,18 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
         throw new Error('Failed to create tag');
       }
 
+      // add new tag to list
+      setTagsList(prev => [newTag, ...prev]);
+      // add new tag to form data
+      onChange(newUid);
       // reset new tag form
       setIsEditingNewTag(false);
+      setIsSavingNewTag(false);
       setNewUid('');
       setNewTitle('');
     } catch (err) {
       setError(`Failed to save tag. ${(err as Error).message}`);
     }
-  };
-
-  const scrollToRightEnd = () => {
-    const el = containerRef.current;
-    if (el) {
-      el.scrollTo({
-        left: el.scrollWidth - el.clientWidth,
-        behavior: 'smooth',
-      });
-    }
-  };
-
-  const openNewTagEditor = () => {
-    setIsEditingNewTag(true);
-    // wait a moment, then scroll right
-    setTimeout(() => {
-      scrollToRightEnd();
-    }, 200);
   };
 
   const handleNewTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +66,34 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
 
   return (
     <div ref={containerRef} className="flex my-3 overflow-x-auto whitespace-nowrap pb-1">
+      {/* new tag */}
+      {isEditingNewTag ? (
+        <div className="flex items-center">
+          <input
+            type="text"
+            placeholder="New tag name"
+            className={`${sharedTagStyles} !text-left !mr-0`}
+            value={isSavingNewTag ? 'Saving...' : newTitle}
+            onChange={handleNewTitleChange}
+            autoFocus
+          />
+          <SharedButton
+            text="Save"
+            onClick={handleNewTagSubmit}
+            styles={`${sharedTagStyles} ${selectedTagStyles} !py-1 !px-2 hover:bg-blue-600`}
+            disabled={!newTitle || isSavingNewTag}
+          />
+          {error && <span className="text-red-500 text-sm">{error}</span>}
+        </div>
+      ) : (
+        <span
+          className={`${sharedTagStyles} ${unselectedTagStyles}`}
+          onClick={() => setIsEditingNewTag(true)}
+        >
+          + New
+        </span>
+      )}
+      {/* tags list */}
       {tagsList.map(({ uid, title }) => (
         <TagButton
           key={uid + title}
@@ -89,34 +104,6 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
           onChange={() => onChange(uid)}
         />
       ))}
-      {isEditingNewTag ? (
-        <div className="flex items-center">
-          <input
-            type="text"
-            placeholder="New tag name"
-            className={`${sharedTagStyles} w-28 !text-left`}
-            value={newTitle}
-            onChange={handleNewTitleChange}
-            autoFocus
-          />
-          <button
-            type="button"
-            onClick={handleNewTagSubmit}
-            className={`${sharedTagStyles} ${selectedTagStyles} hover:bg-blue-600`}
-            disabled={!newTitle}
-          >
-            Save
-          </button>
-          {error && <span className="text-red-500 text-sm">{error}</span>}
-        </div>
-      ) : (
-        <span
-          className={`${sharedTagStyles} ${unselectedTagStyles}`}
-          onClick={openNewTagEditor}
-        >
-          + New
-        </span>
-      )}
     </div>
   );
 }
