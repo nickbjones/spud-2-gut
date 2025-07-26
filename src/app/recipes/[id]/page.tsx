@@ -78,18 +78,10 @@ export default function Recipe() {
         ) : (
           <>
             <div className="my-2 sm:my-4 mx-0">
-              {recipe.ingredients ? (
-                <Md className="px-3 py-1 bg-gray-100">{recipe.ingredients}</Md>
-              ) : (
-                <SharedLink href={`${recipe.uid}/edit?focus=ingredients`} text="Add ingredients →" styles="mx-3 sm:mx-0" />
-              )}
+              {recipe.ingredients && <Md className="px-3 py-1 bg-gray-100">{recipe.ingredients}</Md>}
             </div>
             <div className={`my-2 sm:my-4 ${!recipe.ingredients ? 'ml-3' : 'ml-0'} mr-1 sm:mx-0`}>
-              {recipe.instructions ? (
-                <Md className="py-0">{recipe.instructions}</Md>
-              ) : (
-                <SharedLink href={`${recipe.uid}/edit?focus=instructions`} text="Add instructions →" styles="mx-3 sm:mx-0" />
-              )}
+              {recipe.instructions && <Md className="py-0">{recipe.instructions}</Md>}
             </div>
           </>
         )}
