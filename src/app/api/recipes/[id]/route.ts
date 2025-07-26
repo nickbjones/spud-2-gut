@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json(recipe);
   } catch (error) {
     console.error('Error fetching recipe:', error);
-    return NextResponse.json({ error: 'Failed to fetch recipe' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch recipe.' }, { status: 500 });
   }
 }
 

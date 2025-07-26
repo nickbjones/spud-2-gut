@@ -25,7 +25,7 @@ export default function Recipe() {
   const fetchRecipe = useCallback(async () => {
     try {
       const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
-      if (!res.ok) throw new Error('Failed to fetch recipe');
+      if (!res.ok) throw new Error('Failed to fetch recipe.');
       const recipeData: Recipe = await res.json();
       setRecipe(recipeData);
     } catch (err) {
@@ -43,7 +43,7 @@ export default function Recipe() {
       setTags(tagData);
     } catch (err) {
       setTags([]);
-      setError(`Failed to load tags. ${(err as Error).message}`);
+      setError((err as Error).message);
     }
   }, []);
 
@@ -57,40 +57,16 @@ export default function Recipe() {
     fetchTags();
   }, [uid, fetchRecipe, fetchTags]);
 
-  const confirmDeletion = () => {
-    if (confirm('Are you sure you want to delete this recipe?')) {
-      deleteRecipe();
-    }
-  };
-
-  const deleteRecipe = async () => {
-    try {
-      if (!recipe) throw new Error('Recipe not found');
-
-      const res = await fetch(`/api/recipes/${encodeURIComponent(recipe.id)}`, {
-        method: 'DELETE',
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to delete recipe');
-      };
-
-      // Redirect to recipes list after deletion
-      window.location.href = '/recipes';
-    } catch (err) {
-      setError((err as Error).message);
-    }
-  };
-
   if (loading) return <LoadingMessage />;
   if (!recipe) return notFound();
   if (error) return <ErrorMessage text={error} />;
 
   return (
     <div className="p-0 sm:p-6">
-      <SharedHeading text={recipe.title} styles="mt-4 px-3 sm:px-0" />
+      <SharedHeading text={recipe.title} styles="inline-block mt-4 px-3 sm:px-0" />
+      <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="float-right mt-6 mr-3 text-sm" />
       {recipe.tags.length > 0 &&
-        <div className="overflow-x-auto whitespace-nowrap h-8 sm:h-10 mt-0 sm:mt-2 px-3 sm:px-0 pt-0 sm:pt-2">
+        <div className="h-8 sm:h-10 mt-0 sm:mt-2 px-3 sm:px-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
           {recipe.tags.map((uid: string) => (
             <Tag key={uid} uid={uid} text={getTitleByUid(uid)} className={selectedTagStyles} />
           ))}
@@ -101,16 +77,16 @@ export default function Recipe() {
           <SharedLink href={`${recipe.uid}/edit`} text="Add content →" styles="mx-3 sm:mx-0" />
         ) : (
           <>
-            <div className="my-0 sm:my-4">
+            <div className="my-2 sm:my-4 mx-0">
               {recipe.ingredients ? (
                 <Md className="px-3 py-1 bg-gray-100">{recipe.ingredients}</Md>
               ) : (
                 <SharedLink href={`${recipe.uid}/edit?focus=ingredients`} text="Add ingredients →" styles="mx-3 sm:mx-0" />
               )}
             </div>
-            <div className="my-0 sm:my-4">
+            <div className={`my-2 sm:my-4 ${!recipe.ingredients ? 'ml-3' : 'ml-0'} mr-1 sm:mx-0`}>
               {recipe.instructions ? (
-                <Md className="py-1">{recipe.instructions}</Md>
+                <Md className="py-0">{recipe.instructions}</Md>
               ) : (
                 <SharedLink href={`${recipe.uid}/edit?focus=instructions`} text="Add instructions →" styles="mx-3 sm:mx-0" />
               )}
@@ -130,10 +106,6 @@ export default function Recipe() {
           <SharedLink href={recipe.reference} text={recipe.reference} />
         </div>
       )}
-      <div className="flex justify-center items-center mt-10">
-        <SharedLink href={`${recipe.uid}/edit`} text="Edit" />
-        <SharedLink text="Delete" styles="ml-8 text-red-800 hover:text-red-400" onClick={confirmDeletion} />
-      </div>
     </div>
   );
 }

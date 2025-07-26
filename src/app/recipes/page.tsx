@@ -18,11 +18,11 @@ export default function Recipes() {
   const fetchRecipes = async () => {
     try {
       const res = await fetch('/api/recipes');
-      if (!res.ok) throw new Error('Failed to fetch recipes');
+      if (!res.ok) throw new Error('Failed to fetch recipes.');
       const recipeData: Recipe[] = await res.json();
       setRecipes(recipeData);
     } catch (err) {
-      setError(`Failed to load recipes. ${(err as Error).message}`);
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -33,7 +33,7 @@ export default function Recipes() {
   }, []);
 
   if (loading) return <LoadingMessage />;
-  if (recipes.length < 1) return <p>No recipes!</p>;
+  if (recipes.length < 1) return <ErrorMessage text="No recipes!" />;
   if (error) return <ErrorMessage text={error} />;
 
   recipes.sort((a, b) => a.uid.localeCompare(b.uid));

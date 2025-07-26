@@ -46,7 +46,7 @@ export default function New() {
       setAvailableTags(tagData);
     } catch (err) {
       setAvailableTags([]);
-      setError(`Failed to load tags. ${(err as Error).message}`);
+      setError((err as Error).message);
     } finally {
       setLoadingTags(false);
     }
@@ -55,13 +55,13 @@ export default function New() {
   const fetchRecipes = async () => {
     try {
       const res = await fetch('/api/recipes');
-      if (!res.ok) throw new Error('Failed to fetch recipes');
+      if (!res.ok) throw new Error('Failed to fetch recipes.');
       const recipeData: Recipe[] = await res.json();
       setRecipes(recipeData);
       const newId = getNewId('RECIPE', recipeData);
       setFormData((prev) => ({ ...prev, id: newId }))
     } catch (err) {
-      setError(`Failed to load recipes. ${(err as Error).message}`);
+      setError((err as Error).message);
     } finally {
       setLoadingRecipes(false);
     }
@@ -131,7 +131,7 @@ export default function New() {
   };
 
   if (loadingTags || loadingRecipes) return <LoadingMessage />;
-  if (recipes.length < 1) return <p>No recipes!</p>;
+  if (recipes.length < 1) return <ErrorMessage text="No recipes!" />;
   if (error) return <ErrorMessage text={error} />;
 
   return (

@@ -42,7 +42,7 @@ export default function Tag() {
     const fetchRecipes = async () => {
       try {
         const res = await fetch('/api/recipes');
-        if (!res.ok) throw new Error('Failed to fetch recipes');
+        if (!res.ok) throw new Error('Failed to fetch recipes.');
         const recipeData: Recipe[] = await res.json();
         setRecipes(recipeData);
       } catch (err) {
