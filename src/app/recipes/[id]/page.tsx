@@ -57,31 +57,6 @@ export default function Recipe() {
     fetchTags();
   }, [uid, fetchRecipe, fetchTags]);
 
-  const confirmDeletion = () => {
-    if (confirm('Are you sure you want to delete this recipe?')) {
-      deleteRecipe();
-    }
-  };
-
-  const deleteRecipe = async () => {
-    try {
-      if (!recipe) throw new Error('Recipe not found');
-
-      const res = await fetch(`/api/recipes/${encodeURIComponent(recipe.id)}`, {
-        method: 'DELETE',
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to delete recipe');
-      };
-
-      // Redirect to recipes list after deletion
-      window.location.href = '/recipes';
-    } catch (err) {
-      setError((err as Error).message);
-    }
-  };
-
   if (loading) return <LoadingMessage />;
   if (!recipe) return notFound();
   if (error) return <ErrorMessage text={error} />;
@@ -131,9 +106,6 @@ export default function Recipe() {
           <SharedLink href={recipe.reference} text={recipe.reference} />
         </div>
       )}
-      <div className="flex justify-center items-center mt-10">
-        <SharedLink text="Delete" styles="ml-8 text-red-800 hover:text-red-400" onClick={confirmDeletion} />
-      </div>
     </div>
   );
 }

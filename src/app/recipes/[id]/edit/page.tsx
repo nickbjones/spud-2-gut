@@ -13,6 +13,7 @@ import TagButtons from '@/components/TagButtons';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
+import SharedLink from '@/components/SharedLink';
 
 type RecipeEditable = {
   id: string;
@@ -137,6 +138,31 @@ export default function Edit() {
     }
   }
 
+  const deleteRecipe = async () => {
+    try {
+      if (!formData) throw new Error('Recipe not found');
+
+      const res = await fetch(`/api/recipes/${encodeURIComponent(formData.id)}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to delete recipe');
+      };
+
+      // Redirect to recipes list after deletion
+      window.location.href = '/recipes';
+    } catch (err) {
+      setError((err as Error).message);
+    }
+  };
+
+  const confirmDeletion = () => {
+    if (confirm('Are you sure you want to delete this recipe?')) {
+      deleteRecipe();
+    }
+  };
+
   if (loadingRecipe) return <LoadingMessage />;
   if (!formData) return notFound();
   if (error) return <ErrorMessage text={error} />;
@@ -176,6 +202,7 @@ export default function Edit() {
         <p className="text-gray-600 font-medium text-sm my-2">{uid}</p>
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Changes'} disabled={isSaving} />
       </form>
+      <SharedLink text="Delete recipe" styles="text-red-800 hover:text-red-400" onClick={confirmDeletion} />
     </div>
   );
 }
