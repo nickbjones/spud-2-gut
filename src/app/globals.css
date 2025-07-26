@@ -48,3 +48,12 @@ body {
   font-weight: inherit;
   color: rgb(30 64 175 / var(--tw-text-opacity, 1));
 }
+
+/* remove scrollbar utility class */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}

@@ -65,7 +65,7 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
   };
 
   return (
-    <div ref={containerRef} className="flex my-3 overflow-x-auto whitespace-nowrap pb-1">
+    <div ref={containerRef} className="flex my-3 pb-1 overflow-x-auto whitespace-nowrap no-scrollbar">
       {/* new tag */}
       {isEditingNewTag ? (
         <div className="flex items-center">
