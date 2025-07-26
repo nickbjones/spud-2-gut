@@ -14,6 +14,8 @@ body {
 }
 
 /* Tailwind global overrides */
+
+/* lists */
 .prose :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *)),
 .prose :where(ol):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   padding-inline-start: 1rem;
@@ -33,6 +35,11 @@ body {
 .prose :where(ol > li):not(:where([class~="not-prose"], [class~="not-prose"] *))::marker {
   color: #000000;
 }
+.prose :where(ol > li):not(:where([class~="not-prose"], [class~="not-prose"] *))::marker {
+  padding-inline-start: 0;
+}
+
+/* other typography */
 .prose :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
