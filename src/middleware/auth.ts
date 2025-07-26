@@ -11,24 +11,32 @@ const protectedRoutes = [
 // Helper function to check authentication
 function isAuthenticated(authHeader?: string | null): boolean {
   if (!authHeader) return false;
-  const validAuth = `Basic ${Buffer.from(`${process.env.AUTH_USER}:${process.env.AUTH_PASS}`).toString('base64')}`;
-  return authHeader === validAuth;
+
+  const envUser = process.env.AUTH_USER;
+  const envPass = process.env.AUTH_PASS;
+
+  const validAuth = `Basic ${Buffer.from(`${envUser}:${envPass}`).toString('base64')}`;
+
+  const isAuthenticated = authHeader === validAuth;
+  return isAuthenticated;
 }
 
 // 🛡 Authentication Middleware
 export default function authenticate(req: NextRequest): NextResponse | null {
-  if (!protectedRoutes.some(path => req.nextUrl.pathname.startsWith(path))) return null;
+  const pathname = req.nextUrl.pathname;
 
-  const auth = req.headers.get('authorization');
+  if (!protectedRoutes.some(path => pathname.startsWith(path))) return null;
 
-  if (!isAuthenticated(auth)) {
-    console.warn(`[AUTH FAIL] ${req.nextUrl.pathname}`);
+  const authHeader = req.headers.get('authorization');
+
+  if (!isAuthenticated(authHeader)) {
+    console.warn(`[AUTH FAIL] ${pathname}`);
     return new NextResponse('Unauthorized', {
       status: 401,
       headers: { 'WWW-Authenticate': 'Basic realm="Secure Area"' },
     });
   }
 
-  console.log(`[AUTH SUCCESS] ${req.nextUrl.pathname}`);
+  console.log(`[AUTH SUCCESS] ${pathname}`);
   return null;
 }
