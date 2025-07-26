@@ -4,11 +4,11 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import type { Recipe } from '@/types/recipe';
+import type { RecipeType } from '@/types/recipe';
 import Md from '@/components/Markdown';
 import { useParams, notFound } from 'next/navigation';
 import Tag, { selectedTagStyles } from '@/components/Tag';
-import type { Tag as TagType } from '@/types/tag';
+import type { TagType } from '@/types/tag';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
@@ -17,7 +17,7 @@ import SharedLink from '@/components/SharedLink';
 export default function Recipe() {
   const params = useParams();
   const uid = params.id as string;
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [recipe, setRecipe] = useState<RecipeType | null>(null);
   const [tags, setTags] = useState<TagType[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -26,7 +26,7 @@ export default function Recipe() {
     try {
       const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
       if (!res.ok) throw new Error('Failed to fetch recipe.');
-      const recipeData: Recipe = await res.json();
+      const recipeData: RecipeType = await res.json();
       setRecipe(recipeData);
     } catch (err) {
       setError((err as Error).message);
@@ -63,8 +63,10 @@ export default function Recipe() {
 
   return (
     <div className="p-0 sm:p-6">
-      <SharedHeading text={recipe.title} styles="inline-block mt-4 px-3 sm:px-0" />
-      <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="float-right mt-6 mr-3 text-sm" />
+      <div className="flex justify-between items-center my-3 px-3 sm:px-0">
+        <SharedHeading text={recipe.title} styles="!my-0" />
+        <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm" />
+      </div>
       {recipe.tags.length > 0 &&
         <div className="h-8 sm:h-10 mt-0 sm:mt-2 px-3 sm:px-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
           {recipe.tags.map((uid: string) => (

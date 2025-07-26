@@ -1,4 +1,4 @@
-export type Recipe = {
+export type RecipeType = {
   id: string; // Indexed from 0
   uid: string; // Ex: 'mashed-potatoes'
   title: string; // Ex: 'Mashed Potatoes'

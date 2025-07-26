@@ -1,7 +1,9 @@
 import type { NextRequest } from 'next/server';
+import logRequest from '@/middleware/log';
 import authenticate from '@/middleware/auth';
 
 export function middleware(req: NextRequest) {
+  logRequest(req);
   return authenticate(req);
 }
 

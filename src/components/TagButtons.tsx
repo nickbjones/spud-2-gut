@@ -1,5 +1,5 @@
 import { generateUid, getNewId } from '@/lib/utils/helpers';
-import type { Tag } from '@/types/tag';
+import type { TagType } from '@/types/tag';
 import { useRef, useState } from 'react';
 import TagButton from './TagButton';
 import { sharedTagStyles, selectedTagStyles, unselectedTagStyles } from "./Tag";
@@ -7,13 +7,13 @@ import SharedButton from './SharedButton';
 
 type TagButtonsType = {
   name: string;
-  tags: Tag[];
+  tags: TagType[];
   selectedTags: string[];
   onChange: (tagUid: string) => void;
 };
 
 export default function TagButtons({ name, tags, selectedTags, onChange }: TagButtonsType) {
-  const [tagsList, setTagsList] = useState<Tag[]>(tags);
+  const [tagsList, setTagsList] = useState<TagType[]>(tags);
   const [isEditingNewTag, setIsEditingNewTag] = useState<boolean>(false);
   const [isSavingNewTag, setIsSavingNewTag] = useState<boolean>(false);
   const [newUid, setNewUid] = useState<string>('');

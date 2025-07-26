@@ -5,8 +5,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams, notFound } from 'next/navigation';
-import type { Recipe } from '@/types/recipe';
-import type { Tag } from '@/types/tag';
+import type { RecipeType } from '@/types/recipe';
+import type { TagType } from '@/types/tag';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import TagButtons from '@/components/TagButtons';
@@ -41,7 +41,7 @@ export default function Edit() {
   const uid = params.id as string;
 
   const [formData, setFormData] = useState<RecipeEditable>(initialValues);
-  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+  const [availableTags, setAvailableTags] = useState<TagType[]>([]);
   const [loadingTags, setLoadingTags] = useState<boolean>(true);
   const [loadingRecipe, setLoadingRecipe] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -51,7 +51,7 @@ export default function Edit() {
     try {
       const res = await fetch(`/api/tags`);
       if (!res.ok) throw new Error('Failed to fetch tags');
-      const tagData: Tag[] = await res.json();
+      const tagData: TagType[] = await res.json();
       setAvailableTags(tagData);
     } catch (err) {
       setAvailableTags([]);
@@ -65,7 +65,7 @@ export default function Edit() {
     try {
       const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
       if (!res.ok) throw new Error('Failed to fetch recipe.');
-      const recipeData: Recipe = await res.json();
+      const recipeData: RecipeType = await res.json();
       setFormData(recipeData);
     } catch (err) {
       setError((err as Error).message);
@@ -162,7 +162,7 @@ export default function Edit() {
             label="Ingredients"
             value={formData.ingredients}
             onChange={handleGeneralFieldChange}
-            className="h-64 sm:h-32"
+            className="h-80 sm:h-32"
           />
          <TextAreaField
             id="instructions"
@@ -170,7 +170,7 @@ export default function Edit() {
             label="Instructions"
             value={formData.instructions}
             onChange={handleGeneralFieldChange}
-            className="h-64 sm:h-32"
+            className="h-80 sm:h-32"
           />
         </div>
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
@@ -179,8 +179,10 @@ export default function Edit() {
           : <TagButtons name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange}
         />}
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
-        <p className="text-gray-600 font-medium text-sm">UID</p>
-        <p className="text-gray-600 font-medium text-sm my-2">{uid}</p>
+        <p className="text-sm mt-6 mb-3">
+          <span className="text-gray-600 font-medium mr-2">UID:</span>
+          <span className="text-gray-400">{uid}</span>
+        </p>
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Changes'} disabled={isSaving} />
       </form>
       <SharedLink text="Delete recipe" styles="text-red-800 hover:text-red-400" onClick={confirmDeletion} />

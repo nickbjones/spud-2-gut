@@ -23,10 +23,10 @@ type SharedButtonProps = {
   href?: string;
   styles?: string;
   onClick?: () => void;
-  disabled: boolean;
+  disabled?: boolean;
 };
 
-export default function SharedButton({ text, href, styles, onClick, disabled}: SharedButtonProps) {
+export default function SharedButton({ text, href, styles, onClick, disabled = false}: SharedButtonProps) {
   return (
     <Link
       href={href || ''}

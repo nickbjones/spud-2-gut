@@ -4,14 +4,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { Recipe } from '@/types/recipe';
+import type { RecipeType } from '@/types/recipe';
 import SharedLink from '@/components/SharedLink';
 import SharedHeading from '@/components/SharedHeading';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 
 export default function Recipes() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [recipes, setRecipes] = useState<RecipeType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
@@ -19,7 +19,7 @@ export default function Recipes() {
     try {
       const res = await fetch('/api/recipes');
       if (!res.ok) throw new Error('Failed to fetch recipes.');
-      const recipeData: Recipe[] = await res.json();
+      const recipeData: RecipeType[] = await res.json();
       setRecipes(recipeData);
     } catch (err) {
       setError((err as Error).message);
@@ -42,7 +42,7 @@ export default function Recipes() {
     <div className="p-6">
       <SharedHeading text="Recipes" />
       <ul>
-        {recipes.map((recipe: Recipe) => (
+        {recipes.map((recipe: RecipeType) => (
           <li key={recipe.id} className="flex my-2">
             <SharedLink href={`recipes/${recipe.uid}`} text={recipe.title} />
           </li>

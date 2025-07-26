@@ -5,8 +5,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Recipe } from '@/types/recipe';
-import type { Tag } from '@/types/tag';
+import type { RecipeType } from '@/types/recipe';
+import type { TagType } from '@/types/tag';
 import { uidRules, generateUid, getNewId } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
@@ -18,7 +18,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 export default function New() {
   const router = useRouter();
 
-  const initialValues: Recipe = {
+  const initialValues: RecipeType = {
     id: '',
     title: '',
     uid: '',
@@ -30,9 +30,9 @@ export default function New() {
     reference: '',
   };
 
-  const [formData, setFormData] = useState<Recipe>(initialValues);
-  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [formData, setFormData] = useState<RecipeType>(initialValues);
+  const [availableTags, setAvailableTags] = useState<TagType[]>([]);
+  const [recipes, setRecipes] = useState<RecipeType[]>([]);
   const [loadingTags, setLoadingTags] = useState<boolean>(true);
   const [loadingRecipes, setLoadingRecipes] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -42,7 +42,7 @@ export default function New() {
     try {
       const res = await fetch(`/api/tags`);
       if (!res.ok) throw new Error('Failed to fetch tags');
-      const tagData: Tag[] = await res.json();
+      const tagData: TagType[] = await res.json();
       setAvailableTags(tagData);
     } catch (err) {
       setAvailableTags([]);
@@ -56,7 +56,7 @@ export default function New() {
     try {
       const res = await fetch('/api/recipes');
       if (!res.ok) throw new Error('Failed to fetch recipes.');
-      const recipeData: Recipe[] = await res.json();
+      const recipeData: RecipeType[] = await res.json();
       setRecipes(recipeData);
       const newId = getNewId('RECIPE', recipeData);
       setFormData((prev) => ({ ...prev, id: newId }))

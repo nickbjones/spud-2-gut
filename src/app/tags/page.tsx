@@ -4,7 +4,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import type { Tag as TagType} from '@/types/tag';
+import type { TagType} from '@/types/tag';
 import Tag from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';

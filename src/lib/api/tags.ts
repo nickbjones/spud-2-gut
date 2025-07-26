@@ -1,6 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
-import type { Tag } from '@/types/tag';
+import type { TagType } from '@/types/tag';
 
 const client = new DynamoDBClient({ region: process.env.AWS_REGION });
 const docClient = DynamoDBDocumentClient.from(client);
@@ -14,14 +14,14 @@ export type DynamoDbTag = {
   description: string,
 };
 
-const emptyTag: Tag = {
+const emptyTag: TagType = {
   id: '',
   uid: '',
   title: '',
   description: '',
 };
 
-function formatDynamoDbTag(tagRaw: DynamoDbTag): Tag {
+function formatDynamoDbTag(tagRaw: DynamoDbTag): TagType {
   try {
     return {
       id: tagRaw.id || '',
@@ -35,13 +35,13 @@ function formatDynamoDbTag(tagRaw: DynamoDbTag): Tag {
   }
 }
 
-function formatDynamoDbTags(tagsRaw: DynamoDbTag[]): Tag[] {
+function formatDynamoDbTags(tagsRaw: DynamoDbTag[]): TagType[] {
   return tagsRaw.map((tagRaw) => {
     return formatDynamoDbTag(tagRaw);
   });
 }
 
-export async function getAllTags(): Promise<Tag[]> {
+export async function getAllTags(): Promise<TagType[]> {
   try {
     // QueryCommand is more efficient for fetching items with a specific partition key
     const command = new ScanCommand({
@@ -66,11 +66,11 @@ export async function getAllTags(): Promise<Tag[]> {
   }
 }
 
-export async function getOneTag(uid: string): Promise<Tag | undefined> {
+export async function getOneTag(uid: string): Promise<TagType | undefined> {
   // temporary fix (fetch ALL tags, then find the correct one)
   try {
     const allTags = await getAllTags();
-    const tag: Tag | undefined = allTags.find((p) => p.uid === uid);
+    const tag: TagType | undefined = allTags.find((p) => p.uid === uid);
     return tag;
   } catch (error) {
     console.error('API Error:', error);
@@ -78,7 +78,7 @@ export async function getOneTag(uid: string): Promise<Tag | undefined> {
   }  
 }
 
-export async function createTag(tag: Tag) {
+export async function createTag(tag: TagType) {
   try {
     const command = new PutCommand({
       TableName: AWS_RECIPES_TABLENAME,
@@ -108,7 +108,7 @@ export async function deleteTag(id: string) {
   }
 }
 
-export async function updateTag(tag: Tag) {
+export async function updateTag(tag: TagType) {
   try {
     const command = new PutCommand({
       TableName: AWS_RECIPES_TABLENAME,
