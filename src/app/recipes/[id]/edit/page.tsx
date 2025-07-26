@@ -162,7 +162,7 @@ export default function Edit() {
             label="Ingredients"
             value={formData.ingredients}
             onChange={handleGeneralFieldChange}
-            className="h-64 sm:h-32"
+            className="h-80 sm:h-32"
           />
          <TextAreaField
             id="instructions"
@@ -170,7 +170,7 @@ export default function Edit() {
             label="Instructions"
             value={formData.instructions}
             onChange={handleGeneralFieldChange}
-            className="h-64 sm:h-32"
+            className="h-80 sm:h-32"
           />
         </div>
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
