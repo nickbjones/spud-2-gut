@@ -10,18 +10,27 @@ const sharedButtonStyles = `
   transition
 `;
 
+const disabledStyles = `
+  bg-gray-300
+  border-gray-300
+  focus:bg-gray-300
+  focus:border-gray-300
+  cursor-not-allowed
+`;
+
 type SharedButtonProps = {
   text: string;
   href?: string;
   styles?: string;
   onClick?: () => void;
+  disabled: boolean;
 };
 
-export default function SharedButton({ text, href, styles, onClick}: SharedButtonProps) {
+export default function SharedButton({ text, href, styles, onClick, disabled}: SharedButtonProps) {
   return (
     <Link
       href={href || ''}
-      className={sharedButtonStyles + (styles ? ` ${styles}` : '')}
+      className={sharedButtonStyles + (styles ? ` ${styles}` : '') + (disabled ? disabledStyles : '')}
       onClick={onClick}
     >
       {text}
