@@ -88,7 +88,8 @@ export default function Recipe() {
 
   return (
     <div className="p-0 sm:p-6">
-      <SharedHeading text={recipe.title} styles="mt-4 px-3 sm:px-0" />
+      <SharedHeading text={recipe.title} styles="inline-block mt-4 px-3 sm:px-0" />
+      <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="float-right mt-6 mr-3 text-sm" />
       {recipe.tags.length > 0 &&
         <div className="overflow-x-auto whitespace-nowrap h-8 sm:h-10 mt-0 sm:mt-2 px-3 sm:px-0 pt-0 sm:pt-2">
           {recipe.tags.map((uid: string) => (
@@ -131,7 +132,6 @@ export default function Recipe() {
         </div>
       )}
       <div className="flex justify-center items-center mt-10">
-        <SharedLink href={`${recipe.uid}/edit`} text="Edit" />
         <SharedLink text="Delete" styles="ml-8 text-red-800 hover:text-red-400" onClick={confirmDeletion} />
       </div>
     </div>
