@@ -1,4 +1,4 @@
-export default function SubmitButton({ text, disabled }: { text: string, disabled?: boolean }) {
+export default function SubmitButton({ text, disabled, styles }: { text: string, disabled?: boolean, styles?: string }) {
   const SubmitButtonStyles = `
     my-4
     bg-blue-500
@@ -13,7 +13,7 @@ export default function SubmitButton({ text, disabled }: { text: string, disable
   return (
     <button
       type="submit"
-      className={SubmitButtonStyles}
+      className={`${SubmitButtonStyles}${styles ? ` ${styles}` : ''}`}
       disabled={disabled || false}
     >
       {text}
