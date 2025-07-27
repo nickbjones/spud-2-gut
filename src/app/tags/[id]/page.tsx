@@ -19,6 +19,15 @@ function getRecipesByTag(recipes: RecipeType[], tag: string): RecipeType[] {
   return recipes.filter((recipe) => recipe.tags.includes(tag));
 }
 
+const tagTitleStyles = `
+  !my-0
+  py-2
+  px-4
+  text-white
+  bg-blue-400
+  rounded-xl
+`;
+
 // TODO: rename all other page components to have "Page" in the name
 export default function TagPage() {
   const params = useParams();
@@ -83,7 +92,7 @@ export default function TagPage() {
   return (
     <div className="p-3 sm:p-6">
       <div className="flex justify-between items-center my-3">
-        <SharedHeading text={tag.title} styles="!my-0" />
+        <SharedHeading text={tag.title} styles={tagTitleStyles} />
         <SharedLink href={`${tag.uid}/edit`} text="[Edit]" styles="text-sm" />
       </div>
       <p>{tag.description}</p>
