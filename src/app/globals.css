@@ -54,6 +54,12 @@ body {
   margin: 0;
 }
 
+/* md hr */
+.prose :where(hr):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  margin-top: 0;
+  margin-bottom: 1.5em;
+}
+
 /* remove scrollbar utility class */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
