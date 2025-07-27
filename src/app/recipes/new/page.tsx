@@ -140,8 +140,22 @@ export default function New() {
         <input type="hidden" id="id" name="id" value={formData.id} />
         <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} required />
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
-          <TextAreaField id="ingredients" name="ingredients" label="Ingredients" value={formData.ingredients} onChange={handleGeneralFieldChange} className="h-32" />
-          <TextAreaField id="instructions" name="instructions" label="Instructions" value={formData.instructions} onChange={handleGeneralFieldChange} className="h-32" />
+          <TextAreaField
+            id="ingredients"
+            name="ingredients"
+            label="Ingredients"
+            value={formData.ingredients}
+            onChange={handleGeneralFieldChange}
+            className="h-80 sm:h-32"
+          />
+          <TextAreaField
+            id="instructions"
+            name="instructions"
+            label="Instructions"
+            value={formData.instructions}
+            onChange={handleGeneralFieldChange}
+            className="h-80 sm:h-32"
+          />
         </div>
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
         <TagButtons name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange} />
