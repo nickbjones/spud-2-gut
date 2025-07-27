@@ -11,68 +11,106 @@ import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
+import { miniTagStyles } from '@/components/Tag';
+import { getTitleByUid } from '@/lib/utils/helpers';
 
-function getRecipesByTag(recipes: RecipeType[], tag: string) {
+// TODO: move to shared util?
+function getRecipesByTag(recipes: RecipeType[], tag: string): RecipeType[] {
   return recipes.filter((recipe) => recipe.tags.includes(tag));
 }
-  
-export default function Tag() {
+
+// TODO: rename all other page components to have "Page" in the name
+export default function TagPage() {
   const params = useParams();
   const uid = params.id as string;
-  const [tag, setTag] = useState<TagType | null>(null);
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
+  const [tags, setTags] = useState<TagType[]>([]);
+  const [tag, setTag] = useState<TagType | null>(null);
   const [loadingTags, setLoadingTags] = useState<boolean>(true);
   const [loadingRecipes, setLoadingRecipes] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
-  useEffect(() => {
-    const fetchTag = async () => {
-      try {
-        const res = await fetch(`/api/tags/${encodeURIComponent(uid)}`);
-        if (!res.ok) throw new Error('Failed to fetch tag');
-        const tagData: TagType = await res.json();
-        setTag(tagData);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoadingTags(false);
-      }
-    };
-  
-    const fetchRecipes = async () => {
-      try {
-        const res = await fetch('/api/recipes');
-        if (!res.ok) throw new Error('Failed to fetch recipes.');
-        const recipeData: RecipeType[] = await res.json();
-        setRecipes(recipeData);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoadingRecipes(false);
-      }
-    };
+  const fetchRecipes = async () => {
+    try {
+      const res = await fetch('/api/recipes');
+      if (!res.ok) throw new Error('Failed to fetch recipes.');
+      const recipeData: RecipeType[] = await res.json();
+      setRecipes(recipeData);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoadingRecipes(false);
+    }
+  };
 
-    fetchTag();
+  const fetchTags = async () => {
+    try {
+      const res = await fetch(`/api/tags`);
+      if (!res.ok) throw new Error('Failed to fetch tags');
+      const tagData: TagType[] = await res.json();
+      setTags(tagData);
+    } catch (err) {
+      setTags([]);
+      setError((err as Error).message);
+    }
+  };
+
+  const fetchTag = async () => {
+    try {
+      const res = await fetch(`/api/tags/${encodeURIComponent(uid)}`);
+      if (!res.ok) throw new Error('Failed to fetch tag');
+      const tagData: TagType = await res.json();
+      setTag(tagData);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoadingTags(false);
+    }
+  };
+
+  useEffect(() => {
     fetchRecipes();
+    fetchTags();
+    fetchTag();
   }, [uid]);
 
   if (loadingTags || loadingRecipes) return <LoadingMessage />;
   if (!tag) return notFound();
   if (error) return <ErrorMessage text={error} />;
 
-  const filteredRecipes = getRecipesByTag(recipes, uid);
+  const recipesWithThisTag = getRecipesByTag(recipes, uid);
 
   return (
-    <div className="p-6">
-      <SharedHeading text={tag.title} />
+    <div className="p-3 sm:p-6">
+      <div className="flex justify-between items-center my-3">
+        <SharedHeading text={tag.title} styles="!my-0" />
+        <SharedLink href={`${tag.uid}/edit`} text="[Edit]" styles="text-sm" />
+      </div>
+      <p>{tag.description}</p>
       <div className="mt-4">
-        <p className="mb-3">Recipes with the tag &quot;{tag.title}&quot;:</p>
         <ul>
-          {filteredRecipes && filteredRecipes.map((recipe) => (
-            <li key={recipe.id} className="flex my-2">
-              <SharedLink key={recipe.id} href={`/recipes/${recipe.uid}`} text={recipe.title} />
-            </li>
-          ))}
+          {recipesWithThisTag.length > 0
+            ? <>
+                <p className="mb-2">Recipes with this tag:</p>
+                {recipesWithThisTag.map((recipe: RecipeType) => (
+                  <li key={recipe.id} className="mb-2 sm:mb-3 border rounded-lg shadow-lg">
+                    <a href={`/recipes/${recipe.uid}`} className="block py-2 px-3">
+                      <span className="text-base font-semibold">{recipe.title}</span>
+                      {recipe.tags.length > 0 &&
+                        <div className="flex gap-1 flex-wrap mt-1">
+                          {recipe.tags.map((uid: string) => (
+                            <span key={uid} className={miniTagStyles}>{getTitleByUid(uid, tags)}</span>
+                          ))}
+                        </div>
+                      }
+                    </a>
+                  </li>
+                ))}
+              </>
+            : <>
+              No recipes with this tag
+            </>
+          }
         </ul>
       </div>
     </div>

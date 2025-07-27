@@ -58,13 +58,13 @@ export default function Recipe() {
   if (error) return <ErrorMessage text={error} />;
 
   return (
-    <div className="p-0 sm:p-6">
-      <div className="flex justify-between items-center my-3 px-3 sm:px-0">
+    <div className="p-3 sm:p-6">
+      <div className="flex justify-between items-center my-3">
         <SharedHeading text={recipe.title} styles="!my-0" />
         <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm" />
       </div>
       {recipe.tags.length > 0 &&
-        <div className="tags h-8 sm:h-10 mt-0 sm:mt-2 px-3 sm:px-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
+        <div className="tags h-8 sm:h-10 mt-0 sm:mt-2 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
           {recipe.tags.map((uid: string) => (
             <Tag key={uid} uid={uid} text={getTitleByUid(uid, tags)} className={selectedTagStyles} />
           ))}
@@ -73,7 +73,7 @@ export default function Recipe() {
       {(recipe.ingredients || recipe.instructions) && (
         <div className={recipe.ingredients && recipe.instructions && `grid grid-cols-2 gap-3 sm:gap-4`}>
           {recipe.ingredients && (
-            <div className="ingredients my-2 sm:my-4 mx-0">
+            <div className="ingredients my-2 sm:my-4 -ml-3 sm:mx-0">
               <Md className="px-3 py-1 bg-gray-100">{recipe.ingredients}</Md>
             </div>
           )}
@@ -85,17 +85,17 @@ export default function Recipe() {
         </div>
       )}
       {recipe.description && (
-        <div className="description mt-4 px-3 sm:px-0">
+        <div className="description mt-4">
           <Md className="max-w-full">{recipe.description}</Md>
         </div>
       )}
       {recipe.reference && (
-        <div className="reference mt-4 px-3 sm:px-0">
+        <div className="reference mt-4">
           <SharedLink href={recipe.reference} text={recipe.reference} />
         </div>
       )}
       {(!recipe.ingredients && !recipe.instructions && !recipe.description && !recipe.reference) && (
-        <SharedLink href={`${recipe.uid}/edit`} text="Add content →" styles="mx-3 sm:mx-0" />
+        <SharedLink href={`${recipe.uid}/edit`} text="Add content →" styles="" />
       )}
     </div>
   );

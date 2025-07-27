@@ -9,6 +9,7 @@ import { TagType } from '@/types/tag';
 import { getTitleByUid } from '@/lib/utils/helpers';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
+import { miniTagStyles } from '@/components/Tag';
 
 export default function Recipes() {
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
@@ -52,17 +53,6 @@ export default function Recipes() {
 
   recipes.sort((a, b) => a.title.localeCompare(b.uid));
 
-  const tagStyles = `
-    py-0
-    px-1
-    text-center
-    text-xs
-    sm:text-sm
-    text-white
-    bg-blue-400
-    rounded-md
-  `;
-
   return (
     <div className="p-3 sm:p-6">
       {/* search... */}
@@ -70,12 +60,12 @@ export default function Recipes() {
         <ul>
           {recipes.map((recipe: RecipeType) => (
             <li key={recipe.id} className="mb-2 sm:mb-3 border rounded-lg shadow-lg">
-              <a href={`recipes/${recipe.uid}`} className="block py-2 px-3">
+              <a href={`/recipes/${recipe.uid}`} className="block py-2 px-3">
                 <span className="text-base font-semibold">{recipe.title}</span>
                 {recipe.tags.length > 0 &&
-                  <div className="flex gap gap-1 flex-wrap mt-1">
+                  <div className="flex gap-1 flex-wrap mt-1">
                     {recipe.tags.map((uid: string) => (
-                      <span key={uid} className={tagStyles}>{getTitleByUid(uid, tags)}</span>
+                      <span key={uid} className={miniTagStyles}>{getTitleByUid(uid, tags)}</span>
                     ))}
                   </div>
                 }
