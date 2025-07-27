@@ -154,7 +154,10 @@ export default function Edit() {
     <div className="max-w-2xl mx-auto p-3 sm:p-6">
       <form onSubmit={handleSubmit}>
         <input type="hidden" id="id" name="id" value={formData.id} />
-        <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleGeneralFieldChange} />
+        <div className="inline-block flex items-center mb-4">
+          <InputField id="title" name="title" value={formData.title} onChange={handleGeneralFieldChange} className="!mb-0" />
+          <SubmitButton disabled={isSaving} styles="!my-0 ml-10 text-sm" text={isSaving ? 'Saving...' : 'Save'} />
+        </div>
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <TextAreaField
             id="ingredients"
@@ -183,7 +186,6 @@ export default function Edit() {
           <span className="text-gray-600 font-medium mr-2">UID:</span>
           <span className="text-gray-400">{uid}</span>
         </p>
-        <SubmitButton text={isSaving ? 'Saving...' : 'Save Changes'} disabled={isSaving} />
       </form>
       <SharedLink text="Delete recipe" styles="text-red-800 hover:text-red-400" onClick={confirmDeletion} />
     </div>
