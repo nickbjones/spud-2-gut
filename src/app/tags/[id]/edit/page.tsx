@@ -34,25 +34,26 @@ export default function Edit() {
   const uid = params.id as string;
 
   const [formData, setFormData] = useState<TagEditable>(initialValues);
-  const [availableTags, setAvailableTags] = useState<TagType[]>([]);
-  const [loadingTags, setLoadingTags] = useState<boolean>(true);
+  // const [availableTags, setAvailableTags] = useState<TagType[]>([]);
+  // const [loadingTags, setLoadingTags] = useState<boolean>(true);
   const [loadingTag, setLoadingTag] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
-  const fetchTags = useCallback(async () => {
-    try {
-      const res = await fetch(`/api/tags`);
-      if (!res.ok) throw new Error('Failed to fetch tags');
-      const tagData: TagType[] = await res.json();
-      setAvailableTags(tagData);
-    } catch (err) {
-      setAvailableTags([]);
-      setError((err as Error).message);
-    } finally {
-      setLoadingTags(false);
-    }
-  }, []);
+  // // to be used later to check if a tag title is used already
+  // const fetchTags = useCallback(async () => {
+  //   try {
+  //     const res = await fetch(`/api/tags`);
+  //     if (!res.ok) throw new Error('Failed to fetch tags');
+  //     const tagData: TagType[] = await res.json();
+  //     setAvailableTags(tagData);
+  //   } catch (err) {
+  //     setAvailableTags([]);
+  //     setError((err as Error).message);
+  //   } finally {
+  //     setLoadingTags(false);
+  //   }
+  // }, []);
 
   const fetchTag = useCallback(async () => {
     try {
@@ -70,9 +71,9 @@ export default function Edit() {
   useEffect(() => {
     if (uid) {
       fetchTag();
-      fetchTags();
+      // fetchTags();
     }
-  }, [uid, fetchTag, fetchTags]);
+  }, [uid, fetchTag]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
