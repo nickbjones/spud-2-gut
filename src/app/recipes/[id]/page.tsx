@@ -3,7 +3,7 @@
  */
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { RecipeType } from '@/types/recipe';
 import Md from '@/components/Markdown';
 import { useParams, notFound } from 'next/navigation';
@@ -13,12 +13,13 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
+import { getTitleByUid } from '@/lib/utils/helpers';
 
 export default function Recipe() {
   const params = useParams();
   const uid = params.id as string;
   const [recipe, setRecipe] = useState<RecipeType | null>(null);
-  const [tags, setTags] = useState<TagType[] | null>(null);
+  const [tags, setTags] = useState<TagType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
@@ -47,11 +48,6 @@ export default function Recipe() {
     }
   }, []);
 
-  const getTitleByUid = (uid: string | null | undefined): string => {
-    if (!tags || !uid) return '';
-    return tags.find(tag => tag.uid === uid)?.title || uid;
-  };
-
   useEffect(() => {
     fetchRecipe();
     fetchTags();
@@ -70,7 +66,7 @@ export default function Recipe() {
       {recipe.tags.length > 0 &&
         <div className="tags h-8 sm:h-10 mt-0 sm:mt-2 px-3 sm:px-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
           {recipe.tags.map((uid: string) => (
-            <Tag key={uid} uid={uid} text={getTitleByUid(uid)} className={selectedTagStyles} />
+            <Tag key={uid} uid={uid} text={getTitleByUid(uid, tags)} className={selectedTagStyles} />
           ))}
         </div>
       }

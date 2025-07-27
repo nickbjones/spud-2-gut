@@ -36,3 +36,8 @@ export const getNewId = (prefix: string, data: { id: string }[]): string => {
   const nextId = (maxId + 1).toString().padStart(3, '0');
   return `${prefix}#${nextId}`;
 }
+
+export const getTitleByUid = (uid: string | null | undefined, list: TagType[]): string => {
+  if (!uid || !list || list.length === 0) return '';
+  return list.find(item => item.uid === uid)?.title || uid;
+};
