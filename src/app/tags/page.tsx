@@ -86,14 +86,8 @@ export default function Tags() {
 
   return (
     <div className="p-6">
-      <ul className="flex flex-wrap gap-1 sm:gap-2">
-        {tags.map((tag: TagType) => (
-          <Tag key={tag.uid} uid={tag.uid} text={tag.title} className={`${selectedTagStyles} !mr-0`} />
-        ))}
-      </ul>
-
       {/* new tag */}
-      <div className="mt-4">
+      <div className="mb-4">
         {isEditingNewTag ? (
           <form onSubmit={handleSubmit} className="mt-4 flex items-center gap-2">
             <input type="hidden" id="id" name="id" value={id} />
@@ -113,6 +107,13 @@ export default function Tags() {
           <SharedLink text="+ New Tag" onClick={() => setIsEditingNewTag(true)} />
         )}
       </div>
+
+      {/* tags list */}
+      <ul className="flex flex-wrap gap-1 sm:gap-2">
+        {tags.map((tag: TagType) => (
+          <Tag key={tag.uid} uid={tag.uid} text={tag.title} className={`${selectedTagStyles} !mr-0`} />
+        ))}
+      </ul>
     </div>
   );
 }
