@@ -3,7 +3,7 @@ import logRequest from '@/middleware/log';
 import authenticate from '@/middleware/auth';
 
 export function middleware(req: NextRequest) {
-  logRequest(req);
+  // logRequest(req);
   return authenticate(req);
 }
 
