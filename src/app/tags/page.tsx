@@ -85,7 +85,7 @@ export default function Tags() {
   tags.sort((a, b) => a.uid.localeCompare(b.uid));
 
   return (
-    <div className="p-6">
+    <div className="p-3 sm:p-6">
       {/* new tag */}
       <div className="mb-4">
         {isEditingNewTag ? (
