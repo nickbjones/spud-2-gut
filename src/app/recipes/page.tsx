@@ -9,8 +9,6 @@ import { TagType } from '@/types/tag';
 import { getTitleByUid } from '@/lib/utils/helpers';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
-// import SharedLink from '@/components/SharedLink';
-import Tag, { sharedTagStyles, selectedTagStyles } from '@/components/Tag';
 
 export default function Recipes() {
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
