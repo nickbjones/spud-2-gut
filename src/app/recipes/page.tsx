@@ -73,7 +73,7 @@ export default function Recipes() {
               <a href={`recipes/${recipe.uid}`} className="block py-2 px-3">
                 <span className="text-base font-semibold">{recipe.title}</span>
                 {recipe.tags.length > 0 &&
-                  <div className="flex gap gap-1 flex-wrap mt-1">
+                  <div className="flex gap-1 flex-wrap mt-1">
                     {recipe.tags.map((uid: string) => (
                       <span key={uid} className={tagStyles}>{getTitleByUid(uid, tags)}</span>
                     ))}
