@@ -9,7 +9,6 @@ import Tag, { selectedTagStyles } from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
-import SharedHeading from '@/components/SharedHeading';
 import InputField from '@/components/InputField';
 import SubmitButton from '@/components/SubmitButton';
 import { generateUid, getNewId } from '@/lib/utils/helpers';
@@ -87,7 +86,6 @@ export default function Tags() {
 
   return (
     <div className="p-6">
-      <SharedHeading text="Tags" />
       <ul className="flex flex-wrap gap-1 sm:gap-2">
         {tags.map((tag: TagType) => (
           <Tag key={tag.uid} uid={tag.uid} text={tag.title} className={`${selectedTagStyles} !mr-0`} />
