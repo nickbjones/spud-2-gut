@@ -68,37 +68,38 @@ export default function Recipe() {
         <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm" />
       </div>
       {recipe.tags.length > 0 &&
-        <div className="h-8 sm:h-10 mt-0 sm:mt-2 px-3 sm:px-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
+        <div className="tags h-8 sm:h-10 mt-0 sm:mt-2 px-3 sm:px-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
           {recipe.tags.map((uid: string) => (
             <Tag key={uid} uid={uid} text={getTitleByUid(uid)} className={selectedTagStyles} />
           ))}
         </div>
       }
-      <div className={recipe.ingredients && recipe.instructions && `grid grid-cols-2 gap-3 sm:gap-4`}>
-        {!recipe.ingredients && !recipe.instructions ? (
-          <SharedLink href={`${recipe.uid}/edit`} text="Add content →" styles="mx-3 sm:mx-0" />
-        ) : (
-          <>
-            <div className="my-2 sm:my-4 mx-0">
-              {recipe.ingredients && <Md className="px-3 py-1 bg-gray-100">{recipe.ingredients}</Md>}
+      {(recipe.ingredients || recipe.instructions) && (
+        <div className={recipe.ingredients && recipe.instructions && `grid grid-cols-2 gap-3 sm:gap-4`}>
+          {recipe.ingredients && (
+            <div className="ingredients my-2 sm:my-4 mx-0">
+              <Md className="px-3 py-1 bg-gray-100">{recipe.ingredients}</Md>
             </div>
-            <div className={`my-2 sm:my-4 ${!recipe.ingredients ? 'ml-3' : 'ml-0'} mr-1 sm:mx-0`}>
-              {recipe.instructions && <Md className="py-0">{recipe.instructions}</Md>}
+          )}
+          {recipe.instructions && (
+            <div className={`instructions my-2 sm:my-4 ${!recipe.ingredients ? 'ml-3' : 'ml-0'} mr-1 sm:mx-0`}>
+              <Md className="py-0">{recipe.instructions}</Md>
             </div>
-          </>
-        )}
-      </div>
+          )}
+        </div>
+      )}
       {recipe.description && (
-        <div className="mt-4 px-3 sm:px-0">
-          <SharedHeading type="h3" text="More info" />
+        <div className="description mt-4 px-3 sm:px-0">
           <Md className="max-w-full">{recipe.description}</Md>
         </div>
       )}
       {recipe.reference && (
-        <div className="mt-4 px-3 sm:px-0">
-          <SharedHeading type="h3" text="Reference" />
+        <div className="reference mt-4 px-3 sm:px-0">
           <SharedLink href={recipe.reference} text={recipe.reference} />
         </div>
+      )}
+      {(!recipe.ingredients && !recipe.instructions && !recipe.description && !recipe.reference) && (
+        <SharedLink href={`${recipe.uid}/edit`} text="Add content →" styles="mx-3 sm:mx-0" />
       )}
     </div>
   );
