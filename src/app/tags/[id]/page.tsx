@@ -63,8 +63,11 @@ export default function Tag() {
   const filteredRecipes = getRecipesByTag(recipes, uid);
 
   return (
-    <div className="p-6">
-      <SharedHeading text={tag.title} />
+    <div className="p-3 sm:p-6">
+      <div className="flex justify-between items-center my-3">
+        <SharedHeading text={tag.title} styles="!my-0" />
+        <SharedLink href={`${tag.uid}/edit`} text="[Edit]" styles="text-sm" />
+      </div>
       <div className="mt-4">
         <p className="mb-3">Recipes with the tag &quot;{tag.title}&quot;:</p>
         <ul>
