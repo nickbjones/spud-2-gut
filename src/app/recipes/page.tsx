@@ -9,6 +9,7 @@ import { TagType } from '@/types/tag';
 import { getTitleByUid } from '@/lib/utils/helpers';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
+import { miniTagStyles } from '@/components/Tag';
 
 export default function Recipes() {
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
@@ -52,17 +53,6 @@ export default function Recipes() {
 
   recipes.sort((a, b) => a.title.localeCompare(b.uid));
 
-  const tagStyles = `
-    py-0
-    px-1
-    text-center
-    text-xs
-    sm:text-sm
-    text-white
-    bg-blue-400
-    rounded-md
-  `;
-
   return (
     <div className="p-3 sm:p-6">
       {/* search... */}
@@ -75,7 +65,7 @@ export default function Recipes() {
                 {recipe.tags.length > 0 &&
                   <div className="flex gap-1 flex-wrap mt-1">
                     {recipe.tags.map((uid: string) => (
-                      <span key={uid} className={tagStyles}>{getTitleByUid(uid, tags)}</span>
+                      <span key={uid} className={miniTagStyles}>{getTitleByUid(uid, tags)}</span>
                     ))}
                   </div>
                 }

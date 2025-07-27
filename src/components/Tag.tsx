@@ -27,6 +27,17 @@ export const unselectedTagStyles = `
   border-gray-300
 `;
 
+export const miniTagStyles = `
+  py-0
+  px-1
+  text-center
+  text-xs
+  sm:text-sm
+  text-white
+  bg-blue-400
+  rounded-md
+`;
+
 export default function Tag({uid, text, className}: {uid: string, text: string, className?: string}) {
   return (
     <Link href={`/tags/${uid}`} className={`${sharedTagStyles} ${className}`}>{text}</Link>
