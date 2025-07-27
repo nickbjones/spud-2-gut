@@ -60,7 +60,7 @@ export default function Recipes() {
         <ul>
           {recipes.map((recipe: RecipeType) => (
             <li key={recipe.id} className="mb-2 sm:mb-3 border rounded-lg shadow-lg">
-              <a href={`recipes/${recipe.uid}`} className="block py-2 px-3">
+              <a href={`/recipes/${recipe.uid}`} className="block py-2 px-3">
                 <span className="text-base font-semibold">{recipe.title}</span>
                 {recipe.tags.length > 0 &&
                   <div className="flex gap-1 flex-wrap mt-1">

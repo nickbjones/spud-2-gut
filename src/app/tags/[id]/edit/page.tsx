@@ -5,34 +5,27 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams, notFound } from 'next/navigation';
-import type { RecipeType } from '@/types/recipe';
+// import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
-import TagButtons from '@/components/TagButtons';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 
-type RecipeEditable = {
+type TagEditable = {
   id: string;
+  uid: string;
   title: string;
-  tags: string[];
   description: string;
-  ingredients: string;
-  instructions: string;
-  reference: string;
 };
 
-const initialValues: RecipeEditable = {
+const initialValues: TagEditable = {
   id: '',
+  uid: '',
   title: '',
-  tags: [],
   description: '',
-  ingredients: '',
-  instructions: '',
-  reference: '',
 };
 
 export default function Edit() {
@@ -40,10 +33,10 @@ export default function Edit() {
   const params = useParams();
   const uid = params.id as string;
 
-  const [formData, setFormData] = useState<RecipeEditable>(initialValues);
+  const [formData, setFormData] = useState<TagEditable>(initialValues);
   const [availableTags, setAvailableTags] = useState<TagType[]>([]);
   const [loadingTags, setLoadingTags] = useState<boolean>(true);
-  const [loadingRecipe, setLoadingRecipe] = useState<boolean>(true);
+  const [loadingTag, setLoadingTag] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -61,25 +54,25 @@ export default function Edit() {
     }
   }, []);
 
-  const fetchRecipe = useCallback(async () => {
+  const fetchTag = useCallback(async () => {
     try {
-      const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
-      if (!res.ok) throw new Error('Failed to fetch recipe.');
-      const recipeData: RecipeType = await res.json();
-      setFormData(recipeData);
+      const res = await fetch(`/api/tags/${encodeURIComponent(uid)}`);
+      if (!res.ok) throw new Error('Failed to fetch tag.');
+      const tagData: TagType = await res.json();
+      setFormData(tagData);
     } catch (err) {
       setError((err as Error).message);
     } finally {
-      setLoadingRecipe(false);
+      setLoadingTag(false);
     }
   }, [uid]);
 
   useEffect(() => {
     if (uid) {
-      fetchRecipe();
+      fetchTag();
       fetchTags();
     }
-  }, [uid, fetchRecipe, fetchTags]);
+  }, [uid, fetchTag, fetchTags]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -88,65 +81,57 @@ export default function Edit() {
     }));
   };
 
-  const handleTagChange = (tagUid: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      tags: prev.tags.includes(tagUid)
-        ? prev.tags.filter((t) => t !== tagUid) // remove if already selected
-        : [...prev.tags, tagUid], // add if not already selected
-    }));
-  };
-
-  async function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     setError('');
 
+    console.log(formData);
+
     try {
-      const res = await fetch(`/api/recipes/${encodeURIComponent(formData.id)}`, {
+      const res = await fetch(`/api/tags/${encodeURIComponent(formData.id)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       if (!res.ok) {
-        throw new Error('Failed to update recipe');
+        throw new Error('Failed to update tag');
       };
 
-      router.push(`/recipes/${uid}`);
+      router.push(`/tags/${uid}`);
     } catch (err) {
-      setError(`Error saving recipe. ${(err as Error).message}`);
+      setError(`Error saving tag. ${(err as Error).message}`);
     } finally {
       setIsSaving(false);
     }
   }
 
-  const deleteRecipe = async () => {
-    try {
-      if (!formData) throw new Error('Recipe not found');
+  const deleteTag = async () => {
+    if (!confirm(`Are you sure you want to delete the tag "${formData.title}"?`)) return;
 
-      const res = await fetch(`/api/recipes/${encodeURIComponent(formData.id)}`, {
+    // check here if this tag is used in any recipes
+    // if so, show a warning and do not delete
+    // for now, just confirm deletion
+    try {
+      if (!formData) throw new Error('Tag not found');
+
+      const res = await fetch(`/api/tags/${encodeURIComponent(formData.id)}`, {
         method: 'DELETE',
       });
 
       if (!res.ok) {
-        throw new Error('Failed to delete recipe');
+        throw new Error('Failed to delete tag');
       };
 
-      // Redirect to recipes list after deletion
-      window.location.href = '/recipes';
+      // Redirect to tags list after deletion
+      window.location.href = '/tags';
     } catch (err) {
       setError((err as Error).message);
     }
   };
 
-  const confirmDeletion = () => {
-    if (confirm('Are you sure you want to delete this recipe?')) {
-      deleteRecipe();
-    }
-  };
-
-  if (loadingRecipe) return <LoadingMessage />;
+  if (loadingTag) return <LoadingMessage />;
   if (!formData) return notFound();
   if (error) return <ErrorMessage text={error} />;
 
@@ -158,36 +143,20 @@ export default function Edit() {
           <InputField id="title" name="title" value={formData.title} onChange={handleGeneralFieldChange} className="!mb-0" />
           <SubmitButton disabled={isSaving} styles="!my-0 ml-10 text-sm" text={isSaving ? 'Saving...' : 'Save'} />
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
-          <TextAreaField
-            id="ingredients"
-            name="ingredients"
-            label="Ingredients"
-            value={formData.ingredients}
-            onChange={handleGeneralFieldChange}
-            className="h-80 sm:h-32"
-          />
-         <TextAreaField
-            id="instructions"
-            name="instructions"
-            label="Instructions"
-            value={formData.instructions}
-            onChange={handleGeneralFieldChange}
-            className="h-80 sm:h-32"
-          />
-        </div>
-        <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
-        {loadingTags
-          ? <LoadingMessage />
-          : <TagButtons name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange}
-        />}
-        <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
+        <TextAreaField
+          id="description"
+          name="description"
+          label="Description"
+          value={formData.description}
+          onChange={handleGeneralFieldChange}
+          className="h-32"
+        />
         <p className="text-sm mt-6 mb-3">
           <span className="text-gray-600 font-medium mr-2">UID:</span>
           <span className="text-gray-400">{uid}</span>
         </p>
       </form>
-      <SharedLink text="Delete recipe" styles="text-red-800 hover:text-red-400" onClick={confirmDeletion} />
+      <SharedLink text="Delete tag" styles="text-red-800 hover:text-red-400" onClick={deleteTag} />
     </div>
   );
 }
