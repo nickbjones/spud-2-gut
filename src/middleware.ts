@@ -4,8 +4,8 @@ import { NextResponse } from 'next/server';
 import authenticate from '@/middleware/auth';
 
 export function middleware(req: NextRequest) {
-  // 🔴 Check if killswitch is active
-  if (process.env.KILLSWITCH_ENABLED === 'true') {
+  // Check if killswitch is active
+  if (process.env.APP_KILLSWITCH_ENABLED === 'true') {
     return new NextResponse('The site is temporarily unavailable.', { status: 503 });
   }
 
@@ -14,5 +14,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/api/:path*', '/:path*'], // ✅ Matches all API routes & pages
+  matcher: ['/api/:path*', '/:path*'], // Matches all API routes & pages
 };
