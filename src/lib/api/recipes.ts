@@ -1,22 +1,10 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import type { RecipeType } from '@/types/recipe';
+import { dynamoDbClient } from '@/lib/aws/dynamoClient';
+import { DynamoDbRecipe } from '../aws/dynamoTypes';
 
-const client = new DynamoDBClient({ region: process.env.AWS_REGION });
-const docClient = DynamoDBDocumentClient.from(client);
+const docClient = DynamoDBDocumentClient.from(dynamoDbClient);
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
-
-export type DynamoDbRecipe = {
-  id: string,
-  uid: string,
-  title: string,
-  tags: string[],
-  date: string,
-  description: string,
-  ingredients: string,
-  instructions: string,
-  reference: string,
-};
 
 const emptyRecipe: RecipeType = {
   id: '',
