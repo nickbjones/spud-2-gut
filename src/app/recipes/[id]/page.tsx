@@ -73,12 +73,12 @@ export default function Recipe() {
       {(recipe.ingredients || recipe.instructions) && (
         <div className={recipe.ingredients && recipe.instructions && `grid grid-cols-2 gap-3 sm:gap-4`}>
           {recipe.ingredients && (
-            <div className="ingredients my-2 sm:my-4 -ml-3 sm:mx-0">
-              <Md className="px-3 py-1 bg-gray-100">{recipe.ingredients}</Md>
+            <div className="ingredients mb-2 sm:mb-4 -ml-3 sm:mx-0">
+              <Md className="mt-2 sm:mt-4 px-3 py-1 bg-gray-100">{recipe.ingredients}</Md>
             </div>
           )}
           {recipe.instructions && (
-            <div className={`instructions my-2 sm:my-4 ${!recipe.ingredients ? 'ml-3' : 'ml-0'} mr-1 sm:mx-0`}>
+            <div className={`instructions mb-2 sm:mb-4 ${!recipe.ingredients ? 'ml-3' : 'ml-0'} mr-1 sm:mx-0`}>
               <Md className="py-0">{recipe.instructions}</Md>
             </div>
           )}
