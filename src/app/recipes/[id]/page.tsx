@@ -1,81 +1,47 @@
-/**
- * Recipe page
- */
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-import type { RecipeType } from '@/types/recipe';
-import Md from '@/components/Markdown';
+import useSWR from 'swr';
 import { useParams, notFound } from 'next/navigation';
-import Tag, { selectedTagStyles } from '@/components/Tag';
+import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
+import Md from '@/components/Markdown';
+import Tag, { selectedTagStyles } from '@/components/Tag';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
 import { getRecipesByTag, getTitleByUid } from '@/lib/utils/helpers';
 
+const fetcher = (url: string) => fetch(url).then((res) => {
+  if (!res.ok) throw new Error('Network response was not ok');
+  return res.json();
+});
+
 export default function Recipe() {
   const params = useParams();
   const uid = params.id as string;
 
-  const [recipe, setRecipe] = useState<RecipeType | null>(null);
-  const [recipes, setRecipes] = useState<RecipeType[]>([]);
-  const [tags, setTags] = useState<TagType[]>([]);
-  const [loadingRecipe, setLoadingRecipe] = useState<boolean>(true);
-  const [loadingRecipes, setLoadingRecipes] = useState<boolean>(true);
-  const [loadingTags, setLoadingTags] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
+  const {
+    data: recipe,
+    error: recipeError,
+    isLoading: loadingRecipe,
+  } = useSWR<RecipeType>(`/api/recipes/${encodeURIComponent(uid)}`, fetcher);
 
-  const fetchRecipes = useCallback(async () => {
-    try {
-      const res = await fetch('/api/recipes');
-      if (!res.ok) throw new Error('Failed to fetch recipes.');
-      const recipeData: RecipeType[] = await res.json();
-      setRecipes(recipeData);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoadingRecipes(false);
-    }
-  }, []);
+  const {
+    data: recipes,
+    error: recipesError,
+    isLoading: loadingRecipes,
+  } = useSWR<RecipeType[]>('/api/recipes', fetcher);
 
-  const fetchRecipe = useCallback(async () => {
-    try {
-      const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
-      if (!res.ok) throw new Error('Failed to fetch recipe.');
-      const recipeData: RecipeType = await res.json();
-      setRecipe(recipeData);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoadingRecipe(false);
-    }
-  }, [uid]);
-
-  const fetchTags = useCallback(async () => {
-    try {
-      const res = await fetch(`/api/tags`);
-      if (!res.ok) throw new Error('Failed to fetch tags');
-      const tagData: TagType[] = await res.json();
-      setTags(tagData);
-    } catch (err) {
-      setTags([]);
-      setError((err as Error).message);
-    } finally {
-      setLoadingTags(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchRecipe();
-    fetchRecipes();
-    fetchTags();
-  }, [uid, fetchRecipe, fetchRecipes, fetchTags]);
+  const {
+    data: tags,
+    error: tagsError,
+    isLoading: loadingTags,
+  } = useSWR<TagType[]>('/api/tags', fetcher);
 
   if (loadingRecipe || loadingRecipes || loadingTags) return <LoadingMessage />;
+  if (recipeError || recipesError || tagsError) return <ErrorMessage text="Failed to load data." />;
   if (!recipe) return notFound();
-  if (error) return <ErrorMessage text={error} />;
 
   return (
     <div className="p-3 sm:p-6">
@@ -83,18 +49,17 @@ export default function Recipe() {
         <SharedHeading text={recipe.title} styles="!my-0" />
         <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm" />
       </div>
-      {/* tags list */}
+
       {recipe.tags.length > 0 &&
         <div className="flex flex-wrap mt-3">
-        {/* <div className="h-8 sm:h-10 mt-0 sm:mt-2 -mr-3 sm:mr-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar"> */}
           {recipe.tags.map((uid: string) => {
-            const recipesWithThisTag = getRecipesByTag(recipes, uid).length;
+            const recipesWithThisTag = getRecipesByTag(recipes!, uid).length;
             return (
               <Tag key={uid} uid={uid} className={selectedTagStyles}>
-                <span className="block">{getTitleByUid(uid, tags)}</span>
+                <span className="block">{getTitleByUid(uid, tags!)}</span>
                 <span className="block text-[8px]/[8px]">({recipesWithThisTag} receipes)</span>
               </Tag>
-            )
+            );
           })}
         </div>
       }
