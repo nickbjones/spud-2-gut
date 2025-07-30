@@ -153,7 +153,6 @@ export default function Edit() {
   return (
     <div className="max-w-2xl mx-auto p-3 sm:p-6">
       <form onSubmit={handleSubmit}>
-        <input type="hidden" id="id" name="id" value={formData.id} />
         <div className="inline-block flex items-center mb-4">
           <InputField id="title" name="title" value={formData.title} onChange={handleGeneralFieldChange} className="!mb-0" />
           <SubmitButton disabled={isSaving} styles="!my-0 ml-10 text-sm" text={isSaving ? 'Saving...' : 'Save'} />

@@ -116,7 +116,6 @@ export default function New() {
             label="Description"
             value={formData.description || ''}
             onChange={handleGeneralFieldChange}
-            className="h-80 sm:h-32"
           />
           <TextAreaField
             id="color"
@@ -124,11 +123,9 @@ export default function New() {
             label="Color"
             value={formData.color || ''}
             onChange={handleGeneralFieldChange}
-            className="h-80 sm:h-32"
           />
         </div>
         <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} required />
-        <input type="hidden" id="date" name="date" value={formData.date} />
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Tag'} disabled={isSaving} />
       </form>
     </div>

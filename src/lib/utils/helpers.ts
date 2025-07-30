@@ -41,3 +41,7 @@ export const getTitleByUid = (uid: string | null | undefined, list: TagType[]): 
   if (!uid || !list || list.length === 0) return '';
   return list.find(item => item.uid === uid)?.title || uid;
 };
+
+export const getRecipesByTag = (recipes: RecipeType[], tag: string): RecipeType[] => {
+  return recipes.filter((recipe) => recipe.tags.includes(tag));
+}

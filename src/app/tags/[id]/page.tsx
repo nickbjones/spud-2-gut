@@ -7,17 +7,12 @@ import { useEffect, useState, useCallback } from 'react';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
 import { useParams, notFound } from 'next/navigation';
+import { getRecipesByTag } from '@/lib/utils/helpers';
 import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
-import { miniTagStyles } from '@/components/Tag';
-import { getTitleByUid } from '@/lib/utils/helpers';
-
-// TODO: move to shared util?
-function getRecipesByTag(recipes: RecipeType[], tag: string): RecipeType[] {
-  return recipes.filter((recipe) => recipe.tags.includes(tag));
-}
+import RecipeCard from '@/components/RecipeCard';
 
 const tagTitleStyles = `
   !my-0
@@ -95,32 +90,16 @@ export default function TagPage() {
         <SharedHeading text={tag.title} styles={tagTitleStyles} />
         <SharedLink href={`${tag.uid}/edit`} text="[Edit]" styles="text-sm" />
       </div>
-      <p>{tag.description}</p>
+      {tag.description && <p>{tag.description}</p>}
       <div className="mt-4">
-        <ul>
-          {recipesWithThisTag.length > 0
-            ? <>
-                <p className="mb-2">Recipes with this tag:</p>
-                {recipesWithThisTag.map((recipe: RecipeType) => (
-                  <li key={recipe.id} className="mb-2 sm:mb-3 border rounded-lg shadow-lg">
-                    <a href={`/recipes/${recipe.uid}`} className="block py-2 px-3">
-                      <span className="text-base font-semibold">{recipe.title}</span>
-                      {recipe.tags.length > 0 &&
-                        <div className="flex gap-1 flex-wrap mt-1">
-                          {recipe.tags.map((uid: string) => (
-                            <span key={uid} className={miniTagStyles}>{getTitleByUid(uid, tags)}</span>
-                          ))}
-                        </div>
-                      }
-                    </a>
-                  </li>
-                ))}
-              </>
-            : <>
-              No recipes with this tag
-            </>
-          }
-        </ul>
+        <p className="mb-2">{recipesWithThisTag.length > 0 ? `Recipes with this tag (${recipesWithThisTag.length}):` : 'No recipes with this tag'}</p>
+        {recipesWithThisTag.length > 0 &&
+          <ul>
+            {recipesWithThisTag.map((recipe: RecipeType) => (
+              <RecipeCard key={recipe.id} recipe={recipe} tags={tags} />
+            ))}
+          </ul>
+        }
       </div>
     </div>
   );

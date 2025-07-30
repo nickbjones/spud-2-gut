@@ -13,15 +13,32 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
-import { getTitleByUid } from '@/lib/utils/helpers';
+import { getRecipesByTag, getTitleByUid } from '@/lib/utils/helpers';
 
 export default function Recipe() {
   const params = useParams();
   const uid = params.id as string;
+
   const [recipe, setRecipe] = useState<RecipeType | null>(null);
+  const [recipes, setRecipes] = useState<RecipeType[]>([]);
   const [tags, setTags] = useState<TagType[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingRecipe, setLoadingRecipe] = useState<boolean>(true);
+  const [loadingRecipes, setLoadingRecipes] = useState<boolean>(true);
+  const [loadingTags, setLoadingTags] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+
+  const fetchRecipes = useCallback(async () => {
+    try {
+      const res = await fetch('/api/recipes');
+      if (!res.ok) throw new Error('Failed to fetch recipes.');
+      const recipeData: RecipeType[] = await res.json();
+      setRecipes(recipeData);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoadingRecipes(false);
+    }
+  }, []);
 
   const fetchRecipe = useCallback(async () => {
     try {
@@ -32,7 +49,7 @@ export default function Recipe() {
     } catch (err) {
       setError((err as Error).message);
     } finally {
-      setLoading(false);
+      setLoadingRecipe(false);
     }
   }, [uid]);
 
@@ -45,15 +62,18 @@ export default function Recipe() {
     } catch (err) {
       setTags([]);
       setError((err as Error).message);
+    } finally {
+      setLoadingTags(false);
     }
   }, []);
 
   useEffect(() => {
     fetchRecipe();
+    fetchRecipes();
     fetchTags();
-  }, [uid, fetchRecipe, fetchTags]);
+  }, [uid, fetchRecipe, fetchRecipes, fetchTags]);
 
-  if (loading) return <LoadingMessage />;
+  if (loadingRecipe || loadingRecipes || loadingTags) return <LoadingMessage />;
   if (!recipe) return notFound();
   if (error) return <ErrorMessage text={error} />;
 
@@ -63,11 +83,19 @@ export default function Recipe() {
         <SharedHeading text={recipe.title} styles="!my-0" />
         <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm" />
       </div>
+      {/* tags list */}
       {recipe.tags.length > 0 &&
-        <div className="tags h-8 sm:h-10 mt-0 sm:mt-2 -mr-3 sm:mr-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
-          {recipe.tags.map((uid: string) => (
-            <Tag key={uid} uid={uid} text={getTitleByUid(uid, tags)} className={selectedTagStyles} />
-          ))}
+        <div className="flex flex-wrap mt-3">
+        {/* <div className="h-8 sm:h-10 mt-0 sm:mt-2 -mr-3 sm:mr-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar"> */}
+          {recipe.tags.map((uid: string) => {
+            const recipesWithThisTag = getRecipesByTag(recipes, uid).length;
+            return (
+              <Tag key={uid} uid={uid} className={selectedTagStyles}>
+                <span className="block">{getTitleByUid(uid, tags)}</span>
+                <span className="block text-[8px]/[8px]">({recipesWithThisTag} receipes)</span>
+              </Tag>
+            )
+          })}
         </div>
       }
       {(recipe.ingredients || recipe.instructions) && (
@@ -97,7 +125,7 @@ export default function Recipe() {
         </div>
       )}
       {(!recipe.ingredients && !recipe.instructions && !recipe.description && !recipe.reference) && (
-        <SharedLink href={`${recipe.uid}/edit`} text="Add content →" styles="" />
+        <SharedLink href={`${recipe.uid}/edit`} text="Add content →" styles="block mt-8" />
       )}
     </div>
   );
