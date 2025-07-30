@@ -97,7 +97,7 @@ export default function Recipe() {
         </div>
       )}
       {(!recipe.ingredients && !recipe.instructions && !recipe.description && !recipe.reference) && (
-        <SharedLink href={`${recipe.uid}/edit`} text="Add content →" styles="" />
+        <SharedLink href={`${recipe.uid}/edit`} text="Add content →" styles="block mt-8" />
       )}
     </div>
   );
