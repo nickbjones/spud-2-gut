@@ -1,7 +1,6 @@
 import { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import type { RecipeType } from '@/types/recipe';
 import { dynamoDbClient } from '@/lib/aws/dynamoClient';
-import { DynamoDbRecipe } from '../aws/dynamoTypes';
 
 const docClient = DynamoDBDocumentClient.from(dynamoDbClient);
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
@@ -18,7 +17,7 @@ const emptyRecipe: RecipeType = {
   reference: '',
 };
 
-function formatDynamoDbRecipe(recipeRaw: DynamoDbRecipe): RecipeType {
+function formatDynamoDbRecipe(recipeRaw: RecipeType): RecipeType {
   try {
     return {
       id: recipeRaw.id || '',
@@ -37,7 +36,7 @@ function formatDynamoDbRecipe(recipeRaw: DynamoDbRecipe): RecipeType {
   }
 }
 
-function formatDynamoDbRecipes(recipesRaw: DynamoDbRecipe[]): RecipeType[] {
+function formatDynamoDbRecipes(recipesRaw: RecipeType[]): RecipeType[] {
   return recipesRaw.map((recipeRaw) => {
     return formatDynamoDbRecipe(recipeRaw);
   });
@@ -60,7 +59,7 @@ export async function getAllRecipes() {
 
     if (!response.Items) return [];
 
-    const recipesRaw: DynamoDbRecipe[] = response.Items as DynamoDbRecipe[];
+    const recipesRaw: RecipeType[] = response.Items as RecipeType[];
     return formatDynamoDbRecipes(recipesRaw);
   } catch (error) {
     console.error('Error fetching recipes:', error);
