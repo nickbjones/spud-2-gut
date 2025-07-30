@@ -17,7 +17,7 @@ export default function Tags() {
   const [tags, setTags] = useState<TagType[]>([]);
   const [loadingTags, setLoadingTags] = useState<boolean>(true);
   const [loadingRecipes, setLoadingRecipes] = useState<boolean>(true);
-  
+
   const [error, setError] = useState<string>('');
 
   const fetchRecipes = useCallback(async () => {
@@ -50,7 +50,7 @@ export default function Tags() {
   useEffect(() => {
     fetchRecipes();
     fetchTags();
-  }, [fetchTags]);
+  }, [fetchTags, fetchRecipes]);
 
   if (loadingTags || loadingRecipes) return <LoadingMessage />;
   if (tags.length < 1) return <ErrorMessage text="No tags!" />;
@@ -62,7 +62,7 @@ export default function Tags() {
     <div className="p-3 sm:p-6">
       <SharedLink text="+ New Tag" href="/tags/new" />
       {/* tags list */}
-      <ul className="flex flex-wrap gap-2 mt-3">
+      <div className="flex flex-wrap gap-2 mt-3">
         {tags.map((tag: TagType) => {
           const recipesWithThisTag = getRecipesByTag(recipes, tag.uid).length;
           return <Tag key={tag.uid} uid={tag.uid} className={`${selectedTagStyles} !mr-0`}>
@@ -70,7 +70,7 @@ export default function Tags() {
             <span className="block text-[8px]/[8px]">({recipesWithThisTag} receipes)</span>
           </Tag>;
         })}
-      </ul>
+      </div>
     </div>
   );
 }
