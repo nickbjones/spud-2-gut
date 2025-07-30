@@ -109,7 +109,7 @@ export default function Tags() {
       </div>
 
       {/* tags list */}
-      <ul className="flex flex-wrap gap-1 sm:gap-2">
+      <ul className="flex flex-wrap gap-2">
         {tags.map((tag: TagType) => (
           <Tag key={tag.uid} uid={tag.uid} text={tag.title} className={`${selectedTagStyles} !mr-0`} />
         ))}
