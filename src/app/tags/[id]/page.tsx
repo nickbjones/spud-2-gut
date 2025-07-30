@@ -7,12 +7,12 @@ import { useEffect, useState, useCallback } from 'react';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
 import { useParams, notFound } from 'next/navigation';
+import { getRecipesByTag } from '@/lib/utils/helpers';
 import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import RecipeCard from '@/components/RecipeCard';
-import { getRecipesByTag } from '@/lib/utils/helpers';
 
 const tagTitleStyles = `
   !my-0

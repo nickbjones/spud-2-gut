@@ -66,7 +66,9 @@ export default function Recipe() {
       {recipe.tags.length > 0 &&
         <div className="tags h-8 sm:h-10 mt-0 sm:mt-2 -mr-3 sm:mr-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
           {recipe.tags.map((uid: string) => (
-            <Tag key={uid} uid={uid} text={getTitleByUid(uid, tags)} className={selectedTagStyles} />
+            <Tag key={uid} uid={uid} className={selectedTagStyles}>
+              {getTitleByUid(uid, tags)}
+            </Tag>
           ))}
         </div>
       }

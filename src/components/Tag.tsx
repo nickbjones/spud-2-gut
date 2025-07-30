@@ -38,8 +38,16 @@ export const miniTagStyles = `
   rounded-md
 `;
 
-export default function Tag({uid, text, className}: {uid: string, text: string, className?: string}) {
+type TagProps = {
+  uid: string;
+  className?: string;
+  children: React.ReactNode;
+};
+
+export default function Tag({uid, className, children}: TagProps) {
   return (
-    <Link href={`/tags/${uid}`} className={`${sharedTagStyles} ${className}`}>{text}</Link>
+    <Link href={`/tags/${uid}`} className={`${sharedTagStyles} ${className}`}>
+      {children}
+    </Link>
   );
 }

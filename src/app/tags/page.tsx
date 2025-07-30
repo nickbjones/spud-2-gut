@@ -4,6 +4,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { RecipeType } from '@/types/recipe';
 import type { TagType} from '@/types/tag';
 import Tag, { selectedTagStyles } from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
@@ -12,11 +13,12 @@ import ErrorMessage from '@/components/ErrorMessage';
 
 export default function Tags() {
   const [tags, setTags] = useState<TagType[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingTags, setLoadingTags] = useState<boolean>(true);
+  
   const [error, setError] = useState<string>('');
 
   const fetchTags = useCallback(async () => {
-    setLoading(true);
+    setLoadingTags(true);
     try {
       const res = await fetch('/api/tags');
       if (!res.ok) throw new Error('Failed to fetch tags');
@@ -25,7 +27,7 @@ export default function Tags() {
     } catch (err) {
       setError((err as Error).message);
     } finally {
-      setLoading(false);
+      setLoadingTags(false);
     }
   }, []);
 
@@ -33,7 +35,7 @@ export default function Tags() {
     fetchTags();
   }, [fetchTags]);
 
-  if (loading) return <LoadingMessage />;
+  if (loadingTags) return <LoadingMessage />;
   if (tags.length < 1) return <ErrorMessage text="No tags!" />;
   if (error) return <ErrorMessage text={error} />;
 
@@ -44,9 +46,11 @@ export default function Tags() {
       <SharedLink text="+ New Tag" href="/tags/new" />
       {/* tags list */}
       <ul className="flex flex-wrap gap-2 mt-3">
-        {tags.map((tag: TagType) => (
-          <Tag key={tag.uid} uid={tag.uid} text={tag.title} className={`${selectedTagStyles} !mr-0`} />
-        ))}
+        {tags.map((tag: TagType) => {
+          return <Tag key={tag.uid} uid={tag.uid} className={`${selectedTagStyles} !mr-0`}>
+            {tag.title}
+          </Tag>;
+        })}
       </ul>
     </div>
   );
