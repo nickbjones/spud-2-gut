@@ -126,7 +126,6 @@ export default function New() {
           />
         </div>
         <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} required />
-        <input type="hidden" id="date" name="date" value={formData.date} />
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Tag'} disabled={isSaving} />
       </form>
     </div>

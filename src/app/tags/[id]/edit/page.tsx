@@ -32,7 +32,7 @@ export default function Edit() {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
-  // // to be used later to check if a tag title is used already
+  // // to be used later to check if a tag title exists already
   // const fetchTags = useCallback(async () => {
   //   try {
   //     const res = await fetch(`/api/tags`);
@@ -63,6 +63,7 @@ export default function Edit() {
   useEffect(() => {
     if (uid) {
       fetchTag();
+      // // to be used later to check if a tag title exists already
       // fetchTags();
     }
   }, [uid, fetchTag]);
@@ -78,8 +79,6 @@ export default function Edit() {
     e.preventDefault();
     setIsSaving(true);
     setError('');
-
-    console.log(formData);
 
     try {
       const res = await fetch(`/api/tags/${encodeURIComponent(formData.id)}`, {
@@ -103,7 +102,7 @@ export default function Edit() {
   const deleteTag = async () => {
     if (!confirm(`Are you sure you want to delete the tag "${formData.title}"?`)) return;
 
-    // check here if this tag is used in any recipes
+    // check here if this tag exists in any recipes
     // if so, show a warning and do not delete
     // for now, just confirm deletion
     try {
@@ -131,7 +130,6 @@ export default function Edit() {
   return (
     <div className="max-w-2xl mx-auto p-3 sm:p-6">
       <form onSubmit={handleSubmit}>
-        <input type="hidden" id="id" name="id" value={formData.id} />
         <div className="inline-block flex items-center mb-4">
           <InputField id="title" name="title" value={formData.title} onChange={handleGeneralFieldChange} className="!mb-0" />
           <SubmitButton disabled={isSaving} styles="!my-0 ml-10 text-sm" text={isSaving ? 'Saving...' : 'Save'} />
