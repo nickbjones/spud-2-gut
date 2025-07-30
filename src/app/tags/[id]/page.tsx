@@ -90,9 +90,9 @@ export default function TagPage() {
         <SharedHeading text={tag.title} styles={tagTitleStyles} />
         <SharedLink href={`${tag.uid}/edit`} text="[Edit]" styles="text-sm" />
       </div>
-      <p>{tag.description}</p>
+      {tag.description && <p>{tag.description}</p>}
       <div className="mt-4">
-        <p className="mb-2">{recipesWithThisTag.length > 0 ? 'Recipes with this tag:' : 'No recipes with this tag'}</p>
+        <p className="mb-2">{recipesWithThisTag.length > 0 ? `Recipes with this tag (${recipesWithThisTag.length}):` : 'No recipes with this tag'}</p>
         {recipesWithThisTag.length > 0 &&
           <ul>
             {recipesWithThisTag.map((recipe: RecipeType) => (
