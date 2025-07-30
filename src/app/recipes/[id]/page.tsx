@@ -64,33 +64,35 @@ export default function Recipe() {
         <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm" />
       </div>
       {recipe.tags.length > 0 &&
-        <div className="tags h-8 sm:h-10 mt-0 sm:mt-2 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
+        <div className="tags h-8 sm:h-10 mt-0 sm:mt-2 -mr-3 sm:mr-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar">
           {recipe.tags.map((uid: string) => (
             <Tag key={uid} uid={uid} text={getTitleByUid(uid, tags)} className={selectedTagStyles} />
           ))}
         </div>
       }
       {(recipe.ingredients || recipe.instructions) && (
-        <div className={recipe.ingredients && recipe.instructions && `grid grid-cols-2 gap-3 sm:gap-4`}>
+        <div className={recipe.ingredients && recipe.instructions && `sm:grid grid-cols-2 gap-6 mt-0 sm:mt-2`}>
           {recipe.ingredients && (
-            <div className="ingredients my-2 sm:my-4 -ml-3 sm:mx-0">
-              <Md className="px-3 py-1 bg-gray-100">{recipe.ingredients}</Md>
+            <div className="ingredients mt-6 sm:mt-0 -mx-3 sm:mx-0">
+              <div className="mt-2 sm:mt-4 px-3 py-1 bg-gray-100">
+                <Md>{recipe.ingredients}</Md>
+              </div>
             </div>
           )}
           {recipe.instructions && (
-            <div className={`instructions my-2 sm:my-4 ${!recipe.ingredients ? 'ml-3' : 'ml-0'} mr-1 sm:mx-0`}>
-              <Md className="py-0">{recipe.instructions}</Md>
+            <div className={`instructions mt-6 sm:mt-1 mb-2 sm:mb-4 mr-1 sm:mx-0`}>
+              <Md>{recipe.instructions}</Md>
             </div>
           )}
         </div>
       )}
       {recipe.description && (
-        <div className="description mt-4">
+        <div className="description mt-6">
           <Md className="max-w-full">{recipe.description}</Md>
         </div>
       )}
       {recipe.reference && (
-        <div className="reference mt-4">
+        <div className="reference mt-6 break-all">
           <SharedLink href={recipe.reference} text={recipe.reference} />
         </div>
       )}
