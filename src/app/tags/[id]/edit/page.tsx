@@ -5,7 +5,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams, notFound } from 'next/navigation';
-// import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
@@ -14,18 +13,11 @@ import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 
-type TagEditable = {
-  id: string;
-  uid: string;
-  title: string;
-  description: string;
-};
-
-const initialValues: TagEditable = {
+const initialValues: TagType = {
   id: '',
   uid: '',
   title: '',
-  description: '',
+  date: '',
 };
 
 export default function Edit() {
@@ -33,7 +25,7 @@ export default function Edit() {
   const params = useParams();
   const uid = params.id as string;
 
-  const [formData, setFormData] = useState<TagEditable>(initialValues);
+  const [formData, setFormData] = useState<TagType>(initialValues);
   // const [availableTags, setAvailableTags] = useState<TagType[]>([]);
   // const [loadingTags, setLoadingTags] = useState<boolean>(true);
   const [loadingTag, setLoadingTag] = useState<boolean>(true);
@@ -148,7 +140,7 @@ export default function Edit() {
           id="description"
           name="description"
           label="Description"
-          value={formData.description}
+          value={formData.description || ''}
           onChange={handleGeneralFieldChange}
           className="h-32"
         />
