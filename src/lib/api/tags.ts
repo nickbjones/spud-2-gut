@@ -1,7 +1,6 @@
 import { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import type { TagType } from '@/types/tag';
 import { dynamoDbClient } from '@/lib/aws/dynamoClient';
-import { DynamoDbTag } from '../aws/dynamoTypes';
 
 const docClient = DynamoDBDocumentClient.from(dynamoDbClient);
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
@@ -10,16 +9,18 @@ const emptyTag: TagType = {
   id: '',
   uid: '',
   title: '',
-  description: '',
+  date: '',
 };
 
-function formatDynamoDbTag(tagRaw: DynamoDbTag): TagType {
+function formatDynamoDbTag(tagRaw: TagType): TagType {
   try {
     return {
       id: tagRaw.id || '',
       uid: tagRaw.uid || '',
       title: tagRaw.title || '', // || tagRaw.name, // -- FIX
       description: tagRaw.description || '',
+      date: tagRaw.date || '',
+      color: tagRaw.color || '',
     };
   } catch (error) {
     console.error('Error parsing tag ID:', tagRaw.id, error);
@@ -27,7 +28,7 @@ function formatDynamoDbTag(tagRaw: DynamoDbTag): TagType {
   }
 }
 
-function formatDynamoDbTags(tagsRaw: DynamoDbTag[]): TagType[] {
+function formatDynamoDbTags(tagsRaw: TagType[]): TagType[] {
   return tagsRaw.map((tagRaw) => {
     return formatDynamoDbTag(tagRaw);
   });
@@ -50,7 +51,7 @@ export async function getAllTags(): Promise<TagType[]> {
 
     if (!response.Items) return [];
 
-    const tagsRaw: DynamoDbTag[] = response.Items as DynamoDbTag[];
+    const tagsRaw: TagType[] = response.Items as TagType[];
     return formatDynamoDbTags(tagsRaw);
   } catch (error) {
     console.error('Error fetching tags:', error);

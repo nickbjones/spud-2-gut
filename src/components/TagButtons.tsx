@@ -26,11 +26,13 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
     if (!newTitle) return;
     setIsSavingNewTag(true);
 
-    const newTag = {
+    const newTag: TagType = {
       id: getNewId('TAG', tagsList),
       uid: newUid,
       title: newTitle,
       description: '',
+      color: '',
+      date: new Date().toISOString().split('T')[0], // today
     };
 
     try {

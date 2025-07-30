@@ -3,7 +3,7 @@
  */
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
 import { useParams, notFound } from 'next/navigation';
@@ -39,7 +39,7 @@ export default function TagPage() {
   const [loadingRecipes, setLoadingRecipes] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
-  const fetchRecipes = async () => {
+  const fetchRecipes = useCallback(async () => {
     try {
       const res = await fetch('/api/recipes');
       if (!res.ok) throw new Error('Failed to fetch recipes.');
@@ -50,9 +50,9 @@ export default function TagPage() {
     } finally {
       setLoadingRecipes(false);
     }
-  };
+  }, []);
 
-  const fetchTags = async () => {
+  const fetchTags = useCallback(async () => {
     try {
       const res = await fetch(`/api/tags`);
       if (!res.ok) throw new Error('Failed to fetch tags');
@@ -62,9 +62,9 @@ export default function TagPage() {
       setTags([]);
       setError((err as Error).message);
     }
-  };
+  }, []);
 
-  const fetchTag = async () => {
+  const fetchTag = useCallback(async () => {
     try {
       const res = await fetch(`/api/tags/${encodeURIComponent(uid)}`);
       if (!res.ok) throw new Error('Failed to fetch tag');
@@ -75,13 +75,13 @@ export default function TagPage() {
     } finally {
       setLoadingTags(false);
     }
-  };
+  }, [uid]);
 
   useEffect(() => {
     fetchRecipes();
     fetchTags();
     fetchTag();
-  }, [uid]);
+  }, [uid, fetchRecipes, fetchTags, fetchTag]);
 
   if (loadingTags || loadingRecipes) return <LoadingMessage />;
   if (!tag) return notFound();
