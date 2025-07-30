@@ -3,7 +3,7 @@
  */
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { TagType } from '@/types/tag';
 import { uidRules, generateUid, getNewId } from '@/lib/utils/helpers';
@@ -31,7 +31,7 @@ export default function New() {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
-  const fetchTags = async () => {
+  const fetchTags = useCallback(async () => {
     try {
       const res = await fetch(`/api/tags`);
       if (!res.ok) throw new Error('Failed to fetch tags');
@@ -46,11 +46,11 @@ export default function New() {
     } finally {
       setLoadingTags(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchTags();
-  }, []);
+  }, [fetchTags]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -114,7 +114,7 @@ export default function New() {
             id="description"
             name="description"
             label="Description"
-            value={formData.description}
+            value={formData.description || ''}
             onChange={handleGeneralFieldChange}
             className="h-80 sm:h-32"
           />
@@ -122,7 +122,7 @@ export default function New() {
             id="color"
             name="color"
             label="Color"
-            value={formData.color}
+            value={formData.color || ''}
             onChange={handleGeneralFieldChange}
             className="h-80 sm:h-32"
           />
