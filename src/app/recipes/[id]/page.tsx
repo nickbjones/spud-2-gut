@@ -1,5 +1,9 @@
+/**
+ * Recipe page
+ */
 'use client';
 
+import { API } from '@/lib/constants';
 import useSWR from 'swr';
 import { useParams, notFound } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
@@ -20,24 +24,29 @@ const fetcher = (url: string) => fetch(url).then(res => {
 export default function Recipe() {
   const { id: uid } = useParams() as { id: string };
 
-  const { data: recipe, error: errorRecipe, isLoading: loadingRecipe } = useSWR<RecipeType>(
-    `/api/recipes/${encodeURIComponent(uid)}`,
-    fetcher
-  );
+  const {
+    data: recipe,
+    error: recipeError,
+    isLoading: loadingRecipe,
+  } = useSWR<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`, fetcher);
 
-  const { data: recipes, error: errorRecipes, isLoading: loadingRecipes } = useSWR<RecipeType[]>(
-    '/api/recipes',
-    fetcher
-  );
+  const {
+    data: recipes,
+    error: recipesError,
+    isLoading: loadingRecipes,
+  } = useSWR<RecipeType[]>(API.recipes, fetcher);
 
-  const { data: tags, error: errorTags, isLoading: loadingTags } = useSWR<TagType[]>(
-    '/api/tags',
-    fetcher
-  );
+  const { data: tags,
+    error: tagsError,
+    isLoading: loadingTags,
+  } = useSWR<TagType[]>(API.tags, fetcher);
 
-  if (loadingRecipe || loadingRecipes || loadingTags) return <LoadingMessage />;
+  const error = recipeError?.message || recipesError?.message || tagsError?.message || '';
+  const loading = loadingRecipe || loadingRecipes || loadingTags;
+
+  if (loading) return <LoadingMessage />;
+  if (error) return <ErrorMessage text={error} />;
   if (!recipe) return notFound();
-  if (errorRecipe || errorRecipes || errorTags) return <ErrorMessage text="Failed to load data." />;
 
   return (
     <div className="p-3 sm:p-6">
