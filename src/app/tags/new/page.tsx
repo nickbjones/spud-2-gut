@@ -15,6 +15,7 @@ import SubmitButton from '@/components/SubmitButton';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import { initialTagValues } from '@/lib/initialValues';
+import ColorPicker from '@/components/ColorPicker';
 
 export default function New() {
   const router = useRouter();
@@ -97,7 +98,7 @@ export default function New() {
             value={formData.description || ''}
             onChange={handleGeneralFieldChange}
           />
-          <TextAreaField
+          <ColorPicker
             id="color"
             name="color"
             label="Color"
