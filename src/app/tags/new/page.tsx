@@ -5,7 +5,7 @@
 
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { TagType } from '@/types/tag';
 import { uidRules, generateUid, getNewId } from '@/lib/utils/helpers';

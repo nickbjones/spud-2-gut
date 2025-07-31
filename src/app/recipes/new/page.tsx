@@ -31,7 +31,7 @@ export default function New() {
   useEffect(() => {
     const newId = getNewId('RECIPE', recipes || []);
     setFormData((prev) => ({ ...prev, id: newId }))
-  }, []);
+  }, [recipes]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
