@@ -17,6 +17,18 @@ import SubmitButton from '@/components/SubmitButton';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 
+const initialValues: RecipeType = {
+  id: '',
+  title: '',
+  uid: '',
+  tags: [],
+  date: new Date().toISOString().split('T')[0], // today
+  description: '',
+  ingredients: '',
+  instructions: '',
+  reference: '',
+};
+
 const fetcher = (url: string) => fetch(url).then(res => {
   if (!res.ok) throw new Error('Fetch failed');
   return res.json();
@@ -24,18 +36,6 @@ const fetcher = (url: string) => fetch(url).then(res => {
 
 export default function New() {
   const router = useRouter();
-
-  const initialValues: RecipeType = {
-    id: '',
-    title: '',
-    uid: '',
-    tags: [],
-    date: new Date().toISOString().split('T')[0], // today
-    description: '',
-    ingredients: '',
-    instructions: '',
-    reference: '',
-  };
 
   const [formData, setFormData] = useState<RecipeType>(initialValues);
   const [isSaving, setIsSaving] = useState<boolean>(false);
