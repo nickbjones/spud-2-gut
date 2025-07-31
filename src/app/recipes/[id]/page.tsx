@@ -4,7 +4,7 @@
 'use client';
 
 import { API } from '@/lib/constants';
-import useSWR from 'swr';
+import { useData } from '@/hooks/useData';
 import { useParams, notFound } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
@@ -16,30 +16,12 @@ import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
 import { getRecipesByTag, getTitleByUid } from '@/lib/utils/helpers';
 
-const fetcher = (url: string) => fetch(url).then(res => {
-  if (!res.ok) throw new Error('Fetch failed');
-  return res.json();
-});
-
 export default function Recipe() {
   const { id: uid } = useParams() as { id: string };
 
-  const {
-    data: recipe,
-    error: recipeError,
-    isLoading: loadingRecipe,
-  } = useSWR<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`, fetcher);
-
-  const {
-    data: recipes,
-    error: recipesError,
-    isLoading: loadingRecipes,
-  } = useSWR<RecipeType[]>(API.recipes, fetcher);
-
-  const { data: tags,
-    error: tagsError,
-    isLoading: loadingTags,
-  } = useSWR<TagType[]>(API.tags, fetcher);
+  const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`);
+  const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
+  const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
   const error = recipeError?.message || recipesError?.message || tagsError?.message || '';
   const loading = loadingRecipe || loadingRecipes || loadingTags;

@@ -4,30 +4,16 @@
 'use client';
 
 import { API } from '@/lib/constants';
-import useSWR from 'swr';
+import { useData } from '@/hooks/useData';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import RecipeCard from '@/components/RecipeCard';
 
-const fetcher = (url: string) => fetch(url).then(res => {
-  if (!res.ok) throw new Error('Failed to fetch');
-  return res.json();
-});
-
 export default function Recipes() {
-  const {
-    data: recipes,
-    error: recipesError,
-    isLoading: loadingRecipes,
-  } = useSWR<RecipeType[]>(API.recipes, fetcher);
-
-  const {
-    data: tags,
-    error: tagsError,
-    isLoading: loadingTags,
-  } = useSWR<TagType[]>(API.tags, fetcher);
+  const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
+  const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
   const error = recipesError?.message || tagsError?.message || '';
   const loading = loadingRecipes || loadingTags;

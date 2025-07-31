@@ -4,7 +4,7 @@
 'use client';
 
 import { API } from '@/lib/constants';
-import useSWR from 'swr';
+import { useData } from '@/hooks/useData';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
@@ -29,28 +29,15 @@ const initialValues: RecipeType = {
   reference: '',
 };
 
-const fetcher = (url: string) => fetch(url).then(res => {
-  if (!res.ok) throw new Error('Fetch failed');
-  return res.json();
-});
-
 export default function New() {
   const router = useRouter();
+
+  const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
+  const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
   const [formData, setFormData] = useState<RecipeType>(initialValues);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
-
-  const {
-    data: recipes,
-    error: recipesError,
-    isLoading: loadingRecipes,
-  } = useSWR<RecipeType[]>(API.recipes, fetcher);
-
-  const { data: tags,
-    error: tagsError,
-    isLoading: loadingTags,
-  } = useSWR<TagType[]>(API.tags, fetcher);
 
   useEffect(() => {
     const newId = getNewId('RECIPE', recipes || []);
