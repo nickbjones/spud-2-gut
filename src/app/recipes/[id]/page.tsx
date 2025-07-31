@@ -85,12 +85,11 @@ export default function Recipe() {
       </div>
       {/* tags list */}
       {recipe.tags.length > 0 &&
-        <div className="flex flex-wrap mt-3">
-        {/* <div className="h-8 sm:h-10 mt-0 sm:mt-2 -mr-3 sm:mr-0 pt-0 sm:pt-2 overflow-x-auto whitespace-nowrap no-scrollbar"> */}
+        <div className="flex flex-wrap mt-3 gap-1 sm:gap-2 whitespace-nowrap overflow-x-auto no-scrollbar">
           {recipe.tags.map((uid: string) => {
             const recipesWithThisTag = getRecipesByTag(recipes, uid).length;
             return (
-              <Tag key={uid} uid={uid} className={selectedTagStyles}>
+              <Tag key={uid} uid={uid} className={`${selectedTagStyles} !mr-0`}>
                 <span className="block">{getTitleByUid(uid, tags)}</span>
                 <span className="block text-[8px]/[8px]">({recipesWithThisTag} receipes)</span>
               </Tag>
@@ -101,7 +100,7 @@ export default function Recipe() {
       {(recipe.ingredients || recipe.instructions) && (
         <div className={recipe.ingredients && recipe.instructions && `sm:grid grid-cols-2 gap-6 mt-0 sm:mt-2`}>
           {recipe.ingredients && (
-            <div className="ingredients mt-6 sm:mt-0 -mx-3 sm:mx-0">
+            <div className="ingredients mt-4 sm:mt-0 -mx-3 sm:mx-0">
               <div className="mt-2 sm:mt-4 px-3 py-1 bg-gray-100">
                 <Md>{recipe.ingredients}</Md>
               </div>
