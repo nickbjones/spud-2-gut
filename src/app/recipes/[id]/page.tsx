@@ -1,6 +1,6 @@
 'use client';
 
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { useParams, notFound } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
@@ -12,36 +12,32 @@ import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
 import { getRecipesByTag, getTitleByUid } from '@/lib/utils/helpers';
 
-const fetcher = (url: string) => fetch(url).then((res) => {
-  if (!res.ok) throw new Error('Network response was not ok');
+const fetcher = (url: string) => fetch(url).then(res => {
+  if (!res.ok) throw new Error('Fetch failed');
   return res.json();
 });
 
 export default function Recipe() {
-  const params = useParams();
-  const uid = params.id as string;
+  const { id: uid } = useParams() as { id: string };
 
-  const {
-    data: recipe,
-    error: recipeError,
-    isLoading: loadingRecipe,
-  } = useSWR<RecipeType>(`/api/recipes/${encodeURIComponent(uid)}`, fetcher);
+  const { data: recipe, error: errorRecipe, isLoading: loadingRecipe } = useSWR<RecipeType>(
+    `/api/recipes/${encodeURIComponent(uid)}`,
+    fetcher
+  );
 
-  const {
-    data: recipes,
-    error: recipesError,
-    isLoading: loadingRecipes,
-  } = useSWR<RecipeType[]>('/api/recipes', fetcher);
+  const { data: recipes, error: errorRecipes, isLoading: loadingRecipes } = useSWR<RecipeType[]>(
+    '/api/recipes',
+    fetcher
+  );
 
-  const {
-    data: tags,
-    error: tagsError,
-    isLoading: loadingTags,
-  } = useSWR<TagType[]>('/api/tags', fetcher);
+  const { data: tags, error: errorTags, isLoading: loadingTags } = useSWR<TagType[]>(
+    '/api/tags',
+    fetcher
+  );
 
   if (loadingRecipe || loadingRecipes || loadingTags) return <LoadingMessage />;
-  if (recipeError || recipesError || tagsError) return <ErrorMessage text="Failed to load data." />;
   if (!recipe) return notFound();
+  if (errorRecipe || errorRecipes || errorTags) return <ErrorMessage text="Failed to load data." />;
 
   return (
     <div className="p-3 sm:p-6">
@@ -50,19 +46,19 @@ export default function Recipe() {
         <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm" />
       </div>
 
-      {recipe.tags.length > 0 &&
+      {recipe.tags.length > 0 && (
         <div className="flex flex-wrap mt-3">
           {recipe.tags.map((uid: string) => {
-            const recipesWithThisTag = getRecipesByTag(recipes!, uid).length;
+            const count = getRecipesByTag(recipes ?? [], uid).length;
             return (
               <Tag key={uid} uid={uid} className={selectedTagStyles}>
-                <span className="block">{getTitleByUid(uid, tags!)}</span>
-                <span className="block text-[8px]/[8px]">({recipesWithThisTag} receipes)</span>
+                <span className="block">{getTitleByUid(uid, tags ?? [])}</span>
+                <span className="block text-[8px]/[8px]">({count} recipes)</span>
               </Tag>
             );
           })}
         </div>
-      }
+      )}
       {(recipe.ingredients || recipe.instructions) && (
         <div className={recipe.ingredients && recipe.instructions && `sm:grid grid-cols-2 gap-6 mt-0 sm:mt-2`}>
           {recipe.ingredients && (
@@ -73,7 +69,7 @@ export default function Recipe() {
             </div>
           )}
           {recipe.instructions && (
-            <div className={`instructions mt-6 sm:mt-1 mb-2 sm:mb-4 mr-1 sm:mx-0`}>
+            <div className="instructions mt-6 sm:mt-1 mb-2 sm:mb-4 mr-1 sm:mx-0">
               <Md>{recipe.instructions}</Md>
             </div>
           )}
