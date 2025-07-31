@@ -16,18 +16,7 @@ import TagButtons from '@/components/TagButtons';
 import SubmitButton from '@/components/SubmitButton';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
-
-const initialValues: RecipeType = {
-  id: '',
-  title: '',
-  uid: '',
-  tags: [],
-  date: new Date().toISOString().split('T')[0], // today
-  description: '',
-  ingredients: '',
-  instructions: '',
-  reference: '',
-};
+import { initialRecipeValues } from '@/lib/initialValues';
 
 export default function New() {
   const router = useRouter();
@@ -35,7 +24,7 @@ export default function New() {
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
-  const [formData, setFormData] = useState<RecipeType>(initialValues);
+  const [formData, setFormData] = useState<RecipeType>(initialRecipeValues);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
 

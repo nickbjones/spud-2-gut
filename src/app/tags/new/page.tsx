@@ -12,20 +12,12 @@ import TextAreaField from '@/components/TextAreaField';
 import SubmitButton from '@/components/SubmitButton';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
+import { initialTagValues } from '@/lib/initialValues';
 
 export default function New() {
   const router = useRouter();
 
-  const initialValues: TagType = {
-    id: '',
-    uid: '',
-    title: '',
-    description: '',
-    color: '',
-    date: new Date().toISOString().split('T')[0], // today
-  };
-
-  const [formData, setFormData] = useState<TagType>(initialValues);
+  const [formData, setFormData] = useState<TagType>(initialTagValues);
   const [existingTags, setExistingTags] = useState<TagType[]>([]);
   const [loadingTags, setLoadingTags] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);

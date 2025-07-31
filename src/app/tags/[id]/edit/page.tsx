@@ -12,20 +12,14 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
-
-const initialValues: TagType = {
-  id: '',
-  uid: '',
-  title: '',
-  date: '',
-};
+import { initialTagValues } from '@/lib/initialValues';
 
 export default function Edit() {
   const router = useRouter();
   const params = useParams();
   const uid = params.id as string;
 
-  const [formData, setFormData] = useState<TagType>(initialValues);
+  const [formData, setFormData] = useState<TagType>(initialTagValues);
   // const [availableTags, setAvailableTags] = useState<TagType[]>([]);
   // const [loadingTags, setLoadingTags] = useState<boolean>(true);
   const [loadingTag, setLoadingTag] = useState<boolean>(true);

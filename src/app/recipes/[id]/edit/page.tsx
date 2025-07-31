@@ -16,23 +16,12 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
-
-const initialValues: RecipeType = {
-  id: '',
-  title: '',
-  uid: '',
-  tags: [],
-  date: new Date().toISOString().split('T')[0], // today
-  description: '',
-  ingredients: '',
-  instructions: '',
-  reference: '',
-};
+import { initialRecipeValues } from '@/lib/initialValues';
 
 export default function Edit() {
   const router = useRouter();
 
-  const [formData, setFormData] = useState<RecipeType>(initialValues);
+  const [formData, setFormData] = useState<RecipeType>(initialRecipeValues);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
 
