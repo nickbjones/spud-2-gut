@@ -32,7 +32,7 @@ export default function Tags() {
       {/* tags list */}
       <div className="flex flex-wrap gap-2 mt-3">
         {sortedTags.map((tag: TagType) => {
-          const recipesWithThisTag = getRecipesByTag(recipes, tag.uid).length;
+          const recipesWithThisTag = getRecipesByTag(recipes || [], tag.uid).length;
           return <Tag key={tag.uid} uid={tag.uid} className={`${selectedTagStyles} !mr-0`}>
             <span className="block">{tag.title}</span>
             <span className="block text-[8px]/[8px]">({recipesWithThisTag} receipes)</span>
