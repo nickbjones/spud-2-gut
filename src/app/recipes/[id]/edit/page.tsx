@@ -3,7 +3,9 @@
  */
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { API } from '@/lib/constants';
+import { useData } from '@/hooks/useData';
+import { useState, useEffect } from 'react';
 import { useRouter, useParams, notFound } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
@@ -15,20 +17,12 @@ import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 
-type RecipeEditable = {
-  id: string;
-  title: string;
-  tags: string[];
-  description: string;
-  ingredients: string;
-  instructions: string;
-  reference: string;
-};
-
-const initialValues: RecipeEditable = {
+const initialValues: RecipeType = {
   id: '',
   title: '',
+  uid: '',
   tags: [],
+  date: new Date().toISOString().split('T')[0], // today
   description: '',
   ingredients: '',
   instructions: '',
@@ -37,49 +31,21 @@ const initialValues: RecipeEditable = {
 
 export default function Edit() {
   const router = useRouter();
-  const params = useParams();
-  const uid = params.id as string;
 
-  const [formData, setFormData] = useState<RecipeEditable>(initialValues);
-  const [availableTags, setAvailableTags] = useState<TagType[]>([]);
-  const [loadingTags, setLoadingTags] = useState<boolean>(true);
-  const [loadingRecipe, setLoadingRecipe] = useState<boolean>(true);
+  const [formData, setFormData] = useState<RecipeType>(initialValues);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const [submitError, setSubmitError] = useState<string>('');
 
-  const fetchTags = useCallback(async () => {
-    try {
-      const res = await fetch(`/api/tags`);
-      if (!res.ok) throw new Error('Failed to fetch tags');
-      const tagData: TagType[] = await res.json();
-      setAvailableTags(tagData);
-    } catch (err) {
-      setAvailableTags([]);
-      setError((err as Error).message);
-    } finally {
-      setLoadingTags(false);
-    }
-  }, []);
+  const { id: uid } = useParams() as { id: string };
 
-  const fetchRecipe = useCallback(async () => {
-    try {
-      const res = await fetch(`/api/recipes/${encodeURIComponent(uid)}`);
-      if (!res.ok) throw new Error('Failed to fetch recipe.');
-      const recipeData: RecipeType = await res.json();
-      setFormData(recipeData);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoadingRecipe(false);
-    }
-  }, [uid]);
+  const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`);
+  const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
   useEffect(() => {
-    if (uid) {
-      fetchRecipe();
-      fetchTags();
+    if (recipe) {
+      setFormData(recipe);
     }
-  }, [uid, fetchRecipe, fetchTags]);
+  }, [recipe]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -100,7 +66,7 @@ export default function Edit() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    setError('');
+    setSubmitError('');
 
     try {
       const res = await fetch(`/api/recipes/${encodeURIComponent(formData.id)}`, {
@@ -115,7 +81,7 @@ export default function Edit() {
 
       router.push(`/recipes/${uid}`);
     } catch (err) {
-      setError(`Error saving recipe. ${(err as Error).message}`);
+      setSubmitError(`Error saving recipe. ${(err as Error).message}`);
     } finally {
       setIsSaving(false);
     }
@@ -136,7 +102,7 @@ export default function Edit() {
       // Redirect to recipes list after deletion
       window.location.href = '/recipes';
     } catch (err) {
-      setError((err as Error).message);
+      setSubmitError((err as Error).message);
     }
   };
 
@@ -145,6 +111,8 @@ export default function Edit() {
       deleteRecipe();
     }
   };
+
+  const error = submitError || recipeError?.message || tagsError?.message || '';
 
   if (loadingRecipe) return <LoadingMessage />;
   if (!formData) return notFound();
@@ -178,7 +146,7 @@ export default function Edit() {
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
         {loadingTags
           ? <LoadingMessage />
-          : <TagButtons name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange}
+          : <TagButtons name="tags" tags={tags || []} selectedTags={formData.tags} onChange={handleTagChange}
         />}
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
         <p className="text-sm mt-6 mb-3">
