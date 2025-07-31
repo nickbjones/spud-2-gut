@@ -3,6 +3,8 @@
  */
 'use client';
 
+import { API } from '@/lib/constants';
+import { useData } from '@/hooks/useData';
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { TagType } from '@/types/tag';
@@ -17,32 +19,16 @@ import { initialTagValues } from '@/lib/initialValues';
 export default function New() {
   const router = useRouter();
 
-  const [formData, setFormData] = useState<TagType>(initialTagValues);
-  const [existingTags, setExistingTags] = useState<TagType[]>([]);
-  const [loadingTags, setLoadingTags] = useState<boolean>(true);
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
-  const fetchTags = useCallback(async () => {
-    try {
-      const res = await fetch(`/api/tags`);
-      if (!res.ok) throw new Error('Failed to fetch tags');
-      const tagData: TagType[] = await res.json();
-      setExistingTags(tagData);
-      setFormData((prev) => ({
-        ...prev,
-        id: getNewId('TAG', tagData),
-      }));
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoadingTags(false);
-    }
-  }, []);
+  const [formData, setFormData] = useState<TagType>(initialTagValues);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<string>('');
 
   useEffect(() => {
-    fetchTags();
-  }, [fetchTags]);
+    const newId = getNewId('TAG', tags || []);
+    setFormData((prev) => ({ ...prev, id: newId }));
+  }, [tags]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -56,7 +42,7 @@ export default function New() {
     setFormData((prev) => ({
       ...prev,
       title: e.target.value,
-      uid: generateUid(newTitle, existingTags),
+      uid: generateUid(newTitle, tags || []),
     }));
   };
 
@@ -71,7 +57,7 @@ export default function New() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSaving(true);
-    setError('');
+    setSubmitError('');
 
     try {
       const response = await fetch('/api/tags', {
@@ -87,14 +73,16 @@ export default function New() {
       const newTag = await response.json();
       router.push(`/tags/${newTag.uid}`);
     } catch (err) {
-      setError(`Error saving tag. ${(err as Error).message}`);
+      setSubmitError(`Error saving tag. ${(err as Error).message}`);
     } finally {
       setIsSaving(false);
     }
   };
 
+  const error = submitError || tagsError?.message || '';
+
   if (loadingTags) return <LoadingMessage />;
-  if (existingTags.length < 1) return <ErrorMessage text="No tags!" />;
+  if (!tags || tags.length < 1) return <ErrorMessage text="No tags!" />;
   if (error) return <ErrorMessage text={error} />;
 
   return (
