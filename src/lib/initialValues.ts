@@ -20,6 +20,6 @@ export const initialTagValues: TagType = {
   uid: '',
   title: '',
   description: '',
-  color: '',
+  color: '#3c82f6',
   date: dateToday,
 };
