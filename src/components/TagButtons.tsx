@@ -32,7 +32,7 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
       uid: newUid,
       title: newTitle,
       description: '',
-      color: '',
+      color: '#ffffff',
       date: new Date().toISOString().split('T')[0], // today
     };
 
@@ -83,7 +83,7 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
           <SharedButton
             text="Save"
             onClick={handleNewTagSubmit}
-            styles={`${sharedTagStyles} ${selectedTagStyles} !py-1 !px-2 hover:bg-blue-600`}
+            styles={`${sharedTagStyles} ${selectedTagStyles} mr-2 hover:bg-blue-600 border-none`}
             disabled={!newTitle || isSavingNewTag}
           />
           {error && <span className="text-red-500 text-sm">{error}</span>}
