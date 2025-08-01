@@ -44,7 +44,7 @@ export default function Recipes() {
   const sortedRecipes = [...filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
 
   return (
-    <div className="p-3 sm:p-6 h-[calc(100vh-64px)] bg-slate-400">
+    <div className="p-3 sm:p-6 h-[calc(100vh-64px)] bg-slate-100">
       <div className="relative mb-4">
         <input
           type="text"
