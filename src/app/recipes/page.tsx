@@ -25,7 +25,7 @@ export default function Recipes() {
   const sortedRecipes = [...recipes].sort((a, b) => a.title.localeCompare(b.title));
 
   return (
-    <div className="p-3 sm:p-6">
+    <div className="p-3 sm:p-6 bg-slate-100">
       {/* Add search bar here */}
       <ul>
         {sortedRecipes.map((recipe) => (
