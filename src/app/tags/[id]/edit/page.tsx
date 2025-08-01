@@ -15,6 +15,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 import { initialTagValues } from '@/lib/initialValues';
+import ColorPicker from '@/components/ColorPicker';
 
 export default function Edit() {
   const router = useRouter();
@@ -110,6 +111,13 @@ export default function Edit() {
           value={formData.description || ''}
           onChange={handleGeneralFieldChange}
           className="h-32"
+        />
+        <ColorPicker
+          id="color"
+          name="color"
+          label="Color"
+          value={formData.color || ''}
+          onChange={handleGeneralFieldChange}
         />
         <p className="text-sm mt-6 mb-3">
           <span className="text-gray-600 font-medium mr-2">UID:</span>

@@ -8,18 +8,19 @@ import { useData } from '@/hooks/useData';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
 import { useParams, notFound } from 'next/navigation';
-import { getRecipesByTag } from '@/lib/utils/helpers';
+import { getRecipesByTag, getTagColor } from '@/lib/utils/helpers';
 import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
-import SharedHeading from '@/components/SharedHeading';
 import RecipeCard from '@/components/RecipeCard';
 
 const bigTagStyles = `
   !my-0
   py-2
   px-4
+  text-2xl
   text-white
+  font-bold
   bg-blue-400
   rounded-xl
 `;
@@ -43,7 +44,7 @@ export default function TagPage() {
   return (
     <div className="p-3 sm:p-6">
       <div className="flex justify-between items-center my-3">
-        <SharedHeading text={tag.title} styles={bigTagStyles} />
+        <h2 className={bigTagStyles} style={getTagColor(tag.color || '')}>{tag.title}</h2>
         <SharedLink href={`${tag.uid}/edit`} text="[Edit]" styles="text-sm" />
       </div>
       {tag.description && <p>{tag.description}</p>}

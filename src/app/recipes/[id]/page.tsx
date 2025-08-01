@@ -14,7 +14,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
-import { getRecipesByTag, getTitleByUid } from '@/lib/utils/helpers';
+import { getRecipesByTag, getTagByUid, getTitleByUid } from '@/lib/utils/helpers';
 
 export default function Recipe() {
   const { id: uid } = useParams() as { id: string };
@@ -42,7 +42,12 @@ export default function Recipe() {
           {recipe.tags.map((uid: string) => {
             const count = getRecipesByTag(recipes ?? [], uid).length;
             return (
-              <Tag key={uid} uid={uid} className={`${selectedTagStyles} !mr-0`}>
+              <Tag
+                key={uid}
+                uid={uid}
+                className={`${selectedTagStyles} border-none`}
+                color={getTagByUid(uid, tags || []).color}
+              >
                 <span className="block">{getTitleByUid(uid, tags ?? [])}</span>
                 <span className="block text-[8px]/[8px]">({count} recipes)</span>
               </Tag>

@@ -3,6 +3,8 @@ import { TagType } from '@/types/tag';
 
 export const dateToday = new Date().toISOString().split('T')[0];
 
+export const defaultTagColor = '#3c82f6';
+
 export const initialRecipeValues: RecipeType = {
   id: '',
   title: '',
@@ -20,6 +22,6 @@ export const initialTagValues: TagType = {
   uid: '',
   title: '',
   description: '',
-  color: '#3c82f6',
+  color: defaultTagColor,
   date: dateToday,
 };
