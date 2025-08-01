@@ -42,24 +42,26 @@ function formatDynamoDbRecipes(recipesRaw: RecipeType[]): RecipeType[] {
   });
 }
 
-export async function getAllRecipes() {
+// Need to use ScanCommand instead of QueryCommand because I'm a dumbass and didn't set a PK on the DB.
+// QueryCommand is more efficient for fetching items with a specific partition key,
+// but in this case it's probably fine because we should only be fetching O(100) items.
+export async function getAllRecipes(): Promise<RecipeType[]> {
+  const command = new ScanCommand({
+    TableName: AWS_RECIPES_TABLENAME,
+    FilterExpression: 'begins_with(#id, :prefix)',
+    ExpressionAttributeNames: {
+      '#id': 'id',
+    },
+    ExpressionAttributeValues: {
+      ':prefix': 'RECIPE#',
+    },
+  });
+
   try {
-    // QueryCommand is more efficient for fetching items with a specific partition key
-    const command = new ScanCommand({
-      TableName: AWS_RECIPES_TABLENAME,
-      FilterExpression: 'begins_with(#id, :prefix)',
-      ExpressionAttributeNames: {
-        '#id': 'id',
-      },
-      ExpressionAttributeValues: {
-        ':prefix': 'RECIPE#',
-      },
-    });
-    const response = await docClient.send(command);
+    const { Items } = await docClient.send(command);
+    if (!Items || Items.length === 0) return [];
 
-    if (!response.Items) return [];
-
-    const recipesRaw: RecipeType[] = response.Items as RecipeType[];
+    const recipesRaw = Items as RecipeType[];
     return formatDynamoDbRecipes(recipesRaw);
   } catch (error) {
     console.error('Error fetching recipes:', error);

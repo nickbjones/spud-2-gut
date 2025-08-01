@@ -34,24 +34,26 @@ function formatDynamoDbTags(tagsRaw: TagType[]): TagType[] {
   });
 }
 
+// Need to use ScanCommand instead of QueryCommand because I'm a dumbass and didn't set a PK on the DB.
+// QueryCommand is more efficient for fetching items with a specific partition key,
+// but in this case it's probably fine because we should only be fetching O(100) items.
 export async function getAllTags(): Promise<TagType[]> {
+  const command = new ScanCommand({
+    TableName: AWS_RECIPES_TABLENAME,
+    FilterExpression: 'begins_with(#id, :prefix)',
+    ExpressionAttributeNames: {
+      '#id': 'id',
+    },
+    ExpressionAttributeValues: {
+      ':prefix': 'TAG#',
+    },
+  });
+
   try {
-    // QueryCommand is more efficient for fetching items with a specific partition key
-    const command = new ScanCommand({
-      TableName: AWS_RECIPES_TABLENAME,
-      FilterExpression: 'begins_with(#id, :prefix)',
-      ExpressionAttributeNames: {
-        '#id': 'id',
-      },
-      ExpressionAttributeValues: {
-        ':prefix': 'TAG#',
-      },
-    });
-    const response = await docClient.send(command);
+    const { Items } = await docClient.send(command);
+    if (!Items || Items.length === 0) return [];
 
-    if (!response.Items) return [];
-
-    const tagsRaw: TagType[] = response.Items as TagType[];
+    const tagsRaw = Items as TagType[];
     return formatDynamoDbTags(tagsRaw);
   } catch (error) {
     console.error('Error fetching tags:', error);
