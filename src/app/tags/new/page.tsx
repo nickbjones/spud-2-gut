@@ -38,6 +38,13 @@ export default function New() {
     }));
   };
 
+  const handleColorChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setFormData((prev) => ({
@@ -99,11 +106,8 @@ export default function New() {
             onChange={handleGeneralFieldChange}
           />
           <ColorPicker
-            id="color"
-            name="color"
-            label="Color"
-            value={formData.color || ''}
-            onChange={handleGeneralFieldChange}
+            color={formData.color || '#ffffff'}
+            onChange={(newColor) => handleColorChange('color', newColor)}
           />
         </div>
         <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} required />
