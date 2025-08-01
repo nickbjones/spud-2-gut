@@ -40,7 +40,6 @@ export default function Recipes() {
     })
     .filter(Boolean) as (RecipeType & { matchSources: string[] })[];
 
-
   // sort recipes by title
   const sortedRecipes = [...filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
 

@@ -32,8 +32,8 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
           </div>
         }
         {search && matchSources && matchSources.length > 0 && (
-          <div className="mt-2 text-sm text-gray-500">
-            Match found in: {matchSources.join(', ')}
+          <div className="mt-2 text-xs text-gray-400">
+            {matchSources.length > 1 ? 'Matches' : 'Match'} found in: <span className="text-gray-600">{matchSources.join(', ')}</span>
           </div>
         )}
         <span className="absolute top-0 right-0 h-full w-10 bg-white rounded-r-lg">
