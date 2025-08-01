@@ -61,8 +61,12 @@ export async function getAllTags(): Promise<TagType[]> {
   }
 }
 
+// Would be better to use GetCommand instead of calling getAllRecipes(), but I'm a dumbass and didn't set a PK on the DB.
+// It's not possible to add a PK, so the DB will have to be rebuilt, which is too much effort.
+// The better solution would be to remove uid from the db and query by PK, for example:
+// instead of: "/tags/savory" mapping to "TAG#014" and uid "savory"
+// better: "/tags/014" to map to "TAG#014" (no uid)
 export async function getOneTag(uid: string): Promise<TagType | undefined> {
-  // temporary fix (fetch ALL tags, then find the correct one)
   try {
     const allTags = await getAllTags();
     const tag: TagType | undefined = allTags.find((p) => p.uid === uid);

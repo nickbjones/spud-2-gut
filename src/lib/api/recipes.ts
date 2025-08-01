@@ -1,4 +1,10 @@
-import { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  ScanCommand,
+  GetCommand,
+  PutCommand,
+  DeleteCommand,
+} from '@aws-sdk/lib-dynamodb';
 import type { RecipeType } from '@/types/recipe';
 import { dynamoDbClient } from '@/lib/aws/dynamoClient';
 
@@ -69,8 +75,12 @@ export async function getAllRecipes(): Promise<RecipeType[]> {
   }
 }
 
+// Would be better to use GetCommand instead of calling getAllRecipes(), but I'm a dumbass and didn't set a PK on the DB.
+// It's not possible to add a PK, so the DB will have to be rebuilt, which is too much effort.
+// The better solution would be to remove uid from the db and query by PK, for example:
+// instead of: "/recipes/taco-rice" mapping to "RECIPE#022" and uid "taco-rice"
+// better: "/recipes/022" to map to "RECIPE#022" (no uid)
 export async function getOneRecipe(uid: string): Promise<RecipeType | undefined> {
-  // temporary fix (fetch ALL recipes, then find the correct one)
   try {
     const allRecipes = await getAllRecipes();
     const recipe: RecipeType | undefined = allRecipes.find((p) => p.uid === uid);
@@ -96,21 +106,6 @@ export async function createRecipe(recipe: RecipeType) {
   }
 }
 
-export async function deleteRecipe(id: string) {
-  try {
-    const command = new DeleteCommand({
-      TableName: AWS_RECIPES_TABLENAME,
-      Key: { id },
-    });
-
-    await docClient.send(command);
-    return true;
-  } catch (error) {
-    console.error('Error deleting recipe:', error);
-    throw new Error('Failed to delete recipe');
-  }
-}
-
 export async function updateRecipe(recipe: RecipeType) {
   try {
     const command = new PutCommand({
@@ -123,5 +118,20 @@ export async function updateRecipe(recipe: RecipeType) {
   } catch (error) {
     console.error('Error updating recipe:', error);
     throw new Error('Failed to update recipe');
+  }
+}
+
+export async function deleteRecipe(id: string) {
+  try {
+    const command = new DeleteCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+      Key: { id },
+    });
+
+    await docClient.send(command);
+    return true;
+  } catch (error) {
+    console.error('Error deleting recipe:', error);
+    throw new Error('Failed to delete recipe');
   }
 }
