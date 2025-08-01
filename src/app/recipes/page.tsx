@@ -26,30 +26,53 @@ export default function Recipes() {
 
   const lowerSearch = search.toLowerCase();
 
-  const filteredRecipes = recipes.filter((r) =>
-    [r.title, r.ingredients, r.instructions, r.description, r.reference]
-      .filter(Boolean) // skip undefined/null
-      .some((field) =>
-        field.toLowerCase().includes(lowerSearch)
-      )
-  );
+  const filteredRecipes = recipes
+    .map((r) => {
+      const matchSources: string[] = [];
+
+      if (r.title?.toLowerCase().includes(lowerSearch)) matchSources.push('title');
+      if (r.ingredients?.toLowerCase().includes(lowerSearch)) matchSources.push('ingredients');
+      if (r.instructions?.toLowerCase().includes(lowerSearch)) matchSources.push('instructions');
+      if (r.description?.toLowerCase().includes(lowerSearch)) matchSources.push('description');
+      if (r.reference?.toLowerCase().includes(lowerSearch)) matchSources.push('reference');
+
+      return matchSources.length > 0 ? { ...r, matchSources } : null;
+    })
+    .filter(Boolean) as (RecipeType & { matchSources: string[] })[];
 
   // sort recipes by title
   const sortedRecipes = [...filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
 
   return (
     <div className="p-3 sm:p-6 bg-slate-100">
-      <input
-        type="text"
-        placeholder="Search recipes..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="mb-4 w-full p-2 border rounded"
-      />
+      <div className="relative mb-4">
+        <input
+          type="text"
+          placeholder="Search recipes..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full p-2 pr-10 border rounded"
+        />
+        {search && (
+          <button
+            onClick={() => setSearch('')}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
+            aria-label="Clear search"
+          >
+            ×
+          </button>
+        )}
+      </div>
       {sortedRecipes.length > 0 ? (
         <ul>
           {sortedRecipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} tags={tags ?? []} />
+            <RecipeCard
+              key={recipe.id}
+              recipe={recipe}
+              tags={tags ?? []}
+              search={search}
+              matchSources={recipe.matchSources}
+            />
           ))}
         </ul>
       ) : (
