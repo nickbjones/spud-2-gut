@@ -3,7 +3,9 @@
  */
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { API } from '@/lib/constants';
+import { useData } from '@/hooks/useData';
+import { useState, useEffect } from 'react';
 import { useRouter, useParams, notFound } from 'next/navigation';
 import type { TagType } from '@/types/tag';
 import InputField from '@/components/InputField';
@@ -12,61 +14,27 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
-
-const initialValues: TagType = {
-  id: '',
-  uid: '',
-  title: '',
-  date: '',
-};
+import { initialTagValues } from '@/lib/initialValues';
+import ColorPicker from '@/components/ColorPicker';
 
 export default function Edit() {
   const router = useRouter();
-  const params = useParams();
-  const uid = params.id as string;
-
-  const [formData, setFormData] = useState<TagType>(initialValues);
-  // const [availableTags, setAvailableTags] = useState<TagType[]>([]);
-  // const [loadingTags, setLoadingTags] = useState<boolean>(true);
-  const [loadingTag, setLoadingTag] = useState<boolean>(true);
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const { id: uid } = useParams() as { id: string };
 
   // // to be used later to check if a tag title exists already
-  // const fetchTags = useCallback(async () => {
-  //   try {
-  //     const res = await fetch(`/api/tags`);
-  //     if (!res.ok) throw new Error('Failed to fetch tags');
-  //     const tagData: TagType[] = await res.json();
-  //     setAvailableTags(tagData);
-  //   } catch (err) {
-  //     setAvailableTags([]);
-  //     setError((err as Error).message);
-  //   } finally {
-  //     setLoadingTags(false);
-  //   }
-  // }, []);
+  // const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
+  const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`);
 
-  const fetchTag = useCallback(async () => {
-    try {
-      const res = await fetch(`/api/tags/${encodeURIComponent(uid)}`);
-      if (!res.ok) throw new Error('Failed to fetch tag.');
-      const tagData: TagType = await res.json();
-      setFormData(tagData);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoadingTag(false);
-    }
-  }, [uid]);
+  const [formData, setFormData] = useState<TagType>(initialTagValues);
+  
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<string>('');
 
   useEffect(() => {
-    if (uid) {
-      fetchTag();
-      // // to be used later to check if a tag title exists already
-      // fetchTags();
+    if (tag) {
+      setFormData(tag);
     }
-  }, [uid, fetchTag]);
+  }, [tag]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -78,7 +46,7 @@ export default function Edit() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    setError('');
+    setSubmitError('');
 
     try {
       const res = await fetch(`/api/tags/${encodeURIComponent(formData.id)}`, {
@@ -93,7 +61,7 @@ export default function Edit() {
 
       router.push(`/tags/${uid}`);
     } catch (err) {
-      setError(`Error saving tag. ${(err as Error).message}`);
+      setSubmitError(`Error saving tag. ${(err as Error).message}`);
     } finally {
       setIsSaving(false);
     }
@@ -119,9 +87,11 @@ export default function Edit() {
       // Redirect to tags list after deletion
       window.location.href = '/tags';
     } catch (err) {
-      setError((err as Error).message);
+      setSubmitError((err as Error).message);
     }
   };
+
+  const error = submitError || tagError?.message || '';
 
   if (loadingTag) return <LoadingMessage />;
   if (!formData) return notFound();
@@ -141,6 +111,13 @@ export default function Edit() {
           value={formData.description || ''}
           onChange={handleGeneralFieldChange}
           className="h-32"
+        />
+        <ColorPicker
+          id="color"
+          name="color"
+          label="Color"
+          value={formData.color || ''}
+          onChange={handleGeneralFieldChange}
         />
         <p className="text-sm mt-6 mb-3">
           <span className="text-gray-600 font-medium mr-2">UID:</span>

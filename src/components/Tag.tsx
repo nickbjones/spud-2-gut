@@ -1,30 +1,26 @@
+import { defaultTagColor } from '@/lib/initialValues';
+import { getTagColor } from '@/lib/utils/helpers';
 import Link from 'next/link';
 
 export const sharedTagStyles = `
-  mr-1
   px-2
   py-1
-  sm:mr-2
   sm:px-4
   sm:py-2
   text-center
   text-xs
   sm:text-sm
-  border
+  border-4
   rounded-lg
   cursor-pointer
 `;
 
 export const selectedTagStyles = `
-  bg-blue-500
-  text-white
-  border-blue-500
+  border-blue-600
 `;
 
 export const unselectedTagStyles = `
-  bg-white
-  text-gray-800
-  border-gray-300
+  border-white
 `;
 
 export const miniTagStyles = `
@@ -40,13 +36,18 @@ export const miniTagStyles = `
 
 type TagProps = {
   uid: string;
+  color?: string;
   className?: string;
   children: React.ReactNode;
 };
 
-export default function Tag({uid, className, children}: TagProps) {
+export default function Tag({uid, color = defaultTagColor, className, children}: TagProps) {
   return (
-    <Link href={`/tags/${uid}`} className={`${sharedTagStyles} ${className}`}>
+    <Link
+      href={`/tags/${uid}`}
+      className={`${sharedTagStyles} ${className}`}
+      style={getTagColor(color)}
+    >
       {children}
     </Link>
   );

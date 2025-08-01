@@ -3,6 +3,8 @@
  */
 'use client';
 
+import { API } from '@/lib/constants';
+import { useData } from '@/hooks/useData';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
@@ -14,63 +16,22 @@ import TagButtons from '@/components/TagButtons';
 import SubmitButton from '@/components/SubmitButton';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
+import { initialRecipeValues } from '@/lib/initialValues';
 
 export default function New() {
   const router = useRouter();
 
-  const initialValues: RecipeType = {
-    id: '',
-    title: '',
-    uid: '',
-    tags: [],
-    date: new Date().toISOString().split('T')[0], // today
-    description: '',
-    ingredients: '',
-    instructions: '',
-    reference: '',
-  };
+  const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
+  const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
-  const [formData, setFormData] = useState<RecipeType>(initialValues);
-  const [availableTags, setAvailableTags] = useState<TagType[]>([]);
-  const [recipes, setRecipes] = useState<RecipeType[]>([]);
-  const [loadingTags, setLoadingTags] = useState<boolean>(true);
-  const [loadingRecipes, setLoadingRecipes] = useState<boolean>(true);
+  const [formData, setFormData] = useState<RecipeType>(initialRecipeValues);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-
-  const fetchTags = async () => {
-    try {
-      const res = await fetch(`/api/tags`);
-      if (!res.ok) throw new Error('Failed to fetch tags');
-      const tagData: TagType[] = await res.json();
-      setAvailableTags(tagData);
-    } catch (err) {
-      setAvailableTags([]);
-      setError((err as Error).message);
-    } finally {
-      setLoadingTags(false);
-    }
-  };
-
-  const fetchRecipes = async () => {
-    try {
-      const res = await fetch('/api/recipes');
-      if (!res.ok) throw new Error('Failed to fetch recipes.');
-      const recipeData: RecipeType[] = await res.json();
-      setRecipes(recipeData);
-      const newId = getNewId('RECIPE', recipeData);
-      setFormData((prev) => ({ ...prev, id: newId }))
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoadingRecipes(false);
-    }
-  };
+  const [submitError, setSubmitError] = useState<string>('');
 
   useEffect(() => {
-    fetchTags();
-    fetchRecipes();
-  }, []);
+    const newId = getNewId('RECIPE', recipes || []);
+    setFormData((prev) => ({ ...prev, id: newId }))
+  }, [recipes]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -84,7 +45,7 @@ export default function New() {
     setFormData((prev) => ({
       ...prev,
       title: newTitle,
-      uid: generateUid(newTitle, recipes),
+      uid: generateUid(newTitle, recipes || []),
     }));
   };
 
@@ -108,7 +69,7 @@ export default function New() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSaving(true);
-    setError('');
+    setSubmitError('');
 
     try {
       const response = await fetch('/api/recipes', {
@@ -124,14 +85,16 @@ export default function New() {
       const newRecipe = await response.json();
       router.push(`/recipes/${newRecipe.uid}`);
     } catch (err) {
-      setError(`Error saving recipe. ${(err as Error).message}`);
+      setSubmitError(`Error saving recipe. ${(err as Error).message}`);
     } finally {
       setIsSaving(false);
     }
   };
 
+  const error = submitError || recipesError?.message || tagsError?.message || '';
+
   if (loadingTags || loadingRecipes) return <LoadingMessage />;
-  if (recipes.length < 1) return <ErrorMessage text="No recipes!" />;
+  if (!recipes || recipes.length < 1) return <ErrorMessage text="No recipes!" />;
   if (error) return <ErrorMessage text={error} />;
 
   return (
@@ -145,7 +108,7 @@ export default function New() {
             label="Ingredients"
             value={formData.ingredients}
             onChange={handleGeneralFieldChange}
-            className="h-80 sm:h-32"
+            className="h-80 sm:h-60"
           />
           <TextAreaField
             id="instructions"
@@ -153,11 +116,11 @@ export default function New() {
             label="Instructions"
             value={formData.instructions}
             onChange={handleGeneralFieldChange}
-            className="h-80 sm:h-32"
+            className="h-80 sm:h-60"
           />
         </div>
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
-        <TagButtons name="tags" tags={availableTags} selectedTags={formData.tags} onChange={handleTagChange} />
+        <TagButtons name="tags" tags={tags || []} selectedTags={formData.tags} onChange={handleTagChange} />
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
         <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} required />
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Recipe'} disabled={isSaving} />
