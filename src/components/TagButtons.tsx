@@ -32,7 +32,7 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
       uid: newUid,
       title: newTitle,
       description: '',
-      color: '#ffffff',
+      color: defaultTagColor,
       date: new Date().toISOString().split('T')[0], // today
     };
 
