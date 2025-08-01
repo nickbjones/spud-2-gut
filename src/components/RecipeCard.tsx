@@ -22,7 +22,6 @@ export default function RecipeCard({ recipe, tags }: RecipeCardProps) {
               <span
                 key={uid}
                 style={getTagColor(getTagByUid(uid, tags).color || '')}
-                // style={getTagColorStyles(getTagByUid(uid, tags).color || '')}
                 className={miniTagStyles}
               >
                 {getTitleByUid(uid, tags)}
