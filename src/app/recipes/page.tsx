@@ -44,7 +44,7 @@ export default function Recipes() {
   const sortedRecipes = [...filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
 
   return (
-    <div className="p-3 sm:p-6 h-[calc(100vh-64px)] bg-slate-100">
+    <div className="p-3 sm:p-6 min-h-screen bg-slate-400">
       <div className="relative mb-4">
         <input
           type="text"
@@ -57,7 +57,6 @@ export default function Recipes() {
           <button
             onClick={() => setSearch('')}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
-            aria-label="Clear search"
           >
             ×
           </button>
