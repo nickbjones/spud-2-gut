@@ -38,7 +38,7 @@ export default function Tags() {
               key={tag.uid}
               uid={tag.uid}
               color={tag.color}
-              className={`${selectedTagStyles} !mr-0`}
+              className={`${selectedTagStyles} border-none`}
             >
               <span className="block">{tag.title}</span>
               <span className="block text-[8px]/[8px]">({recipesWithThisTag} receipes)</span>
