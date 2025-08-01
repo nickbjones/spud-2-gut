@@ -26,13 +26,20 @@ export default function Recipes() {
 
   const lowerSearch = search.toLowerCase();
 
-  const filteredRecipes = recipes.filter((r) =>
-    [r.title, r.ingredients, r.instructions, r.description, r.reference]
-      .filter(Boolean) // skip undefined/null
-      .some((field) =>
-        field.toLowerCase().includes(lowerSearch)
-      )
-  );
+  const filteredRecipes = recipes
+    .map((r) => {
+      const matchSources: string[] = [];
+
+      if (r.title?.toLowerCase().includes(lowerSearch)) matchSources.push('title');
+      if (r.ingredients?.toLowerCase().includes(lowerSearch)) matchSources.push('ingredients');
+      if (r.instructions?.toLowerCase().includes(lowerSearch)) matchSources.push('instructions');
+      if (r.description?.toLowerCase().includes(lowerSearch)) matchSources.push('description');
+      if (r.reference?.toLowerCase().includes(lowerSearch)) matchSources.push('reference');
+
+      return matchSources.length > 0 ? { ...r, matchSources } : null;
+    })
+    .filter(Boolean) as (RecipeType & { matchSources: string[] })[];
+
 
   // sort recipes by title
   const sortedRecipes = [...filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
@@ -60,7 +67,13 @@ export default function Recipes() {
       {sortedRecipes.length > 0 ? (
         <ul>
           {sortedRecipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} tags={tags ?? []} />
+            <RecipeCard
+              key={recipe.id}
+              recipe={recipe}
+              tags={tags ?? []}
+              search={search}
+              matchSources={recipe.matchSources}
+            />
           ))}
         </ul>
       ) : (
