@@ -43,6 +43,13 @@ export default function Edit() {
     }));
   };
 
+  const handleColorChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
@@ -113,11 +120,8 @@ export default function Edit() {
           className="h-32"
         />
         <ColorPicker
-          id="color"
-          name="color"
-          label="Color"
-          value={formData.color || ''}
-          onChange={handleGeneralFieldChange}
+          color={formData.color || '#ffffff'}
+          onChange={(newColor) => handleColorChange('color', newColor)}
         />
         <p className="text-sm mt-6 mb-3">
           <span className="text-gray-600 font-medium mr-2">UID:</span>
