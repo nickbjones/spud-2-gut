@@ -1,6 +1,6 @@
 import { RecipeType } from "@/types/recipe";
 import { TagType } from "@/types/tag";
-import { getTitleByUid } from '@/lib/utils/helpers';
+import { getTagByUid, getTagColor, getTitleByUid } from '@/lib/utils/helpers';
 import { miniTagStyles } from '@/components/Tag';
 
 type RecipeCardProps = {
@@ -19,7 +19,13 @@ export default function RecipeCard({ recipe, tags }: RecipeCardProps) {
         {recipe.tags.length > 0 &&
           <div className="flex gap-1 flex-wrap mt-1">
             {recipe.tags.map((uid: string) => (
-              <span key={uid} className={miniTagStyles}>{getTitleByUid(uid, tags)}</span>
+              <span
+                key={uid}
+                style={getTagColor(getTagByUid(uid, tags).color || '')}
+                className={miniTagStyles}
+              >
+                {getTitleByUid(uid, tags)}
+              </span>
             ))}
           </div>
         }

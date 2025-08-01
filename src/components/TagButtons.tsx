@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import TagButton from './TagButton';
 import { sharedTagStyles, selectedTagStyles, unselectedTagStyles } from "./Tag";
 import SharedButton from './SharedButton';
+import { defaultTagColor } from '@/lib/initialValues';
 
 type TagButtonsType = {
   name: string;
@@ -96,12 +97,13 @@ export default function TagButtons({ name, tags, selectedTags, onChange }: TagBu
         </span>
       )}
       {/* tags list */}
-      {tagsList.map(({ uid, title }) => (
+      {tagsList.map(({ uid, title, color = defaultTagColor }) => (
         <TagButton
           key={uid + title}
           uid={uid}
           name={name}
           title={title}
+          color={color}
           isSelected={selectedTags.includes(uid)}
           onChange={() => onChange(uid)}
         />
