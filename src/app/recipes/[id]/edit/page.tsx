@@ -18,7 +18,7 @@ import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 import { initialRecipeValues } from '@/lib/initialValues';
 
-export default function Edit() {
+export default function EditRecipePage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState<RecipeType>(initialRecipeValues);

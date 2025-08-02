@@ -12,7 +12,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import RecipeCard from '@/components/RecipeCard';
 
-export default function Recipes() {
+export default function RecipesPage() {
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
   const [search, setSearch] = useState('');

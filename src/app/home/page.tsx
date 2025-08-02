@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col items-center pt-20 bg-gradient-to-b from-orange-100 to-orange-300 text-gray-900 p-6">
       <div className="bg-white shadow-lg rounded-xl p-8 text-center">

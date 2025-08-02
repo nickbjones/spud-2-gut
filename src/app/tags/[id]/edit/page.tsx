@@ -17,7 +17,7 @@ import SharedLink from '@/components/SharedLink';
 import { initialTagValues } from '@/lib/initialValues';
 import ColorPicker from '@/components/ColorPicker';
 
-export default function Edit() {
+export default function EditTagPage() {
   const router = useRouter();
   const { id: uid } = useParams() as { id: string };
 

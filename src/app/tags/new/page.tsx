@@ -17,7 +17,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import { initialTagValues } from '@/lib/initialValues';
 import ColorPicker from '@/components/ColorPicker';
 
-export default function New() {
+export default function NewTagPage() {
   const router = useRouter();
 
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);

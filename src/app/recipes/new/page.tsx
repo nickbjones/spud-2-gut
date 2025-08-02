@@ -18,7 +18,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import { initialRecipeValues } from '@/lib/initialValues';
 
-export default function New() {
+export default function NewRecipePage() {
   const router = useRouter();
 
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
