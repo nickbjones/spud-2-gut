@@ -49,8 +49,8 @@ export const getTitleByUid = (uid: string | null | undefined, list: TagType[]): 
   return list.find(item => item.uid === uid)?.title || uid;
 };
 
-export const getRecipesByTag = (recipes: RecipeType[], tag: string): RecipeType[] => {
-  return recipes.filter((recipe) => recipe.tags.includes(tag));
+export const getRecipesByTag = (recipes: RecipeType[], tagUid: string): RecipeType[] => {
+  return recipes.filter((recipe) => recipe.tags?.some(uid => uid === tagUid));
 }
 
 export const getTextColorForBackground = (hex: string = defaultTagColor): 'black' | 'white' => {
