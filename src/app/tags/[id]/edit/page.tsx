@@ -16,8 +16,9 @@ import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 import { initialTagValues } from '@/lib/initialValues';
 import ColorPicker from '@/components/ColorPicker';
+import Uid from '@/components/Uid';
 
-export default function Edit() {
+export default function EditTagPage() {
   const router = useRouter();
   const { id: uid } = useParams() as { id: string };
 
@@ -119,10 +120,7 @@ export default function Edit() {
           value={formData.color || ''}
           onChange={handleGeneralFieldChange}
         />
-        <p className="text-sm mt-6 mb-3">
-          <span className="text-gray-600 font-medium mr-2">UID:</span>
-          <span className="text-gray-400">{uid}</span>
-        </p>
+        <Uid uid={formData.uid} />
       </form>
       <SharedLink text="Delete tag" styles="text-red-800 hover:text-red-400" onClick={deleteTag} />
     </div>

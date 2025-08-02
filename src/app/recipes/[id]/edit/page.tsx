@@ -17,8 +17,9 @@ import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 import { initialRecipeValues } from '@/lib/initialValues';
+import Uid from '@/components/Uid';
 
-export default function Edit() {
+export default function EditRecipePage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState<RecipeType>(initialRecipeValues);
@@ -138,10 +139,7 @@ export default function Edit() {
           : <TagButtons name="tags" tags={tags || []} selectedTags={formData.tags} onChange={handleTagChange}
         />}
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
-        <p className="text-sm mt-6 mb-3">
-          <span className="text-gray-600 font-medium mr-2">UID:</span>
-          <span className="text-gray-400">{uid}</span>
-        </p>
+        <Uid uid={formData.uid} />
       </form>
       <SharedLink text="Delete recipe" styles="text-red-800 hover:text-red-400" onClick={confirmDeletion} />
     </div>

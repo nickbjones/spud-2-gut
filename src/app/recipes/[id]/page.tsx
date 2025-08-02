@@ -16,11 +16,19 @@ import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
 import { getRecipesByTag, getTagByUid, getTitleByUid } from '@/lib/utils/helpers';
 
-export default function Recipe() {
+export default function RecipePage() {
   const { id: uid } = useParams() as { id: string };
 
-  const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`);
+  // Get the full list of recipes — this will reuse cache if already available
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
+
+  // Try to find the recipe from the cached recipes
+  const fallbackRecipe = recipes?.find(r => r.uid === uid);
+
+  // Use fallbackData only if we don't already have the specific recipe cached
+  const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`, fallbackRecipe);
+
+  // Fetch tags
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
   const error = recipeError?.message || recipesError?.message || tagsError?.message || '';

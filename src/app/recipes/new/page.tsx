@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
-import { uidRules, generateUid, getNewId } from '@/lib/utils/helpers';
+import { generateUid, getNewId } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import TagButtons from '@/components/TagButtons';
@@ -17,8 +17,9 @@ import SubmitButton from '@/components/SubmitButton';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import { initialRecipeValues } from '@/lib/initialValues';
+import Uid from '@/components/Uid';
 
-export default function New() {
+export default function NewRecipePage() {
   const router = useRouter();
 
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
@@ -46,14 +47,6 @@ export default function New() {
       ...prev,
       title: newTitle,
       uid: generateUid(newTitle, recipes || []),
-    }));
-  };
-
-  const handleUidChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newUid = e.target.value.toLowerCase().replace(uidRules, ''); // enforce rules
-    setFormData((prev) => ({
-      ...prev,
-      uid: newUid,
     }));
   };
 
@@ -122,7 +115,7 @@ export default function New() {
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
         <TagButtons name="tags" tags={tags || []} selectedTags={formData.tags} onChange={handleTagChange} />
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
-        <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} required />
+        <Uid uid={formData.uid} />
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Recipe'} disabled={isSaving} />
       </form>
     </div>

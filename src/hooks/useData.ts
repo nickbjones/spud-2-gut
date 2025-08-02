@@ -7,13 +7,16 @@ const fetcher = (url: string) => fetch(url).then(res => {
   return res.json();
 });
 
-export function useData<T>(url: string) {
+export function useData<T>(url: string, fallbackData?: T) {
   const {
     data,
     error,
     isLoading,
     mutate,
-  } = useSWR<T>(url, fetcher);
+  } = useSWR<T>(url, fetcher, {
+    fallbackData,
+    revalidateOnMount: fallbackData === undefined, // avoid refetch if fallback is used
+  });
 
   return {
     data,

@@ -13,7 +13,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import Tag, { selectedTagStyles } from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
 
-export default function Tags() {
+export default function TagsPage() {
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
