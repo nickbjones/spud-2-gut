@@ -18,6 +18,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import { initialRecipeValues } from '@/lib/initialValues';
 import Uid from '@/components/Uid';
+import ImageUploader from '@/components/ImageUploader';
 
 export default function NewRecipePage() {
   const router = useRouter();
@@ -118,6 +119,9 @@ export default function NewRecipePage() {
         <Uid uid={formData.uid} />
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Recipe'} disabled={isSaving} />
       </form>
+      <div className="mt-6 p-4 bg-gray-200">
+        <ImageUploader />
+      </div>
     </div>
   );
 }
