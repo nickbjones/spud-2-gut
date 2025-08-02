@@ -34,24 +34,26 @@ function formatDynamoDbTags(tagsRaw: TagType[]): TagType[] {
   });
 }
 
+// Need to use ScanCommand instead of QueryCommand because I'm a dumbass and didn't set a PK on the DB.
+// QueryCommand is more efficient for fetching items with a specific partition key,
+// but in this case it's probably fine because we should only be fetching O(100) items.
 export async function getAllTags(): Promise<TagType[]> {
+  const command = new ScanCommand({
+    TableName: AWS_RECIPES_TABLENAME,
+    FilterExpression: 'begins_with(#id, :prefix)',
+    ExpressionAttributeNames: {
+      '#id': 'id',
+    },
+    ExpressionAttributeValues: {
+      ':prefix': 'TAG#',
+    },
+  });
+
   try {
-    // QueryCommand is more efficient for fetching items with a specific partition key
-    const command = new ScanCommand({
-      TableName: AWS_RECIPES_TABLENAME,
-      FilterExpression: 'begins_with(#id, :prefix)',
-      ExpressionAttributeNames: {
-        '#id': 'id',
-      },
-      ExpressionAttributeValues: {
-        ':prefix': 'TAG#',
-      },
-    });
-    const response = await docClient.send(command);
+    const { Items } = await docClient.send(command);
+    if (!Items || Items.length === 0) return [];
 
-    if (!response.Items) return [];
-
-    const tagsRaw: TagType[] = response.Items as TagType[];
+    const tagsRaw = Items as TagType[];
     return formatDynamoDbTags(tagsRaw);
   } catch (error) {
     console.error('Error fetching tags:', error);
@@ -59,8 +61,12 @@ export async function getAllTags(): Promise<TagType[]> {
   }
 }
 
+// Would be better to use GetCommand instead of calling getAllRecipes(), but I'm a dumbass and didn't set a PK on the DB.
+// It's not possible to add a PK, so the DB will have to be rebuilt, which is too much effort.
+// The better solution would be to remove uid from the db and query by PK, for example:
+// instead of: "/tags/savory" mapping to "TAG#014" and uid "savory"
+// better: "/tags/014" to map to "TAG#014" (no uid)
 export async function getOneTag(uid: string): Promise<TagType | undefined> {
-  // temporary fix (fetch ALL tags, then find the correct one)
   try {
     const allTags = await getAllTags();
     const tag: TagType | undefined = allTags.find((p) => p.uid === uid);
