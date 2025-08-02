@@ -71,3 +71,7 @@ export const getTagColor = (color: string) => {
     color: getTextColorForBackground(color),
   };
 }
+
+export function doesTagTitleExist(tags: TagType[] = [], titleToFind: string): boolean {
+  return tags.some(tag => tag.title === titleToFind);
+}

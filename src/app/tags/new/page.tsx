@@ -8,13 +8,13 @@ import { useData } from '@/hooks/useData';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { TagType } from '@/types/tag';
-import { generateUid, getNewId } from '@/lib/utils/helpers';
+import { initialTagValues } from '@/lib/initialValues';
+import { doesTagTitleExist, generateUid, getNewId } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import SubmitButton from '@/components/SubmitButton';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
-import { initialTagValues } from '@/lib/initialValues';
 import ColorPicker from '@/components/ColorPicker';
 import Uid from '@/components/Uid';
 
@@ -26,6 +26,7 @@ export default function NewTagPage() {
   const [formData, setFormData] = useState<TagType>(initialTagValues);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
+  const [isTitleExisting, setIsTitleExisting] = useState<boolean>(false);
 
   useEffect(() => {
     const newId = getNewId('TAG', tags || []);
@@ -41,6 +42,7 @@ export default function NewTagPage() {
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
+    setIsTitleExisting(doesTagTitleExist(tags, newTitle));
     setFormData((prev) => ({
       ...prev,
       title: e.target.value,
@@ -83,7 +85,12 @@ export default function NewTagPage() {
     <div className="max-w-2xl mx-auto p-3 sm:p-6">
       <form onSubmit={handleSubmit}>
         <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} required />
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        {isTitleExisting && (
+          <div className="absolute -mt-2">
+            <p className="text-xs text-red-700">Title exists already!</p>
+          </div>
+        )}
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4">
           <TextAreaField
             id="description"
             name="description"
