@@ -8,13 +8,14 @@ import { useData } from '@/hooks/useData';
 import { useState, useEffect } from 'react';
 import { useRouter, useParams, notFound } from 'next/navigation';
 import type { TagType } from '@/types/tag';
+import { initialTagValues } from '@/lib/initialValues';
+import { doesTagTitleExist } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
-import { initialTagValues } from '@/lib/initialValues';
 import ColorPicker from '@/components/ColorPicker';
 import Uid from '@/components/Uid';
 
@@ -22,20 +23,37 @@ export default function EditTagPage() {
   const router = useRouter();
   const { id: uid } = useParams() as { id: string };
 
-  // // to be used later to check if a tag title exists already
-  // const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
-  const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`);
+  const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
+
+  // Try to find the tag from the cached tags
+  const fallbackTag = tags?.find(r => r.uid === uid);
+
+  // Use fallbackData only if we don't already have the specific tag cached
+  const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`, fallbackTag);
 
   const [formData, setFormData] = useState<TagType>(initialTagValues);
-  
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
+  const [isTitleExisting, setIsTitleExisting] = useState<boolean>(false);
 
   useEffect(() => {
     if (tag) {
       setFormData(tag);
     }
   }, [tag]);
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+
+    if (!tag || newTitle !== tag?.title) {
+      setIsTitleExisting(doesTagTitleExist(tags, newTitle));
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      title: newTitle,
+    }));
+  };
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -92,17 +110,23 @@ export default function EditTagPage() {
     }
   };
 
-  const error = submitError || tagError?.message || '';
+  const error = submitError || tagsError?.message || tagError?.message || '';
+  const loading = loadingTags || loadingTag;
 
-  if (loadingTag) return <LoadingMessage />;
+  if (loading) return <LoadingMessage />;
   if (!formData) return notFound();
   if (error) return <ErrorMessage text={error} />;
 
   return (
     <div className="max-w-2xl mx-auto p-3 sm:p-6">
       <form onSubmit={handleSubmit}>
-        <div className="inline-block flex items-center mb-4">
-          <InputField id="title" name="title" value={formData.title} onChange={handleGeneralFieldChange} className="!mb-0" />
+        <div className="inline-block flex items-center mb-6">
+          <InputField id="title" name="title" value={formData.title} onChange={handleTitleChange} className="!mb-0" />
+          {isTitleExisting && (
+            <div className="absolute mt-14">
+              <p className="text-xs text-red-700">Title exists already!</p>
+            </div>
+          )}
           <SubmitButton disabled={isSaving} styles="!my-0 ml-10 text-sm" text={isSaving ? 'Saving...' : 'Save'} />
         </div>
         <TextAreaField

@@ -8,19 +8,15 @@ import { useData } from '@/hooks/useData';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { TagType } from '@/types/tag';
-import { generateUid, getNewId } from '@/lib/utils/helpers';
+import { initialTagValues } from '@/lib/initialValues';
+import { doesTagTitleExist, generateUid, getNewId } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import SubmitButton from '@/components/SubmitButton';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
-import { initialTagValues } from '@/lib/initialValues';
 import ColorPicker from '@/components/ColorPicker';
 import Uid from '@/components/Uid';
-
-function doesTagTitleExist(tags: TagType[] = [], titleToFind: string): boolean {
-  return tags.some(tag => tag.title === titleToFind);
-}
 
 export default function NewTagPage() {
   const router = useRouter();
