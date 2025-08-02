@@ -104,9 +104,10 @@ export default function EditTagPage() {
     }
   };
 
-  const error = submitError || tagError?.message || '';
+  const error = submitError || tagError?.message || recipesError?.message || '';
+  const loading = loadingTag || loadingRecipes;
 
-  if (loadingTag) return <LoadingMessage />;
+  if (loading) return <LoadingMessage />;
   if (!formData) return notFound();
   if (error) return <ErrorMessage text={error} />;
 
@@ -138,7 +139,7 @@ export default function EditTagPage() {
         ? <div className="mt-6 text-gray-400 text-sm">
             <p>This tag is used in the following recipes:</p>
             <p className="my-1">
-              {recipesWithThisTag.map((recipe, i) => (
+              {recipesWithThisTag.map((recipe) => (
                 <SharedLink
                   key={recipe.uid}
                   text={recipe.title}
