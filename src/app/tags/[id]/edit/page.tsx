@@ -8,13 +8,15 @@ import { useData } from '@/hooks/useData';
 import { useState, useEffect } from 'react';
 import { useRouter, useParams, notFound } from 'next/navigation';
 import type { TagType } from '@/types/tag';
+import { RecipeType } from '@/types/recipe';
+import { initialTagValues } from '@/lib/initialValues';
+import { getRecipesByTag } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
-import { initialTagValues } from '@/lib/initialValues';
 import ColorPicker from '@/components/ColorPicker';
 import Uid from '@/components/Uid';
 
@@ -24,18 +26,28 @@ export default function EditTagPage() {
 
   // // to be used later to check if a tag title exists already
   // const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
+
+  // Fetch tags
   const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`);
+
+  // Fetch recipes
+  const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
   const [formData, setFormData] = useState<TagType>(initialTagValues);
   
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
+  const [recipesWithThisTag, setRecipesWithThisTag] = useState<RecipeType[]>([]);
 
   useEffect(() => {
     if (tag) {
       setFormData(tag);
     }
   }, [tag]);
+
+  useEffect(() => {
+    setRecipesWithThisTag(getRecipesByTag(recipes || [], uid));
+  }, [recipes]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -120,9 +132,24 @@ export default function EditTagPage() {
           value={formData.color || ''}
           onChange={handleGeneralFieldChange}
         />
-        <Uid uid={formData.uid} />
       </form>
-      <SharedLink text="Delete tag" styles="text-red-800 hover:text-red-400" onClick={deleteTag} />
+      <Uid uid={formData.uid} />
+      {(recipesWithThisTag.length > 0)
+        ? <div className="mt-6 text-gray-400 text-sm">
+            <p>This tag is used in the following recipes:</p>
+            <p className="my-1">
+              {recipesWithThisTag.map((recipe, i) => (
+                <SharedLink
+                  key={recipe.uid}
+                  text={recipe.title}
+                  styles="mr-4 whitespace-nowrap"
+                  href={`/recipes/${recipe.uid}/edit?redirect=/tags/${formData.uid}/edit`} />
+              ))}
+            </p>
+            <p>Please remove this tag from those recipes before deleting.</p>
+          </div>
+        : <SharedLink text="Delete tag" styles="text-red-800 hover:text-red-400" onClick={deleteTag} />
+      }
     </div>
   );
 }

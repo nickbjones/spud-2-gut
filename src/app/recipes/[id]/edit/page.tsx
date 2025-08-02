@@ -6,7 +6,7 @@
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
 import { useState, useEffect } from 'react';
-import { useRouter, useParams, notFound } from 'next/navigation';
+import { useRouter, useParams, useSearchParams, notFound } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
 import InputField from '@/components/InputField';
@@ -19,8 +19,14 @@ import SharedLink from '@/components/SharedLink';
 import { initialRecipeValues } from '@/lib/initialValues';
 import Uid from '@/components/Uid';
 
+function safeRedirect(path: string | null, fallback = '/') {
+  return path?.startsWith('/') && !path.startsWith('//') ? path : fallback;
+}
+
 export default function EditRecipePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
 
   const [formData, setFormData] = useState<RecipeType>(initialRecipeValues);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -69,7 +75,11 @@ export default function EditRecipePage() {
         throw new Error('Failed to update recipe');
       };
 
-      router.push(`/recipes/${uid}`);
+      if (redirect) {
+        router.push(safeRedirect(redirect, '/recipes'));
+      } else {
+        router.push(`/recipes/${uid}`);
+      }
     } catch (err) {
       setSubmitError(`Error saving recipe. ${(err as Error).message}`);
     } finally {
