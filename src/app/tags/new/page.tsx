@@ -16,6 +16,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import { initialTagValues } from '@/lib/initialValues';
 import ColorPicker from '@/components/ColorPicker';
+import Uid from '@/components/Uid';
 
 export default function NewTagPage() {
   const router = useRouter();
@@ -106,6 +107,7 @@ export default function NewTagPage() {
             onChange={handleGeneralFieldChange}
           />
         </div>
+        <Uid uid={formData.uid} />
         <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} required />
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Tag'} disabled={isSaving} />
       </form>

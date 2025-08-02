@@ -17,6 +17,7 @@ import SubmitButton from '@/components/SubmitButton';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import { initialRecipeValues } from '@/lib/initialValues';
+import Uid from '@/components/Uid';
 
 export default function NewRecipePage() {
   const router = useRouter();
@@ -122,6 +123,7 @@ export default function NewRecipePage() {
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
         <TagButtons name="tags" tags={tags || []} selectedTags={formData.tags} onChange={handleTagChange} />
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
+        <Uid uid={formData.uid} />
         <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} required />
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Recipe'} disabled={isSaving} />
       </form>
