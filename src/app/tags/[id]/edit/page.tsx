@@ -26,11 +26,7 @@ export default function EditTagPage() {
 
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
-  // Try to find the tag from the cached tags
-  const fallbackTag = tags?.find(r => r.uid === uid);
-
-  // Use fallbackData only if we don't already have the specific tag cached
-  const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`, fallbackTag);
+  const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`);
 
   // Fetch recipes
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);

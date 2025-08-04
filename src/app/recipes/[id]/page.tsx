@@ -22,11 +22,8 @@ export default function RecipePage() {
   // Get the full list of recipes — this will reuse cache if already available
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
-  // Try to find the recipe from the cached recipes
-  const fallbackRecipe = recipes?.find(r => r.uid === uid);
-
   // Use fallbackData only if we don't already have the specific recipe cached
-  const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`, fallbackRecipe);
+  const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`);
 
   // Fetch tags
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
