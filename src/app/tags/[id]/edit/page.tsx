@@ -24,8 +24,10 @@ export default function EditTagPage() {
   const router = useRouter();
   const { id: uid } = useParams() as { id: string };
 
+  // Fetch all tag data
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
+  // Fetch tag data
   const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`);
 
   // Fetch recipes

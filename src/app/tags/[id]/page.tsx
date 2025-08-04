@@ -28,13 +28,13 @@ const bigTagStyles = `
 export default function TagPage() {
   const { id: uid } = useParams() as { id: string };
 
-  // Get the full list of tags — this will reuse cache if already available
+  // Fetch all tag data
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
-  // Use fallbackData only if we don't already have the specific tag cached
+  // Fetch tag data
   const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`);
 
-  // Fetch recipes
+  // Fetch all recipe data
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
   const error = recipesError?.message || tagsError?.message || tagError?.message || '';

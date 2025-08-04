@@ -19,13 +19,13 @@ import { getRecipesByTag, getTagByUid, getTitleByUid } from '@/lib/utils/helpers
 export default function RecipePage() {
   const { id: uid } = useParams() as { id: string };
 
-  // Get the full list of recipes — this will reuse cache if already available
+  // Fetch all recipe data
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
-  // Use fallbackData only if we don't already have the specific recipe cached
+  // Fetch recipe data
   const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`);
 
-  // Fetch tags
+  // Fetch all tag data
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
   const error = recipeError?.message || recipesError?.message || tagsError?.message || '';

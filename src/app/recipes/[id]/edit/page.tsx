@@ -34,7 +34,10 @@ export default function EditRecipePage() {
 
   const { id: uid } = useParams() as { id: string };
 
+  // Fetch recipe data
   const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`);
+
+  // Fetch all tag data
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
   useEffect(() => {
