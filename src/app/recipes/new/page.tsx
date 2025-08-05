@@ -111,7 +111,7 @@ export default function NewRecipePage() {
             label="Ingredients"
             value={formData.ingredients}
             onChange={handleGeneralFieldChange}
-            className="h-80 sm:h-60"
+            className="h-48"
           />
           <TextAreaField
             id="instructions"
@@ -119,7 +119,7 @@ export default function NewRecipePage() {
             label="Instructions"
             value={formData.instructions}
             onChange={handleGeneralFieldChange}
-            className="h-80 sm:h-60"
+            className="h-48"
           />
         </div>
         <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
