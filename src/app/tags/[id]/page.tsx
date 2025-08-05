@@ -28,13 +28,13 @@ const bigTagStyles = `
 export default function TagPage() {
   const { id: uid } = useParams() as { id: string };
 
-  // Fetch tag data
+  // Fetch tag
   const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`);
 
-  // Fetch all tag data
+  // Fetch all tags
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
-  // Fetch all recipe data
+  // Fetch all recipes
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
   const error = recipesError?.message || tagsError?.message || tagError?.message || '';

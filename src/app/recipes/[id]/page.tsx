@@ -19,13 +19,14 @@ import { getRecipesByTag, getTagByUid, getTitleByUid } from '@/lib/utils/helpers
 export default function RecipePage() {
   const { id: uid } = useParams() as { id: string };
 
-  // Fetch recipe data
-  const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`);
-
-  // Fetch all recipe data
+  // Fetch all recipes
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
-  // Fetch all tag data
+  // Fetch recipe, use fallback if available
+  const fallbackRecipe = recipes?.find(r => r.uid === uid);
+  const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`, fallbackRecipe);
+
+  // Fetch all tags
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
   const error = recipeError?.message || recipesError?.message || tagsError?.message || '';
