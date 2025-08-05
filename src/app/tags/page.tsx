@@ -14,10 +14,10 @@ import Tag, { selectedTagStyles } from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
 
 export default function TagsPage() {
-  // Fetch all tag data
+  // Fetch all tags
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
   
-  // Fetch all recipe data
+  // Fetch all recipes
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
   const error = recipesError?.message || tagsError?.message || '';
