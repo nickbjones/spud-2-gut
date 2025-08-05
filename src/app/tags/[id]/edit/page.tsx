@@ -24,13 +24,11 @@ export default function EditTagPage() {
   const router = useRouter();
   const { id: uid } = useParams() as { id: string };
 
+  // Fetch tag data
+  const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`);
+
+  // Fetch all tag data
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
-
-  // Try to find the tag from the cached tags
-  const fallbackTag = tags?.find(r => r.uid === uid);
-
-  // Use fallbackData only if we don't already have the specific tag cached
-  const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`, fallbackTag);
 
   // Fetch recipes
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);

@@ -21,6 +21,7 @@ import Uid from '@/components/Uid';
 export default function NewTagPage() {
   const router = useRouter();
 
+  // Fetch all tag data
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
   const [formData, setFormData] = useState<TagType>(initialTagValues);
