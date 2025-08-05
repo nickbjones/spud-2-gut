@@ -25,13 +25,6 @@ function safeRedirect(path: string | null, fallback = '/') {
 
 export default function EditRecipePage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect');
-
-  const [formData, setFormData] = useState<RecipeType>(initialRecipeValues);
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [submitError, setSubmitError] = useState<string>('');
-
   const { id: uid } = useParams() as { id: string };
 
   // Fetch recipe data
@@ -39,6 +32,13 @@ export default function EditRecipePage() {
 
   // Fetch all tag data
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
+
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
+
+  const [formData, setFormData] = useState<RecipeType>(initialRecipeValues);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<string>('');
 
   useEffect(() => {
     if (recipe) {

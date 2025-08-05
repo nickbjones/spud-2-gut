@@ -19,11 +19,11 @@ import { getRecipesByTag, getTagByUid, getTitleByUid } from '@/lib/utils/helpers
 export default function RecipePage() {
   const { id: uid } = useParams() as { id: string };
 
-  // Fetch all recipe data
-  const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
-
   // Fetch recipe data
   const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`);
+
+  // Fetch all recipe data
+  const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
   // Fetch all tag data
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
