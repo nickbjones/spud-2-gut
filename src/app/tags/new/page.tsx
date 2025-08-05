@@ -9,14 +9,13 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { TagType } from '@/types/tag';
 import { initialTagValues } from '@/lib/initialValues';
-import { doesTagTitleExist, generateUid, getNewId } from '@/lib/utils/helpers';
+import { uidRules, generateUid, getNewId, doesTagTitleExist } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import SubmitButton from '@/components/SubmitButton';
 import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import ColorPicker from '@/components/ColorPicker';
-import Uid from '@/components/Uid';
 
 export default function NewTagPage() {
   const router = useRouter();
@@ -48,6 +47,14 @@ export default function NewTagPage() {
       ...prev,
       title: e.target.value,
       uid: generateUid(newTitle, tags || []),
+    }));
+  };
+
+  const handleUidChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newUid = e.target.value.toLowerCase().replace(uidRules, ''); // enforce rules
+    setFormData((prev) => ({
+      ...prev,
+      uid: newUid,
     }));
   };
 
@@ -107,7 +114,7 @@ export default function NewTagPage() {
             onChange={handleGeneralFieldChange}
           />
         </div>
-        <Uid uid={formData.uid} />
+        <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} required />
         <SubmitButton text={isSaving ? 'Saving...' : 'Save Tag'} disabled={isSaving} />
       </form>
     </div>
