@@ -2,6 +2,7 @@ import { RecipeType } from "@/types/recipe";
 import { TagType } from "@/types/tag";
 import { getTagByUid, getTagColor, getTitleByUid } from '@/lib/utils/helpers';
 import { miniTagStyles } from '@/components/Tag';
+import Link from "next/link";
 
 type RecipeCardProps = {
   recipe: RecipeType;
@@ -15,7 +16,7 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
 
   return (
     <li className="mb-2 sm:mb-3 border rounded-lg shadow-lg bg-white">
-      <a href={`/recipes/${recipe.uid}`} className="block py-2 pl-3 pr-10 relative">
+      <Link href={`/recipes/${recipe.uid}`} className="block py-2 pl-3 pr-10 relative">
         <span className="text-base font-semibold">{recipe.title}</span>
         {noContent && <p className="text-red-300 italic">No content!</p>}
         {recipe.tags.length > 0 &&
@@ -39,7 +40,7 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
         <span className="absolute top-0 right-0 h-full w-10 bg-white rounded-r-lg">
           <span className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-400">＞</span>
         </span>
-      </a>
+      </Link>
     </li>
   );
 }
