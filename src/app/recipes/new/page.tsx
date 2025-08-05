@@ -22,7 +22,10 @@ import Uid from '@/components/Uid';
 export default function NewRecipePage() {
   const router = useRouter();
 
+  // Fetch all recipe data
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
+
+  // Fetch all tag data
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
   const [formData, setFormData] = useState<RecipeType>(initialRecipeValues);
