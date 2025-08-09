@@ -22,15 +22,14 @@ export default function RecipePage() {
   // Fetch all recipes
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
-  // Fetch recipe, use fallback if available
-  const fallbackRecipe = recipes?.find(r => r.uid === uid);
-  const { data: recipe, error: recipeError, isLoading: loadingRecipe } = useData<RecipeType>(`${API.recipes}/${encodeURIComponent(uid)}`, fallbackRecipe);
+  // Get recipe from list of all recipes
+  const recipe = recipes?.find(r => r.uid === uid);
 
   // Fetch all tags
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
-  const error = recipeError?.message || recipesError?.message || tagsError?.message || '';
-  const loading = loadingRecipe || loadingRecipes || loadingTags;
+  const error = recipesError?.message || tagsError?.message || '';
+  const loading = loadingRecipes || loadingTags;
 
   if (loading) return <LoadingMessage />;
   if (error) return <ErrorMessage text={error} />;
