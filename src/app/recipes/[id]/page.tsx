@@ -83,7 +83,7 @@ export default function RecipePage() {
       )}
       {recipe.reference && (
         <div className="reference mt-6 break-all">
-          <SharedLink href={recipe.reference} text={recipe.reference} />
+          <SharedLink href={recipe.reference} text={recipe.reference} target="_blank" />
         </div>
       )}
       {(!recipe.ingredients && !recipe.instructions && !recipe.description && !recipe.reference) && (
