@@ -17,6 +17,8 @@ import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
 
+const findRecipe = (recipeList: RecipeType[], uid: string) => recipeList.find(r => r.uid === uid);
+
 export default function RecipePage() {
   const { id: uid } = useParams() as { id: string };
   const [recipe, setRecipe] = useState<RecipeType | undefined>(undefined);
@@ -28,12 +30,13 @@ export default function RecipePage() {
   // Fetch all tags
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
+
   // Get recipe
   useEffect(() => {
     if (!recipes) return; // still loading
 
     // Always do the initial check immediately
-    const recipeFound = recipes.find(r => r.uid === uid);
+    const recipeFound = findRecipe(recipes, uid);
     if (recipeFound) {
       setRecipe(recipeFound);
       setChecked(true);
@@ -42,7 +45,7 @@ export default function RecipePage() {
 
     // Otherwise, wait and check again once
     const timer = setTimeout(() => {
-      const foundLater = recipes.find(r => r.uid === uid);
+      const foundLater = findRecipe(recipes, uid);
       if (foundLater) {
         setRecipe(foundLater);
       }
