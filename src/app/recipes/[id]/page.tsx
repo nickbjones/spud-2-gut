@@ -18,6 +18,7 @@ import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
 
 const findRecipe = (recipeList: RecipeType[], uid: string) => recipeList.find(r => r.uid === uid);
+const retryDelay = 1000;
 
 export default function RecipePage() {
   const { id: uid } = useParams() as { id: string };
@@ -29,7 +30,6 @@ export default function RecipePage() {
 
   // Fetch all tags
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
-
 
   // Get recipe
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function RecipePage() {
         setRecipe(foundLater);
       }
       setChecked(true);
-    }, 1000);
+    }, retryDelay);
 
     return () => clearTimeout(timer);
   }, [recipes, uid]);
