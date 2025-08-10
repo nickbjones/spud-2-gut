@@ -23,7 +23,7 @@ const retryDelay = 1000;
 export default function RecipePage() {
   const { id: uid } = useParams() as { id: string };
   const [recipe, setRecipe] = useState<RecipeType | undefined>(undefined);
-  const [checked, setChecked] = useState<Boolean>(false);
+  const [checkedForRecipe, setCheckedForRecipe] = useState<boolean>(false);
 
   // Fetch all recipes
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
@@ -39,7 +39,7 @@ export default function RecipePage() {
     const recipeFound = findRecipe(recipes, uid);
     if (recipeFound) {
       setRecipe(recipeFound);
-      setChecked(true);
+      setCheckedForRecipe(true);
       return; // no need to wait
     }
 
@@ -49,18 +49,18 @@ export default function RecipePage() {
       if (foundLater) {
         setRecipe(foundLater);
       }
-      setChecked(true);
+      setCheckedForRecipe(true);
     }, retryDelay);
 
     return () => clearTimeout(timer);
   }, [recipes, uid]);
 
   const error = recipesError?.message || tagsError?.message || '';
-  const isLoading = loadingRecipes || !checked;
+  const isLoading = loadingRecipes || loadingTags || !checkedForRecipe;
 
   if (isLoading) return <LoadingMessage />;
   if (error) return <ErrorMessage text={error} />;
-  if (checked && !recipe) return notFound();
+  if (checkedForRecipe && !recipe) return notFound();
 
   if (recipe) {
     return (
