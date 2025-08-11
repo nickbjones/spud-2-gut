@@ -14,6 +14,8 @@ import ErrorMessage from '@/components/ErrorMessage';
 import RecipeCard from '@/components/RecipeCard';
 
 export default function RecipesPage() {
+  usePageTitle('Recipes');
+
   // Fetch all recipes
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
@@ -47,8 +49,6 @@ export default function RecipesPage() {
 
   // sort recipes by title
   const sortedRecipes = [...filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
-
-  usePageTitle('Recipes');
 
   return (
     <div className="-mb-12 p-3 pb-12 sm:p-6 sm:pb-24 min-h-screen bg-slate-100">

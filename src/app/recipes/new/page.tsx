@@ -20,6 +20,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import { initialRecipeValues } from '@/lib/initialValues';
 
 export default function NewRecipePage() {
+  usePageTitle('New Recipe');
   const router = useRouter();
 
   // Fetch all recipes
@@ -36,8 +37,6 @@ export default function NewRecipePage() {
     const newId = getNewId('RECIPE', recipes || []);
     setFormData((prev) => ({ ...prev, id: newId }))
   }, [recipes]);
-
-  usePageTitle('New Recipe');
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({

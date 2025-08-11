@@ -40,6 +40,8 @@ export default function EditTagPage() {
   const [isTitleExisting, setIsTitleExisting] = useState<boolean>(false);
   const [recipesWithThisTag, setRecipesWithThisTag] = useState<RecipeType[]>([]);
 
+  usePageTitle(tag?.title);
+
   useEffect(() => {
     if (tag) {
       setFormData(tag);
@@ -48,7 +50,7 @@ export default function EditTagPage() {
 
   useEffect(() => {
     setRecipesWithThisTag(getRecipesByTag(recipes || [], uid));
-  }, [recipes]);
+  }, [recipes, uid]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
@@ -117,8 +119,6 @@ export default function EditTagPage() {
       setSubmitError((err as Error).message);
     }
   };
-
-  usePageTitle(tag?.title);
 
   const error = submitError || tagsError?.message || tagError?.message || recipesError?.message || '';
   const loading = loadingTags || loadingTag || loadingRecipes;
