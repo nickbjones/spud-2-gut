@@ -6,6 +6,7 @@
 import { useState } from 'react';
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
 import LoadingMessage from '@/components/LoadingMessage';
@@ -46,6 +47,8 @@ export default function RecipesPage() {
 
   // sort recipes by title
   const sortedRecipes = [...filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
+
+  usePageTitle('Recipes');
 
   return (
     <div className="-mb-12 p-3 pb-12 sm:p-6 sm:pb-24 min-h-screen bg-slate-100">

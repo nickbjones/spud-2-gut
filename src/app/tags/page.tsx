@@ -5,6 +5,7 @@
 
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { RecipeType } from '@/types/recipe';
 import type { TagType} from '@/types/tag';
 import { getRecipesByTag } from '@/lib/utils/helpers';
@@ -28,6 +29,8 @@ export default function TagsPage() {
   if (!tags || tags.length < 1) return <ErrorMessage text="No tags!" />;
 
   const sortedTags = [...tags].sort((a, b) => a.uid.localeCompare(b.uid));
+
+  usePageTitle('Tags');
 
   return (
     <div className="p-3 sm:p-6">

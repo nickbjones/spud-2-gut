@@ -5,6 +5,7 @@
 
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
@@ -35,6 +36,8 @@ export default function NewRecipePage() {
     const newId = getNewId('RECIPE', recipes || []);
     setFormData((prev) => ({ ...prev, id: newId }))
   }, [recipes]);
+
+  usePageTitle('New Recipe');
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({

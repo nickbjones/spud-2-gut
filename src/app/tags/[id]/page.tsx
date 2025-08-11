@@ -5,6 +5,7 @@
 
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
 import { useParams, notFound } from 'next/navigation';
@@ -30,6 +31,8 @@ export default function TagPage() {
 
   // Fetch tag
   const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`);
+
+  usePageTitle(tag?.title);
 
   // Fetch all tags
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);

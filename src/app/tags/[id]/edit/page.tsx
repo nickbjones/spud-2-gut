@@ -5,6 +5,7 @@
 
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useRouter, useParams, notFound } from 'next/navigation';
 import type { TagType } from '@/types/tag';
@@ -116,6 +117,8 @@ export default function EditTagPage() {
       setSubmitError((err as Error).message);
     }
   };
+
+  usePageTitle(tag?.title);
 
   const error = submitError || tagsError?.message || tagError?.message || recipesError?.message || '';
   const loading = loadingTags || loadingTag || loadingRecipes;

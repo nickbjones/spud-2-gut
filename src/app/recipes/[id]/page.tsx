@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useParams, notFound } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
 import type { TagType } from '@/types/tag';
@@ -54,6 +55,8 @@ export default function RecipePage() {
 
     return () => clearTimeout(timer);
   }, [recipes, uid]);
+
+  usePageTitle(recipe?.title);
 
   const error = recipesError?.message || tagsError?.message || '';
   const isLoading = loadingRecipes || loadingTags || !checkedForRecipe;
