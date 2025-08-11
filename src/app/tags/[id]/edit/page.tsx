@@ -165,7 +165,7 @@ export default function EditTagPage() {
                   href={`/recipes/${recipe.uid}/edit?redirect=/tags/${formData.uid}/edit`} />
               ))}
             </p>
-            <p>Please remove this tag from those recipes before deleting.</p>
+            <p>Remove this tag from these recipes before deleting.</p>
           </div>
         : <SharedLink text="Delete tag" styles="text-red-800 hover:text-red-400" onClick={deleteTag} />
       }
