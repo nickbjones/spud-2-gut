@@ -19,6 +19,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import ColorPicker from '@/components/ColorPicker';
 
 export default function NewTagPage() {
+  usePageTitle('New Tag');
   const router = useRouter();
 
   // Fetch all tags
@@ -28,8 +29,6 @@ export default function NewTagPage() {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
   const [isTitleExisting, setIsTitleExisting] = useState<boolean>(false);
-
-  usePageTitle('New Tag');
 
   useEffect(() => {
     const newId = getNewId('TAG', tags || []);

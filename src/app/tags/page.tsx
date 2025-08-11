@@ -15,6 +15,8 @@ import Tag, { selectedTagStyles } from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
 
 export default function TagsPage() {
+  usePageTitle('Tags');
+
   // Fetch all tags
   const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
   
@@ -29,8 +31,6 @@ export default function TagsPage() {
   if (!tags || tags.length < 1) return <ErrorMessage text="No tags!" />;
 
   const sortedTags = [...tags].sort((a, b) => a.uid.localeCompare(b.uid));
-
-  usePageTitle('Tags');
 
   return (
     <div className="p-3 sm:p-6">
