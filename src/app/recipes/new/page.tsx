@@ -103,7 +103,14 @@ export default function NewRecipePage() {
   return (
     <div className="max-w-2xl mx-auto p-3 sm:p-6">
       <form onSubmit={handleSubmit}>
-        <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} required />
+        <InputField
+          id="title"
+          name="title"
+          label="Title"
+          value={formData.title}
+          onChange={handleTitleChange}
+          required
+        />
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <TextAreaField
             id="ingredients"
