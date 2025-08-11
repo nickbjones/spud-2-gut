@@ -5,6 +5,7 @@
 
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useRouter, useParams, notFound } from 'next/navigation';
 import type { TagType } from '@/types/tag';
@@ -117,6 +118,8 @@ export default function EditTagPage() {
     }
   };
 
+  usePageTitle(tag?.title);
+
   const error = submitError || tagsError?.message || tagError?.message || recipesError?.message || '';
   const loading = loadingTags || loadingTag || loadingRecipes;
 
@@ -165,7 +168,7 @@ export default function EditTagPage() {
                   href={`/recipes/${recipe.uid}/edit?redirect=/tags/${formData.uid}/edit`} />
               ))}
             </p>
-            <p>Please remove this tag from those recipes before deleting.</p>
+            <p>Remove this tag from these recipes before deleting.</p>
           </div>
         : <SharedLink text="Delete tag" styles="text-red-800 hover:text-red-400" onClick={deleteTag} />
       }

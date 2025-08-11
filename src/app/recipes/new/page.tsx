@@ -5,6 +5,7 @@
 
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
@@ -35,6 +36,8 @@ export default function NewRecipePage() {
     const newId = getNewId('RECIPE', recipes || []);
     setFormData((prev) => ({ ...prev, id: newId }))
   }, [recipes]);
+
+  usePageTitle('New Recipe');
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -103,7 +106,15 @@ export default function NewRecipePage() {
   return (
     <div className="max-w-2xl mx-auto p-3 sm:p-6">
       <form onSubmit={handleSubmit}>
-        <InputField id="title" name="title" label="Title" value={formData.title} onChange={handleTitleChange} required />
+        <InputField
+          id="title"
+          name="title"
+          label="Title"
+          value={formData.title}
+          onChange={handleTitleChange}
+          required
+          autoFocus
+        />
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <TextAreaField
             id="ingredients"

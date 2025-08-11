@@ -5,6 +5,7 @@
 
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { TagType } from '@/types/tag';
@@ -27,6 +28,8 @@ export default function NewTagPage() {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
   const [isTitleExisting, setIsTitleExisting] = useState<boolean>(false);
+
+  usePageTitle('New Tag');
 
   useEffect(() => {
     const newId = getNewId('TAG', tags || []);

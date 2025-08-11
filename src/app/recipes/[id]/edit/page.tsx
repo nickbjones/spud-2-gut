@@ -5,6 +5,7 @@
 
 import { API } from '@/lib/constants';
 import { useData } from '@/hooks/useData';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useRouter, useParams, useSearchParams, notFound } from 'next/navigation';
 import type { RecipeType } from '@/types/recipe';
@@ -39,6 +40,8 @@ export default function EditRecipePage() {
   const [formData, setFormData] = useState<RecipeType>(initialRecipeValues);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>('');
+
+  usePageTitle(recipe?.title);
 
   useEffect(() => {
     if (recipe) {
