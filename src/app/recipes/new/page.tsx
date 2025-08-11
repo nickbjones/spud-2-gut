@@ -110,6 +110,7 @@ export default function NewRecipePage() {
           value={formData.title}
           onChange={handleTitleChange}
           required
+          autoFocus
         />
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <TextAreaField
