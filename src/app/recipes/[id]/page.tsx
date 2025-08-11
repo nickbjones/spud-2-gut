@@ -18,7 +18,7 @@ import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
 
 const findRecipe = (recipeList: RecipeType[], uid: string) => recipeList.find(r => r.uid === uid);
-const retryDelay = 1000;
+const retryDelay = 2000;
 
 export default function RecipePage() {
   const { id: uid } = useParams() as { id: string };
