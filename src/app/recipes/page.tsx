@@ -51,39 +51,41 @@ export default function RecipesPage() {
   const sortedRecipes = [...filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
 
   return (
-    <div className="-mb-12 p-3 pb-12 sm:p-6 sm:pb-24 min-h-screen bg-slate-100">
-      <div className="relative mb-4">
-        <input
-          type="text"
-          placeholder="Search recipes..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-2 pr-10 border rounded"
-        />
-        {search && (
-          <button
-            onClick={() => setSearch('')}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
-          >
-            ×
-          </button>
+    <div className="bg-slate-100 min-h-screen">
+      <div className="max-w-5xl mx-auto -mb-12 p-3 sm:p-6 pb-12 sm:pb-24">
+        <div className="relative mb-4">
+          <input
+            type="text"
+            placeholder="Search recipes..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full p-2 pr-10 border rounded"
+          />
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
+            >
+              ×
+            </button>
+          )}
+        </div>
+        {sortedRecipes.length > 0 ? (
+          <ul>
+            {sortedRecipes.map((recipe) => (
+              <RecipeCard
+                key={recipe.id}
+                recipe={recipe}
+                tags={tags ?? []}
+                search={search}
+                matchSources={recipe.matchSources}
+              />
+            ))}
+          </ul>
+        ) : (
+          <p>No results found.</p>
         )}
       </div>
-      {sortedRecipes.length > 0 ? (
-        <ul>
-          {sortedRecipes.map((recipe) => (
-            <RecipeCard
-              key={recipe.id}
-              recipe={recipe}
-              tags={tags ?? []}
-              search={search}
-              matchSources={recipe.matchSources}
-            />
-          ))}
-        </ul>
-      ) : (
-        <p>No results found.</p>
-      )}
     </div>
   );
 }

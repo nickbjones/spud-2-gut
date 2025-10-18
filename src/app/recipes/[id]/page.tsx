@@ -67,7 +67,7 @@ export default function RecipePage() {
 
   if (recipe) {
     return (
-      <div className="p-3 sm:p-6">
+      <div className="max-w-5xl mx-auto p-3 sm:p-6">
         <div className="flex justify-between items-center my-3">
           <SharedHeading text={recipe.title} styles="!my-0" />
           <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm" />

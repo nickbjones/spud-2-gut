@@ -33,7 +33,7 @@ export default function TagsPage() {
   const sortedTags = [...tags].sort((a, b) => a.uid.localeCompare(b.uid));
 
   return (
-    <div className="p-3 sm:p-6">
+    <div className="max-w-5xl mx-auto p-3 sm:p-6">
       <SharedLink text="+ New Tag" href="/tags/new" />
       {/* tags list */}
       <div className="flex flex-wrap gap-2 mt-3">

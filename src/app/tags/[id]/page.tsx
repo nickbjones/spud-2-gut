@@ -50,7 +50,7 @@ export default function TagPage() {
   const recipesWithThisTag = getRecipesByTag(recipes || [], uid);
 
   return (
-    <div className="p-3 sm:p-6">
+    <div className="max-w-5xl mx-auto p-3 sm:p-6">
       <div className="flex justify-between items-center my-3">
         <h2 className={bigTagStyles} style={getTagColor(tag.color || '')}>{tag.title}</h2>
         <SharedLink href={`${tag.uid}/edit`} text="[Edit]" styles="text-sm" />
