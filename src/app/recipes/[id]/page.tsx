@@ -66,6 +66,8 @@ export default function RecipePage() {
   if (checkedForRecipe && !recipe) return notFound();
 
   if (recipe) {
+    const sortedTags = [...recipe.tags].sort((a, b) => a.localeCompare(b));
+
     return (
       <div className="max-w-5xl mx-auto p-3 sm:p-6">
         <div className="flex justify-between items-center my-3">
@@ -73,9 +75,9 @@ export default function RecipePage() {
           <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm" />
         </div>
         {/* tags list */}
-        {(recipe.tags.length > 0) &&
+        {(sortedTags.length > 0) &&
           <div className="flex flex-wrap mt-3 gap-1 sm:gap-2 whitespace-nowrap overflow-x-auto no-scrollbar">
-            {recipe.tags.map((uid: string) => {
+            {sortedTags.map((uid: string) => {
               const count = getRecipesByTag(recipes ?? [], uid).length;
               return (
                 <Tag
