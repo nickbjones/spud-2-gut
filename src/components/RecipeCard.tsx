@@ -19,19 +19,22 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
       <Link href={`/recipes/${recipe.uid}`} className="block py-2 pl-3 pr-10 relative">
         <span className="text-base font-semibold">{recipe.title}</span>
         {noContent && <p className="text-red-300 italic">No content!</p>}
-        {recipe.tags.length > 0 &&
-          <div className="flex gap-1 flex-wrap mt-1">
-            {recipe.tags.map((uid: string) => (
-              <span
-                key={uid}
-                style={getTagColor(getTagByUid(uid, tags).color || '')}
-                className={miniTagStyles}
-              >
-                {getTitleByUid(uid, tags)}
-              </span>
-            ))}
-          </div>
-        }
+        <div className="flex justify-between items-end">
+          {recipe.tags.length > 0 &&
+            <div className="flex gap-1 flex-wrap mt-1">
+              {recipe.tags.map((uid: string) => (
+                <span
+                  key={uid}
+                  style={getTagColor(getTagByUid(uid, tags).color || '')}
+                  className={miniTagStyles}
+                >
+                  {getTitleByUid(uid, tags)}
+                </span>
+              ))}
+            </div>
+          }
+          <span className="mt-1 text-xs sm:text-sm text-nowrap text-slate-400">{recipe.date}</span>
+        </div>
         {search && matchSources && matchSources.length > 0 && (
           <div className="mt-2 text-xs text-gray-400">
             {matchSources.length > 1 ? 'Matches' : 'Match'} found in: <span className="text-gray-600">{matchSources.join(', ')}</span>
