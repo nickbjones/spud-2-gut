@@ -47,7 +47,7 @@ export default function TagsPage() {
               className={`${selectedTagStyles} border-none`}
             >
               <span className="block">{tag.title}</span>
-              <span className="block text-[8px]/[8px]">({recipesWithThisTag} receipes)</span>
+              <span className="block text-[8px]/[8px]">({recipesWithThisTag} recipes)</span>
             </Tag>
           );
         })}
