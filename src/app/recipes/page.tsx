@@ -48,7 +48,10 @@ export default function RecipesPage() {
     .filter(Boolean) as (RecipeType & { matchSources: string[] })[];
 
   // sort recipes by title
-  const sortedRecipes = [...filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
+  // const sortedRecipes = [...filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
+
+  // sort recipes by date
+  const sortedRecipes = [...filteredRecipes].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
     <div className="bg-slate-100 min-h-screen">
