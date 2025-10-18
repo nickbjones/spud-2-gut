@@ -49,6 +49,9 @@ export default function TagPage() {
 
   const recipesWithThisTag = getRecipesByTag(recipes || [], uid);
 
+  // sort recipes by date
+  const sortedRecipes = [...recipesWithThisTag].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   return (
     <div className="max-w-5xl mx-auto p-3 sm:p-6">
       <div className="flex justify-between items-center my-3">
@@ -57,10 +60,10 @@ export default function TagPage() {
       </div>
       {tag.description && <p>{tag.description}</p>}
       <div className="mt-4">
-        <p className="mb-2">{recipesWithThisTag.length > 0 ? `Recipes with this tag (${recipesWithThisTag.length}):` : 'No recipes with this tag'}</p>
-        {recipesWithThisTag.length > 0 &&
+        <p className="mb-2">{sortedRecipes.length > 0 ? `Recipes with this tag (${sortedRecipes.length}):` : 'No recipes with this tag'}</p>
+        {sortedRecipes.length > 0 &&
           <ul>
-            {recipesWithThisTag.map((recipe: RecipeType) => (
+            {sortedRecipes.map((recipe: RecipeType) => (
               <RecipeCard key={recipe.id} recipe={recipe} tags={tags || []} />
             ))}
           </ul>
