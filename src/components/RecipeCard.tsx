@@ -15,6 +15,11 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
   const noContent = !recipe.ingredients && !recipe.instructions && !recipe.description && !recipe.reference && recipe.tags.length === 0;
 
   const sortedTags = [...recipe.tags].sort((a, b) => a.localeCompare(b));
+  let matchedSourcesToDisplay = '';
+
+  if (search && matchSources && matchSources.length > 0) {
+    matchedSourcesToDisplay = matchSources.filter(item => item !== 'title').join(', ');
+  }
 
   return (
     <li className="mb-2 sm:mb-3 border rounded-lg shadow-lg bg-white">
@@ -37,9 +42,9 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
           }
           <span className="mt-1 text-xs sm:text-sm text-nowrap text-slate-400">{recipe.date}</span>
         </div>
-        {search && matchSources && matchSources.length > 0 && (
+        {matchedSourcesToDisplay && (
           <div className="mt-2 text-xs text-gray-400">
-            {matchSources.length > 1 ? 'Matches' : 'Match'} found in: <span className="text-gray-600">{matchSources.join(', ')}</span>
+            {matchedSourcesToDisplay.length > 1 ? 'Matches' : 'Match'} found in: <span className="text-gray-600">{matchedSourcesToDisplay}</span>
           </div>
         )}
         <span className="absolute top-0 right-0 h-full w-10 bg-white rounded-r-lg">
