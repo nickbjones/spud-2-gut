@@ -13,6 +13,8 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import RecipeCard from '@/components/RecipeCard';
 
+const listStyles = 'grid grid-cols-1 sm:grid-cols-2 gap-3 items-start';
+
 export default function RecipesPage() {
   usePageTitle('Recipes');
 
@@ -53,6 +55,10 @@ export default function RecipesPage() {
   // sort recipes by date
   const sortedRecipes = [...filteredRecipes].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
+  // separate pinned and unpinned recipes
+  const pinnedRecipes = sortedRecipes.filter(r => r.isPinned);
+  const unpinnedRecipes = sortedRecipes.filter(r => !r.isPinned);
+
   return (
     <div className="bg-slate-100 min-h-screen">
       <div className="max-w-5xl mx-auto -mb-12 p-3 sm:p-6 pb-12 sm:pb-24">
@@ -73,20 +79,40 @@ export default function RecipesPage() {
             </button>
           )}
         </div>
-        {sortedRecipes.length > 0 ? (
-          <ul>
-            {sortedRecipes.map((recipe) => (
-              <RecipeCard
-                key={recipe.id}
-                recipe={recipe}
-                tags={tags ?? []}
-                search={search}
-                matchSources={recipe.matchSources}
-              />
-            ))}
-          </ul>
-        ) : (
-          <p>No results found.</p>
+        {sortedRecipes.length === 0 && <p>No recipes!</p>}
+        {/* pinned recipes */}
+        {pinnedRecipes.length > 0 && (
+          <>
+            <h2 className="mb-3 mt-6 ml-1 text-md font-semibold text-gray-600">Pinned</h2>
+            <ul className={listStyles}>
+              {pinnedRecipes.map((recipe) => (
+                <RecipeCard
+                  key={recipe.id}
+                  recipe={recipe}
+                  tags={tags ?? []}
+                  search={search}
+                  matchSources={recipe.matchSources}
+                />
+              ))}
+            </ul>
+          </>
+        )}
+        {/* unpinned recipes */}
+        {unpinnedRecipes.length > 0 && (
+          <>
+            <hr className="my-8 border-t border-slate-300" />
+            <ul className={listStyles}>
+              {unpinnedRecipes.map((recipe) => (
+                <RecipeCard
+                  key={recipe.id}
+                  recipe={recipe}
+                  tags={tags ?? []}
+                  search={search}
+                  matchSources={recipe.matchSources}
+                />
+              ))}
+            </ul>
+          </>
         )}
       </div>
     </div>

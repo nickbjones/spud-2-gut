@@ -8,4 +8,5 @@ export type RecipeType = {
   reference: string;
   tags: string[];
   date: string; // ISO string format (YYYY-MM-DD)
+  isPinned: boolean;
 };

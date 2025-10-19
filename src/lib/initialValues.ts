@@ -15,6 +15,7 @@ export const initialRecipeValues: RecipeType = {
   ingredients: '',
   instructions: '',
   reference: '',
+  isPinned: false,
 };
 
 export const initialTagValues: TagType = {
