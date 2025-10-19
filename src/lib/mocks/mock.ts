@@ -12,6 +12,7 @@ export const recipes: RecipeType[] = [
     ingredients: '',
     instructions: '',
     reference: '',
+    isPinned: true,
   },
   {
     id: 'TAG#02',
@@ -23,6 +24,7 @@ export const recipes: RecipeType[] = [
     ingredients: '',
     instructions: '',
     reference: '',
+    isPinned: false,
   },
   {
     id: 'TAG#03',
@@ -34,6 +36,7 @@ export const recipes: RecipeType[] = [
     ingredients: '- 青唐辛子\n- にんにく',
     instructions: '1. Chop the 青唐辛子\n2. Mince the にんにく',
     reference: 'https://nomadette.com/pickled-green-chillies/',
+    isPinned: false,
   },
   {
     id: 'TAG#04',
@@ -45,6 +48,7 @@ export const recipes: RecipeType[] = [
     ingredients: '',
     instructions: '',
     reference: '',
+    isPinned: false,
   },
   {
     id: 'TAG#05',
@@ -56,6 +60,7 @@ export const recipes: RecipeType[] = [
     ingredients: '- Potatoes\n- Chili powder',
     instructions: '1. Cut the potatoes\n2. Add the chili powder\n3. Roast them\n4. Enjoy!',
     reference: '',
+    isPinned: false,
   },
   {
     id: 'TAG#06',
@@ -67,6 +72,7 @@ export const recipes: RecipeType[] = [
     ingredients: '- Spinach\n- Salt',
     instructions: '1. Boil spinach\n2. Add salt\n3. Enjoy',
     reference: 'http://www.spinach.com',
+    isPinned: true,
   },
 ];
 
