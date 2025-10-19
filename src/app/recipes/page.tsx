@@ -97,22 +97,20 @@ export default function RecipesPage() {
             </ul>
           </>
         )}
+        {(pinnedRecipes.length > 0) && (unpinnedRecipes.length > 0) && (<hr className="my-8 mx-20 border-t border-slate-300" />)}
         {/* unpinned recipes */}
         {unpinnedRecipes.length > 0 && (
-          <>
-            <hr className="my-8 border-t border-slate-300" />
-            <ul className={listStyles}>
-              {unpinnedRecipes.map((recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  tags={tags ?? []}
-                  search={search}
-                  matchSources={recipe.matchSources}
-                />
-              ))}
-            </ul>
-          </>
+          <ul className={listStyles}>
+            {unpinnedRecipes.map((recipe) => (
+              <RecipeCard
+                key={recipe.id}
+                recipe={recipe}
+                tags={tags ?? []}
+                search={search}
+                matchSources={recipe.matchSources}
+              />
+            ))}
+          </ul>
         )}
       </div>
     </div>
