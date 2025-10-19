@@ -5,6 +5,7 @@ const protectedRoutes = [
   '/api/',
   '/home/',
   '/recipes/',
+  '/settings/',
   '/tags/',
 ];
 
