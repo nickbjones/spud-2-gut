@@ -16,20 +16,6 @@ const sharedNavButtonStyles = `
   transition
 `;
 
-const HamMenuItem = ({ href, label }: { href: string; label: string }) => (
-  <li>
-    <a href={href} className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100">
-      {label}
-    </a>
-  </li>
-);
-
-const HamMenuHr = () => (
-  <li>
-    <hr className="my-2 mx-8 border-t border-slate-200" />
-  </li>
-);
-
 export default function Navbar() {
   const pathname = usePathname();
   const rootPath = `/${pathname.split('/')[1]}`;
@@ -66,31 +52,6 @@ export default function Navbar() {
             <span className="block sm:hidden">+ New</span>
           </Link>
         )}
-
-        {/* Hamburger button */}
-        <button
-          className="ml-2 -mr-2 px-1 sm:p-2 focus:outline-none focus:ring"
-          onClick={() => setHamMenuIsOpen(!hamMenuIsOpen)}
-        >
-          ≡
-        </button>
-
-        {/* Hamburger menu */}
-        <div className="relative z-10">
-          {hamMenuIsOpen && (
-            <ul className="absolute -right-2 w-[50vw] max-w-[180] mt-12 py-3 px-2 bg-white border text-black rounded shadow-lg">
-              <HamMenuItem href="/recipes" label="View all recipes" />
-              <HamMenuItem href="/recipes/new" label="Create new recipe" />
-              <HamMenuHr />
-              <HamMenuItem href="/tags" label="View all tags" />
-              <HamMenuItem href="/tags/new" label="Create new tag" />
-              <HamMenuHr />
-              <HamMenuItem href="/home" label="Landing page" />
-              <HamMenuItem href="/settings" label="Settings" />
-              <HamMenuItem href="/change-log" label="Change log" />
-            </ul>
-          )}
-        </div>
       </div>
     </nav>
   );
