@@ -70,9 +70,14 @@ export default function RecipePage() {
 
     return (
       <div className="max-w-5xl mx-auto p-3 sm:p-6">
-        <div className="flex justify-between items-center my-3">
+        <div className="flex items-end my-3">
           <SharedHeading text={recipe.title} styles="!my-0" />
-          <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm" />
+          {recipe.isPinned && (
+            <span className="inline-block mb-1 mx-2 sm:mx-4 px-1 text-xs text-center rounded-full border border-orange-300 bg-orange-200">
+              Pinned
+            </span>
+          )}
+          <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm ml-auto" />
         </div>
         {/* tags list */}
         {(sortedTags.length > 0) &&

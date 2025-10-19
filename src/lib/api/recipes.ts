@@ -15,6 +15,7 @@ const emptyRecipe: RecipeType = {
   ingredients: '',
   instructions: '',
   reference: '',
+  isPinned: false,
 };
 
 function formatDynamoDbRecipe(recipeRaw: RecipeType): RecipeType {
@@ -29,6 +30,7 @@ function formatDynamoDbRecipe(recipeRaw: RecipeType): RecipeType {
       ingredients: recipeRaw.ingredients || '',
       instructions: recipeRaw.instructions || '',
       reference: recipeRaw.reference || '',
+      isPinned: recipeRaw.isPinned || false,
     };
   } catch (error) {
     console.error('Error parsing recipe ID:', recipeRaw.id, error);
