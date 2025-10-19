@@ -22,7 +22,7 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
   }
 
   return (
-    <li className="mb-2 sm:mb-3 border rounded-lg shadow-lg bg-white">
+    <li className="border rounded-lg shadow-lg bg-white">
       <Link href={`/recipes/${recipe.uid}`} className="block py-2 pl-3 pr-10 relative">
         <span className="text-base font-semibold">{recipe.title}</span>
         {noContent && <p className="text-red-300 italic">No content!</p>}

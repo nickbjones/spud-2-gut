@@ -69,7 +69,7 @@ export default function Navbar() {
 
         {/* Hamburger button */}
         <button
-          className="ml-2 -mr-2 p-2 focus:outline-none focus:ring"
+          className="ml-2 -mr-2 px-1 sm:p-2 focus:outline-none focus:ring"
           onClick={() => setHamMenuIsOpen(!hamMenuIsOpen)}
         >
           ≡
@@ -78,7 +78,7 @@ export default function Navbar() {
         {/* Hamburger menu */}
         <div className="relative z-10">
           {hamMenuIsOpen && (
-            <ul className="absolute -right-2 w-[180] mt-12 py-3 px-2 bg-white border text-black rounded shadow-lg">
+            <ul className="absolute -right-2 w-[50vw] max-w-[180] mt-12 py-3 px-2 bg-white border text-black rounded shadow-lg">
               <HamMenuItem href="/recipes" label="View all recipes" />
               <HamMenuItem href="/recipes/new" label="Create new recipe" />
               <HamMenuHr />
