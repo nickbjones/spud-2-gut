@@ -44,7 +44,7 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
         </div>
         {matchedSourcesToDisplay && (
           <div className="mt-2 text-xs text-gray-400">
-            "{search}" found in: <span className="text-gray-600">{matchedSourcesToDisplay}</span>
+            &quot;{search}&quot; found in: <span className="text-gray-600">{matchedSourcesToDisplay}</span>
           </div>
         )}
         <span className="absolute top-0 right-0 h-full w-10 bg-white rounded-r-lg">

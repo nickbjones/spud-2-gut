@@ -1,4 +1,4 @@
-export default [
+const content = [
   {
     date: '2025-10-19',
     logs: [
@@ -385,3 +385,5 @@ export default [
     ],
   },
 ]
+
+export default content;
