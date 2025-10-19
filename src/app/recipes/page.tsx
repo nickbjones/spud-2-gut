@@ -61,8 +61,8 @@ export default function RecipesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-100 to-orange-300 bg-fixed">
-      <div className="relative z-10 max-w-5xl mx-auto -mb-12 p-3 sm:p-6 pb-12 sm:pb-24">
-        <div className="relative mb-4">
+      <div className="max-w-5xl mx-auto -mb-12 p-3 sm:p-6 pb-12 sm:pb-24">
+        <div className="mb-4">
           <input
             type="text"
             placeholder="Search recipes..."
