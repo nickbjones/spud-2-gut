@@ -20,13 +20,13 @@ export default function Navbar() {
   const rootPath = `/${pathname.split('/')[1]}`;
 
   const navItems = [
-    { href: '/home', label: 'Home' },
+    // { href: '/home', label: 'Home' },
     { href: '/recipes', label: 'Recipes' },
     { href: '/tags', label: 'Tags' },
   ];
 
   return (
-    <nav className="p-4 bg-gray-800 text-white flex">
+    <nav className="py-4 px-6 bg-gray-800 text-white flex">
       {navItems.map(({ href, label }) => (
         <Link
           key={href} 
@@ -40,7 +40,7 @@ export default function Navbar() {
       ))}
       <Link
         href="/recipes/new" 
-        className={`${sharedNavButtonStyles} ml-auto mr-0 bg-green-600 hover:bg-green-500`}
+        className={`${sharedNavButtonStyles} ml-auto !mr-0 bg-green-600 hover:bg-green-500`}
       >
         <span className="hidden sm:block">+ New Recipe</span>
         <span className="block sm:hidden">+ New</span>

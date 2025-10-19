@@ -97,7 +97,7 @@ export default function RecipesPage() {
             </ul>
           </>
         )}
-        {(pinnedRecipes.length > 0) && (unpinnedRecipes.length > 0) && (<hr className="my-8 mx-20 border-t border-slate-300" />)}
+        {(pinnedRecipes.length > 0) && (unpinnedRecipes.length > 0) && (<hr className="mt-6 mb-8 mx-20 border-t border-slate-400" />)}
         {/* unpinned recipes */}
         {unpinnedRecipes.length > 0 && (
           <ul className={listStyles}>
