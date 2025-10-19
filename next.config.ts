@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/',
-        destination: '/home',
+        destination: '/recipes',
         permanent: true, // Use false for a temporary redirect (307)
       },
     ];
