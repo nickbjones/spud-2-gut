@@ -13,7 +13,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import RecipeCard from '@/components/RecipeCard';
 
-const listStyles = 'grid grid-cols-1 sm:grid-cols-2 gap-3 items-start';
+const listStyles = 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 items-start';
 
 export default function RecipesPage() {
   usePageTitle('Recipes');
@@ -97,7 +97,9 @@ export default function RecipesPage() {
             </ul>
           </>
         )}
-        {(pinnedRecipes.length > 0) && (unpinnedRecipes.length > 0) && (<hr className="my-8 mx-20 border-t border-slate-400" />)}
+        {(pinnedRecipes.length > 0) && (unpinnedRecipes.length > 0) && (
+          <hr className="my-6 mx-20 border-t border-gray-400" />
+        )}
         {/* unpinned recipes */}
         {unpinnedRecipes.length > 0 && (
           <ul className={listStyles}>
