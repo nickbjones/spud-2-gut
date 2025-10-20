@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -19,8 +18,6 @@ const sharedNavButtonStyles = `
 export default function Navbar() {
   const pathname = usePathname();
   const rootPath = `/${pathname.split('/')[1]}`;
-
-  const [hamMenuIsOpen, setHamMenuIsOpen] = useState(false);
 
   const navItems = [
     // { href: '/home', label: 'Home' },
