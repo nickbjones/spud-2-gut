@@ -1,5 +1,18 @@
 const content = [
   {
+    date: '2025-10-21',
+    logs: [
+      'adding shadow to search box',
+    ],
+  },
+  {
+    date: '2025-10-20',
+    logs: [
+      'adding footer',
+      'removing hamburger menu',
+    ],
+  },
+  {
     date: '2025-10-19',
     logs: [
       'adding change log page',
