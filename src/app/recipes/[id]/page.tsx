@@ -17,6 +17,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
+import CookCounter from '@/components/CookCounter';
 
 const findRecipe = (recipeList: RecipeType[], uid: string) => recipeList.find(r => r.uid === uid);
 const retryDelay = 2000;
@@ -77,6 +78,7 @@ export default function RecipePage() {
               Pinned
             </span>
           )}
+          <CookCounter recipeId={recipe.uid} initialCount={0} />
           <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm ml-auto" />
         </div>
         {/* tags list */}
