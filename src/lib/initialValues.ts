@@ -16,6 +16,7 @@ export const initialRecipeValues: RecipeType = {
   instructions: '',
   reference: '',
   isPinned: false,
+  cookCount: '',
 };
 
 export const initialTagValues: TagType = {

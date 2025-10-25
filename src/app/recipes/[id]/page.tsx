@@ -78,28 +78,31 @@ export default function RecipePage() {
               Pinned
             </span>
           )}
-          <CookCounter recipeId={recipe.uid} initialCount={0} />
           <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm ml-auto" />
         </div>
-        {/* tags list */}
-        {(sortedTags.length > 0) &&
-          <div className="flex flex-wrap mt-3 gap-1 sm:gap-2 whitespace-nowrap overflow-x-auto no-scrollbar">
-            {sortedTags.map((uid: string) => {
-              const count = getRecipesByTag(recipes ?? [], uid).length;
-              return (
-                <Tag
-                  key={uid}
-                  uid={uid}
-                  className={`${selectedTagStyles} border-none`}
-                  color={getTagByUid(uid, tags || []).color}
-                >
-                  <span className="block">{getTitleByUid(uid, tags ?? [])}</span>
-                  <span className="block text-[8px]/[8px]">({count} recipes)</span>
-                </Tag>
-              );
-            })}
-          </div>
-        }
+        <div className="flex items-end justify-between">
+          {/* tags list */}
+          {(sortedTags.length > 0) &&
+            <div className="flex flex-wrap mt-3 gap-1 sm:gap-2 whitespace-nowrap overflow-x-auto no-scrollbar">
+              {sortedTags.map((uid: string) => {
+                const count = getRecipesByTag(recipes ?? [], uid).length;
+                return (
+                  <Tag
+                    key={uid}
+                    uid={uid}
+                    className={`${selectedTagStyles} border-none`}
+                    color={getTagByUid(uid, tags || []).color}
+                  >
+                    <span className="block">{getTitleByUid(uid, tags ?? [])}</span>
+                    <span className="block text-[8px]/[8px]">({count} recipes)</span>
+                  </Tag>
+                );
+              })}
+            </div>
+          }
+          {/* cook counter */}
+          <CookCounter recipe={recipe} />
+        </div>
         {(recipe.ingredients || recipe.instructions) && (
           <div className={recipe.ingredients && recipe.instructions && `sm:grid grid-cols-2 gap-6 mt-0 sm:mt-2`}>
             {recipe.ingredients && (
