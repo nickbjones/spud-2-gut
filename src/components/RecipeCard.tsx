@@ -23,9 +23,14 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
 
   return (
     <li className="border rounded-lg shadow-lg bg-white">
-      <Link href={`/recipes/${recipe.uid}`} className="block py-2 pl-3 pr-10 relative">
-        <span className="text-base font-semibold">{recipe.title}</span>
+      <Link href={`/recipes/${recipe.uid}`} className="block py-2 px-3">
         {noContent && <p className="text-red-300 italic">No content!</p>}
+        <div className="flex justify-between items-end">
+          <span className="text-base font-semibold">{recipe.title}</span>
+          <span>
+            🍳<span className="pl-[2] font-bold text-orange-700">{recipe.cookCount || 0}</span>
+          </span>
+        </div>
         <div className="flex justify-between items-end">
           {sortedTags.length > 0 &&
             <div className="flex gap-1 flex-wrap mt-1">
@@ -47,9 +52,6 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
             &quot;{search}&quot; found in: <span className="text-gray-600">{matchedSourcesToDisplay}</span>
           </div>
         )}
-        <span className="absolute top-0 right-0 h-full w-10 bg-white rounded-r-lg">
-          <span className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-400">＞</span>
-        </span>
       </Link>
     </li>
   );

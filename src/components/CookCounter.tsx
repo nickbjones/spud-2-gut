@@ -8,7 +8,7 @@ export default function CookCounter({ recipe }: { recipe: RecipeType }) {
   const longPressTriggered = useRef(false);
 
   const updateCount = async (oldCount: string, newCount: string) => {
-    console.log(`updating count from ${oldCount} to ${newCount}`);
+    setCount(newCount);
     recipe.cookCount = newCount;
     try {
       const res = await fetch(`/api/recipes/${encodeURIComponent(recipe.id)}`, {
@@ -24,6 +24,7 @@ export default function CookCounter({ recipe }: { recipe: RecipeType }) {
       if (res.ok) {
         setCount(newCount);
       } else {
+        setCount(oldCount);
         console.error('Failed to update cook count');
       }
     } catch (err) {
@@ -56,7 +57,7 @@ export default function CookCounter({ recipe }: { recipe: RecipeType }) {
 
   return (
     <button
-      className="cursor-pointer hover:opacity-70"
+      className="cursor-pointer hover:opacity-70 disabled:opacity-50 select-none"
       disabled={isUpdating}
       onTouchStart={startPressTimer}
       onTouchEnd={endPress}
