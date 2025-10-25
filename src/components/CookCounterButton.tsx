@@ -1,9 +1,10 @@
 import { RecipeType } from '@/types/recipe';
 import { useRef, useState } from 'react';
+import CookCounter from './CookCounter';
 
-export default function CookCounter({ recipe }: { recipe: RecipeType }) {
-  const [count, setCount] = useState(recipe.cookCount || '0');
-  const [isUpdating, setIsUpdating] = useState(false);
+export default function CookCounterButton({ recipe }: { recipe: RecipeType }) {
+  const [count, setCount] = useState<string>(recipe.cookCount || '0');
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const longPressTriggered = useRef(false);
 
@@ -66,7 +67,7 @@ export default function CookCounter({ recipe }: { recipe: RecipeType }) {
       onMouseUp={endPress}
       onMouseLeave={() => timerRef.current && clearTimeout(timerRef.current)} // only cancels, not triggers
     >
-      🍳<span className="pl-[2] font-bold text-orange-700">{count}</span>
+      <CookCounter cookCount={count} />
     </button>
   );
 }

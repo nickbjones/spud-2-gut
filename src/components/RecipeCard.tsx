@@ -3,6 +3,7 @@ import { TagType } from "@/types/tag";
 import { getTagByUid, getTagColor, getTitleByUid } from '@/lib/utils/helpers';
 import { miniTagStyles } from '@/components/Tag';
 import Link from "next/link";
+import CookCounter from "./CookCounter";
 
 type RecipeCardProps = {
   recipe: RecipeType;
@@ -25,11 +26,9 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
     <li className="border rounded-lg shadow-lg bg-white">
       <Link href={`/recipes/${recipe.uid}`} className="block py-2 px-3">
         {noContent && <p className="text-red-300 italic">No content!</p>}
-        <div className="flex justify-between items-end">
+        <div className="flex justify-between items-start">
           <span className="text-base font-semibold">{recipe.title}</span>
-          <span>
-            🍳<span className="pl-[2] font-bold text-orange-700">{recipe.cookCount || 0}</span>
-          </span>
+          <CookCounter cookCount={recipe.cookCount || '0'} />
         </div>
         <div className="flex justify-between items-end">
           {sortedTags.length > 0 &&
