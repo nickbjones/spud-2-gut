@@ -17,7 +17,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
-import CookCounter from '@/components/CookCounter';
+import CookCounterButton from '@/components/CookCounterButton';
 
 const findRecipe = (recipeList: RecipeType[], uid: string) => recipeList.find(r => r.uid === uid);
 const retryDelay = 2000;
@@ -101,7 +101,7 @@ export default function RecipePage() {
             </div>
           }
           {/* cook counter */}
-          <CookCounter recipe={recipe} />
+          <CookCounterButton recipe={recipe} />
         </div>
         {(recipe.ingredients || recipe.instructions) && (
           <div className={recipe.ingredients && recipe.instructions && `sm:grid grid-cols-2 gap-6 mt-0 sm:mt-2`}>
