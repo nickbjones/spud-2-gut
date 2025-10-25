@@ -9,4 +9,5 @@ export type RecipeType = {
   tags: string[];
   date: string; // ISO string format (YYYY-MM-DD)
   isPinned: boolean;
+  cookCount: string;
 };
