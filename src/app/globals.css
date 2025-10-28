@@ -60,6 +60,11 @@ body {
   margin-bottom: 1.5em;
 }
 
+/* md checkpist */
+/* .prose input[type='checkbox'] {
+  margin-right: 0.5em;
+} */
+
 /* remove scrollbar utility class */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
