@@ -72,6 +72,7 @@ export default function RecipePage() {
     return (
       <div className="max-w-5xl mx-auto p-3 sm:p-6">
         <div className="flex items-end my-3">
+          {/* title row */}
           <SharedHeading text={recipe.title} styles="!my-0" />
           {recipe.isPinned && (
             <span className="inline-block mb-1 mx-2 sm:mx-4 px-1 text-xs text-center rounded-full border border-orange-300 bg-orange-200">
@@ -103,6 +104,7 @@ export default function RecipePage() {
           {/* cook counter */}
           <CookCounterButton recipe={recipe} />
         </div>
+        {/* ingredients */}
         {(recipe.ingredients || recipe.instructions) && (
           <div className={recipe.ingredients && recipe.instructions && `sm:grid grid-cols-2 gap-6 mt-0 sm:mt-2`}>
             {recipe.ingredients && (
@@ -119,16 +121,19 @@ export default function RecipePage() {
             )}
           </div>
         )}
+        {/* description */}
         {recipe.description && (
           <div className="description mt-6">
             <Md className="max-w-full">{recipe.description}</Md>
           </div>
         )}
+        {/* reference */}
         {recipe.reference && (
           <div className="reference mt-6 break-all">
             <SharedLink href={recipe.reference} text={recipe.reference} target="_blank" />
           </div>
         )}
+        {/* no content */}
         {(!recipe.ingredients && !recipe.instructions && !recipe.description && !recipe.reference) && (
           <SharedLink href={`${recipe.uid}/edit`} text="Add content →" styles="block mt-8" />
         )}
