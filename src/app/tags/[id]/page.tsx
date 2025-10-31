@@ -62,7 +62,7 @@ export default function TagPage() {
       <div className="mt-4">
         <p className="mb-2">{sortedRecipes.length > 0 ? `Recipes with this tag (${sortedRecipes.length}):` : 'No recipes with this tag'}</p>
         {sortedRecipes.length > 0 &&
-          <ul>
+          <ul className="grid gap-2 sm:gap-4 grid-cols-1 sm:grid-cols-2">
             {sortedRecipes.map((recipe: RecipeType) => (
               <RecipeCard key={recipe.id} recipe={recipe} tags={tags || []} />
             ))}
