@@ -44,7 +44,7 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
               ))}
             </div>
           }
-          <span className="mt-1 text-xs sm:text-sm text-nowrap text-slate-400">{recipe.date}</span>
+          <span className="mt-1 ml-auto text-xs sm:text-sm text-nowrap text-slate-400">{recipe.date}</span>
         </div>
         {matchedSourcesToDisplay && (
           <div className="mt-2 text-xs text-gray-400">
