@@ -58,7 +58,7 @@ export default function CookCounterButton({ recipe }: { recipe: RecipeType }) {
 
   return (
     <button
-      className="cursor-pointer hover:opacity-70 disabled:opacity-50 select-none"
+      className="ml-auto cursor-pointer hover:opacity-70 disabled:opacity-50 select-none"
       disabled={isUpdating}
       onTouchStart={startPressTimer}
       onTouchEnd={endPress}
