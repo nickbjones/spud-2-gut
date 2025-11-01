@@ -133,7 +133,7 @@ export default function EditRecipePage() {
   if (error) return <ErrorMessage text={error} />;
 
   return (
-    <div className="max-w-2xl mx-auto p-3 sm:p-6">
+    <div className="max-w-4xl mx-auto p-3 sm:px-5">
       <form onSubmit={handleSubmit}>
         <div className="inline-block flex items-center mb-4">
           <InputField id="title" name="title" value={formData.title} onChange={handleGeneralFieldChange} className="!mb-0" />
