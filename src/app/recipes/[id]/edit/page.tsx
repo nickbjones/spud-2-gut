@@ -163,7 +163,7 @@ export default function EditRecipePage() {
           label="Description"
           value={formData.description}
           onChange={handleGeneralFieldChange}
-          textAreaClassName="h-16"
+          textAreaClassName="h-32"
           wrapperClassName="mt-3 mb-6"
         />
         {loadingTags

@@ -138,7 +138,7 @@ export default function NewRecipePage() {
           label="Description"
           value={formData.description}
           onChange={handleGeneralFieldChange}
-          textAreaClassName="h-16"
+          textAreaClassName="h-32"
           wrapperClassName="mt-3 mb-6"
         />
         <TagButtons name="tags" tags={tags || []} selectedTags={formData.tags} onChange={handleTagChange} />
