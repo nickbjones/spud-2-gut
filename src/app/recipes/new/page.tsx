@@ -121,7 +121,7 @@ export default function NewRecipePage() {
             label="Ingredients"
             value={formData.ingredients}
             onChange={handleGeneralFieldChange}
-            className="h-48"
+            textAreaClassName="h-48"
           />
           <TextAreaField
             id="instructions"
@@ -129,10 +129,18 @@ export default function NewRecipePage() {
             label="Instructions"
             value={formData.instructions}
             onChange={handleGeneralFieldChange}
-            className="h-48"
+            textAreaClassName="h-48"
           />
         </div>
-        <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
+        <TextAreaField
+          id="description"
+          name="description"
+          label="Description"
+          value={formData.description}
+          onChange={handleGeneralFieldChange}
+          textAreaClassName="h-16"
+          wrapperClassName="mt-3 mb-6"
+        />
         <TagButtons name="tags" tags={tags || []} selectedTags={formData.tags} onChange={handleTagChange} />
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
         <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} required />

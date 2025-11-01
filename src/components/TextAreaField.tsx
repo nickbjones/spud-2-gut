@@ -7,7 +7,8 @@ type TextAreaField = {
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  className?: string;
+  textAreaClassName?: string;
+  wrapperClassName?: string;
 };
 
 export default function TextAreaField({
@@ -16,18 +17,19 @@ export default function TextAreaField({
   label,
   value,
   onChange,
-  className,
+  textAreaClassName,
+  wrapperClassName,
   ...rest
 }: TextAreaField) {
   return (
-    <div>
+    <div className={wrapperClassName}>
       <label htmlFor={id} className={labelStyles}>{label}</label>
       <textarea
         id={id}
         name={name}
         value={value}
         onChange={onChange}
-        className={inputStyles + (className ? ` ${className}` : '')}
+        className={inputStyles + (textAreaClassName ? ` ${textAreaClassName}` : '')}
         {...rest}
       />
     </div>
