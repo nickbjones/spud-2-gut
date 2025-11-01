@@ -67,6 +67,7 @@ export default function RecipesPage() {
             type="text"
             placeholder="Search recipes..."
             value={search}
+            name="search-recipes"
             onChange={(e) => setSearch(e.target.value)}
             className="w-full p-2 pr-10 border rounded shadow-lg"
           />
