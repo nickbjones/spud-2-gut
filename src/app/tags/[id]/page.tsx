@@ -56,7 +56,7 @@ export default function TagPage() {
     <div className="max-w-5xl mx-auto p-3 sm:p-6">
       <div className="flex justify-between items-center my-3">
         <h2 className={bigTagStyles} style={getTagColor(tag.color || '')}>{tag.title}</h2>
-        <SharedLink href={`${tag.uid}/edit`} text="[Edit]" styles="text-sm" />
+        <SharedLink href={`${tag.uid}/edit`} text="Edit tag" styles="text-sm text-right" />
       </div>
       {tag.description && <p>{tag.description}</p>}
       <div className="mt-4">
