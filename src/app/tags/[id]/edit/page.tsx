@@ -145,7 +145,7 @@ export default function EditTagPage() {
           label="Description"
           value={formData.description || ''}
           onChange={handleGeneralFieldChange}
-          className="h-32"
+          className="h-16"
         />
         <ColorPicker
           id="color"
