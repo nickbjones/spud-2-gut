@@ -52,6 +52,7 @@ export default function Md({ children, className = '' }: MdProps) {
   // init checked state from parsed tasks
   const initial = nodes
     .filter((n) => n.type === 'task')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .map((n) => (n as any).checked as boolean);
   const [checkedStates, setCheckedStates] = useState<boolean[]>(initial);
 
