@@ -1,21 +1,10 @@
 import React from 'react';
-// import Markdown from 'react-markdown';
-// import remarkGfm from 'remark-gfm';
 
 type MdProps = {
   children: string;
   className?: string;
 };
 
-// export default function Md({ children, className = '' }: MdProps) {
-//   return (
-//     <Markdown className={`prose ${className}`}>
-//       {children}
-//     </Markdown>
-//   );
-// }
-
-// https://chatgpt.com/s/t_690011222878819192a3cace81f2d5bf
 export default function Md({ children, className = '' }: MdProps) {
   return (
     <div className={`prose ${className}`}>
