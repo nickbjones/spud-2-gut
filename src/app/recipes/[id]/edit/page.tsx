@@ -133,20 +133,20 @@ export default function EditRecipePage() {
   if (error) return <ErrorMessage text={error} />;
 
   return (
-    <div className="max-w-2xl mx-auto p-3 sm:p-6">
+    <div className="max-w-4xl mx-auto p-3 sm:px-5">
       <form onSubmit={handleSubmit}>
         <div className="inline-block flex items-center mb-4">
           <InputField id="title" name="title" value={formData.title} onChange={handleGeneralFieldChange} className="!mb-0" />
           <SubmitButton disabled={isSaving} styles="!my-0 ml-10 text-sm" text={isSaving ? 'Saving...' : 'Save'} />
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <TextAreaField
             id="ingredients"
             name="ingredients"
             label="Ingredients"
             value={formData.ingredients}
             onChange={handleGeneralFieldChange}
-            className="h-80 sm:h-60"
+            textAreaClassName="h-80 sm:h-60"
           />
          <TextAreaField
             id="instructions"
@@ -154,10 +154,18 @@ export default function EditRecipePage() {
             label="Instructions"
             value={formData.instructions}
             onChange={handleGeneralFieldChange}
-            className="h-80 sm:h-60"
+            textAreaClassName="h-80 sm:h-60"
           />
         </div>
-        <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
+        <TextAreaField
+          id="description"
+          name="description"
+          label="Description"
+          value={formData.description}
+          onChange={handleGeneralFieldChange}
+          textAreaClassName="h-32"
+          wrapperClassName="mt-3 mb-6"
+        />
         {loadingTags
           ? <LoadingMessage />
           : <TagButtons name="tags" tags={tags || []} selectedTags={formData.tags} onChange={handleTagChange}

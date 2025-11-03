@@ -79,7 +79,7 @@ export default function RecipePage() {
               Pinned
             </span>
           )}
-          <SharedLink href={`${recipe.uid}/edit`} text="[Edit]" styles="text-sm ml-auto" />
+          <SharedLink href={`${recipe.uid}/edit`} text="Edit recipe" styles="text-sm ml-auto text-right" />
         </div>
         <div className="flex items-end justify-between">
           {/* tags list */}

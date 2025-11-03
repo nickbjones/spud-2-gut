@@ -6,7 +6,7 @@ const FooterLink = ({ href, label }: { href: string; label: string }) => (
 
 const Footer = () => (
   <footer className="mt-12 py-2 border-y border-slate-200 bg-slate-100">
-    <div className="max-w-5xl mx-auto p-4">
+    <div className="max-w-5xl mx-auto">
       <div className={footerBlockStyles}>
         <FooterLink href="/recipes" label="View all recipes" />
         <FooterLink href="/tags" label="View all tags" />

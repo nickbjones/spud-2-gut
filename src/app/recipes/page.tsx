@@ -62,11 +62,12 @@ export default function RecipesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-100 to-orange-300 bg-fixed">
       <div className="max-w-5xl mx-auto -mb-12 p-3 sm:p-6 pb-12 sm:pb-24">
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <input
             type="text"
             placeholder="Search recipes..."
             value={search}
+            name="search-recipes"
             onChange={(e) => setSearch(e.target.value)}
             className="w-full p-2 pr-10 border rounded shadow-lg"
           />

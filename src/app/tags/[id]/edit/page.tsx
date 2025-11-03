@@ -145,7 +145,7 @@ export default function EditTagPage() {
           label="Description"
           value={formData.description || ''}
           onChange={handleGeneralFieldChange}
-          className="h-32"
+          textAreaClassName="h-16"
         />
         <ColorPicker
           id="color"
@@ -164,7 +164,7 @@ export default function EditTagPage() {
                 <SharedLink
                   key={recipe.uid}
                   text={recipe.title}
-                  styles="mr-4 whitespace-nowrap"
+                  styles="block"
                   href={`/recipes/${recipe.uid}/edit?redirect=/tags/${formData.uid}/edit`} />
               ))}
             </p>

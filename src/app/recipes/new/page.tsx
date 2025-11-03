@@ -103,7 +103,7 @@ export default function NewRecipePage() {
   if (error) return <ErrorMessage text={error} />;
 
   return (
-    <div className="max-w-2xl mx-auto p-3 sm:p-6">
+    <div className="max-w-4xl mx-auto p-3 sm:px-5">
       <form onSubmit={handleSubmit}>
         <InputField
           id="title"
@@ -114,14 +114,14 @@ export default function NewRecipePage() {
           required
           autoFocus
         />
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <TextAreaField
             id="ingredients"
             name="ingredients"
             label="Ingredients"
             value={formData.ingredients}
             onChange={handleGeneralFieldChange}
-            className="h-48"
+            textAreaClassName="h-48"
           />
           <TextAreaField
             id="instructions"
@@ -129,10 +129,18 @@ export default function NewRecipePage() {
             label="Instructions"
             value={formData.instructions}
             onChange={handleGeneralFieldChange}
-            className="h-48"
+            textAreaClassName="h-48"
           />
         </div>
-        <TextAreaField id="description" name="description" label="Description" value={formData.description} onChange={handleGeneralFieldChange} className="h-16" />
+        <TextAreaField
+          id="description"
+          name="description"
+          label="Description"
+          value={formData.description}
+          onChange={handleGeneralFieldChange}
+          textAreaClassName="h-32"
+          wrapperClassName="mt-3 mb-6"
+        />
         <TagButtons name="tags" tags={tags || []} selectedTags={formData.tags} onChange={handleTagChange} />
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
         <InputField id="uid" name="uid" label="UID" value={formData.uid} onChange={handleUidChange} required />
