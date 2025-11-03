@@ -7,9 +7,28 @@ const notPinnedStyles = 'border-slate-300 bg-white hover:bg-slate-100';
 type PinCheckType = {
   isPinned?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isMiniPin?: boolean;
 };
 
-export default function PinCheck({ isPinned = false, onChange }: PinCheckType) {
+// 📌
+export default function PinCheck({ isPinned = false, onChange, isMiniPin = false }: PinCheckType) {
+  if(isMiniPin) {
+    return (
+      <label className="ml-auto cursor-pointer" title={isPinned ? 'Unpin' : 'Pin it!'}>
+        <input
+          type="checkbox"
+          name="isPinned"
+          checked={isPinned}
+          onChange={onChange}
+          className="hidden"
+        />
+        <span
+          className={`p-1 border ${isPinned ? 'border-orange-500 bg-orange-200' : 'border-gray-500 bg-gray-200'} rounded-full text-xs`}
+        >📌</span>
+      </label>
+    );
+  }
+
   const [hovered, setHovered] = useState(false);
 
   const labelText = isPinned
@@ -17,8 +36,8 @@ export default function PinCheck({ isPinned = false, onChange }: PinCheckType) {
       ? 'Unpin'
       : 'Pinned'
     : hovered
-    ? 'Pin it!'
-    : 'Not pinned';
+      ? 'Pin it!'
+      : 'Not pinned';
 
   return (
     <label

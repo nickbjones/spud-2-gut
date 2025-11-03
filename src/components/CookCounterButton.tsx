@@ -2,7 +2,7 @@ import { RecipeType } from '@/types/recipe';
 import { useRef, useState } from 'react';
 import CookCounter from './CookCounter';
 
-export default function CookCounterButton({ recipe }: { recipe: RecipeType }) {
+export default function CookCounterButton({ recipe, className }: { recipe: RecipeType, className?: string }) {
   const [count, setCount] = useState<string>(recipe.cookCount || '0');
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -58,7 +58,7 @@ export default function CookCounterButton({ recipe }: { recipe: RecipeType }) {
 
   return (
     <button
-      className="ml-auto cursor-pointer hover:opacity-70 disabled:opacity-50 select-none"
+      className={`cursor-pointer hover:opacity-70 disabled:opacity-50 select-none ${className}`}
       disabled={isUpdating}
       onTouchStart={startPressTimer}
       onTouchEnd={endPress}

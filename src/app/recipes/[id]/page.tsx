@@ -18,6 +18,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
 import CookCounterButton from '@/components/CookCounterButton';
+import PinCheck from '@/components/PinCheck';
 
 const findRecipe = (recipeList: RecipeType[], uid: string) => recipeList.find(r => r.uid === uid);
 const retryDelay = 2000;
@@ -59,6 +60,29 @@ export default function RecipePage() {
 
   usePageTitle(recipe?.title);
 
+  const handlePinChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (recipe) {
+      const updatedRecipe = { ...recipe, isPinned: e.target.checked };
+      setRecipe(updatedRecipe);
+      try {
+        const res = await fetch(`/api/recipes/${encodeURIComponent(recipe.id)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatedRecipe),
+        });
+  
+        if (!res.ok) {
+          throw new Error('Failed to update recipe');
+        };
+      } catch (err) {
+        // setSubmitError(`Error saving recipe. ${(err as Error).message}`);
+        console.error('Error updating recipe pin status:', err);
+      } finally {
+        // setIsSaving(false);
+      }
+    }
+  };
+
   const error = recipesError?.message || tagsError?.message || '';
   const isLoading = loadingRecipes || loadingTags || !checkedForRecipe;
 
@@ -74,11 +98,12 @@ export default function RecipePage() {
         <div className="flex items-end my-3">
           {/* title row */}
           <SharedHeading text={recipe.title} styles="!my-0" />
-          {recipe.isPinned && (
+          {/* temporarily removed */}
+          {/* {recipe.isPinned && (
             <span className="inline-block mb-1 mx-2 sm:mx-4 px-1 text-xs text-center rounded-full border border-orange-300 bg-orange-200">
               Pinned
             </span>
-          )}
+          )} */}
           <SharedLink href={`${recipe.uid}/edit`} text="Edit recipe" styles="text-sm ml-auto text-right" />
         </div>
         <div className="flex items-end justify-between">
@@ -101,8 +126,10 @@ export default function RecipePage() {
               })}
             </div>
           }
+          {/* pin */}
+          <PinCheck isPinned={recipe.isPinned} onChange={handlePinChange} isMiniPin={true} />
           {/* cook counter */}
-          <CookCounterButton recipe={recipe} />
+          <CookCounterButton recipe={recipe} className="ml-1" />
         </div>
         {/* ingredients */}
         {(recipe.ingredients || recipe.instructions) && (
