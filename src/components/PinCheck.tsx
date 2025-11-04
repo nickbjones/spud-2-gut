@@ -16,7 +16,7 @@ export default function PinCheck({ isPinned = false, onChange, isMiniPin = false
   if(isMiniPin) {
     const pinStyle = isPinned ? 'orange' : 'gray'
     return (
-      <label className="ml-auto mb-[3px] cursor-pointer" title={isPinned ? 'Unpin' : 'Pin it!'}>
+      <label className="ml-auto mb-[1px] cursor-pointer" title={isPinned ? 'Unpin' : 'Pin it!'}>
         <input
           type="checkbox"
           name="isPinned"
@@ -24,7 +24,7 @@ export default function PinCheck({ isPinned = false, onChange, isMiniPin = false
           onChange={onChange}
           className="hidden"
         />
-        <span className={`p-1 border-2 border-${pinStyle}-500 bg-${pinStyle}-200 rounded-full text-xs`}>📌</span>
+        <span className={`p-1 border-solid border-1 border-${pinStyle}-500 bg-${pinStyle}-200 rounded-full text-xs`}>📌</span>
       </label>
     );
   }
