@@ -10,9 +10,11 @@ type PinCheckType = {
   isMiniPin?: boolean;
 };
 
-// 📌
 export default function PinCheck({ isPinned = false, onChange, isMiniPin = false }: PinCheckType) {
+  const [hovered, setHovered] = useState(false);
+
   if(isMiniPin) {
+    const pinStyle = isPinned ? 'orange' : 'gray'
     return (
       <label className="ml-auto cursor-pointer" title={isPinned ? 'Unpin' : 'Pin it!'}>
         <input
@@ -22,14 +24,10 @@ export default function PinCheck({ isPinned = false, onChange, isMiniPin = false
           onChange={onChange}
           className="hidden"
         />
-        <span
-          className={`p-1 border ${isPinned ? 'border-orange-500 bg-orange-200' : 'border-gray-500 bg-gray-200'} rounded-full text-xs`}
-        >📌</span>
+        <span className={`p-1 border border-${pinStyle}-500 bg-${pinStyle}-200 rounded-full text-xs`}>📌</span>
       </label>
     );
   }
-
-  const [hovered, setHovered] = useState(false);
 
   const labelText = isPinned
     ? hovered
