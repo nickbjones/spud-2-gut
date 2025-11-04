@@ -24,7 +24,7 @@ export default function PinCheck({ isPinned = false, onChange, isMiniPin = false
           onChange={onChange}
           className="hidden"
         />
-        <span className={`p-1 border-solid border-1 border-${pinStyle}-500 bg-${pinStyle}-200 rounded-full text-xs`}>📌</span>
+        <span className={`p-1 border-solid border-1 border-${pinStyle}-600 bg-${pinStyle}-200 rounded-full text-xs`}>📌</span>
       </label>
     );
   }
