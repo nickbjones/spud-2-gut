@@ -17,7 +17,6 @@ import LoadingMessage from '@/components/LoadingMessage';
 import ErrorMessage from '@/components/ErrorMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
-import PinCheck from '@/components/PinCheck';
 import { initialRecipeValues } from '@/lib/initialValues';
 import Uid from '@/components/Uid';
 
@@ -54,13 +53,6 @@ export default function EditRecipePage() {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      isPinned: e.target.checked,
     }));
   };
 
@@ -170,7 +162,6 @@ export default function EditRecipePage() {
           ? <LoadingMessage />
           : <TagButtons name="tags" tags={tags || []} selectedTags={formData.tags} onChange={handleTagChange}
         />}
-        <PinCheck isPinned={formData.isPinned} onChange={handlePinChange} />
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
         <Uid uid={formData.uid} />
       </form>
