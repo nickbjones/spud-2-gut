@@ -15,8 +15,8 @@ export default function PinCheck({ isPinned = false, onChange, isMiniPin = false
 
   if(isMiniPin) {
     const colors = {
-      orange: 'border-orange-600 bg-orange-200',
-      gray: 'border-gray-600 bg-gray-200',
+      orange: 'border-orange-300 bg-orange-200',
+      gray: 'border-gray-300 bg-gray-200',
     }
     return (
       <label className="ml-auto mb-[1px] cursor-pointer" title={isPinned ? 'Unpin' : 'Pin it!'}>
