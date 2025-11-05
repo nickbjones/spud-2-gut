@@ -84,7 +84,7 @@ export default function RecipesPage() {
         {/* pinned recipes */}
         {pinnedRecipes.length > 0 && (
           <>
-            <h2 className="mb-3 mt-6 ml-1 text-md font-semibold text-gray-600">Pinned</h2>
+            <h2 className="mb-0 mt-6 ml-1 text-xl font-bold text-gray-400">Pinned</h2>
             <ul className={listStyles}>
               {pinnedRecipes.map((recipe) => (
                 <RecipeCard
@@ -99,7 +99,7 @@ export default function RecipesPage() {
           </>
         )}
         {(pinnedRecipes.length > 0) && (unpinnedRecipes.length > 0) && (
-          <hr className="my-6 mx-20 border-t border-gray-400" />
+          <h2 className="mb-0 mt-6 ml-1 text-xl font-bold text-gray-400">All Others</h2>
         )}
         {/* unpinned recipes */}
         {unpinnedRecipes.length > 0 && (
