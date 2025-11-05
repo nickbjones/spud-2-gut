@@ -15,6 +15,10 @@ import RecipeCard from '@/components/RecipeCard';
 
 const listStyles = 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 items-start';
 
+const SectionTitle = ({ text }: { text: string }) => (
+  <h2 className="mt-3 ml-1 text-xl font-bold text-white" style={{ textShadow: '0 1px 14px #666' }}>{text}</h2>
+);
+
 export default function RecipesPage() {
   usePageTitle('Recipes');
 
@@ -62,7 +66,7 @@ export default function RecipesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-100 to-orange-300 bg-fixed">
       <div className="max-w-5xl mx-auto -mb-12 p-3 sm:p-6 pb-12 sm:pb-24">
-        <div className="mb-4 relative">
+        <div className="mb-2 relative">
           <input
             type="text"
             placeholder="Search recipes..."
@@ -84,7 +88,7 @@ export default function RecipesPage() {
         {/* pinned recipes */}
         {pinnedRecipes.length > 0 && (
           <>
-            <h2 className="mb-0 mt-6 ml-1 text-xl font-bold text-gray-400">Pinned</h2>
+            <SectionTitle text="Pinned" />
             <ul className={listStyles}>
               {pinnedRecipes.map((recipe) => (
                 <RecipeCard
@@ -99,7 +103,7 @@ export default function RecipesPage() {
           </>
         )}
         {(pinnedRecipes.length > 0) && (unpinnedRecipes.length > 0) && (
-          <h2 className="mb-0 mt-6 ml-1 text-xl font-bold text-gray-400">All Others</h2>
+          <SectionTitle text="All Others" />
         )}
         {/* unpinned recipes */}
         {unpinnedRecipes.length > 0 && (
