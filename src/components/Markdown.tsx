@@ -68,7 +68,7 @@ export default function Md({ children, className = '' }: MdProps) {
           return (
             <div
               key={`task-${idx}`}
-              className="flex items-start gap-2 my-1"
+              className="flex items-start gap-2 my-2"
               // remove list bullet by not rendering inside <ul>/<li>
             >
               <input
