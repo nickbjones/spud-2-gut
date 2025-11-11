@@ -26,29 +26,31 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="py-4 px-3 sm:px-6 bg-gray-800 text-white flex">
-      {navItems.map(({ href, label }) => (
-        <Link
-          key={href} 
-          href={href} 
-          className={`${sharedNavButtonStyles} ${
-            rootPath === href ? 'bg-orange-500' : 'hover:bg-gray-700'
-          }`}
-        >
-          {label}
-        </Link>
-      ))}
-
-      <div className="flex ml-auto">
-        {rootPath === '/recipes' && (
+    <nav className="bg-gray-800 text-white">
+      <div className="max-w-4xl mx-auto py-4 px-3 sm:px-5 flex">
+        {navItems.map(({ href, label }) => (
           <Link
-            href="/recipes/new" 
-            className={`${sharedNavButtonStyles} ml-auto !mr-0 bg-green-600 hover:bg-green-500`}
+            key={href} 
+            href={href} 
+            className={`${sharedNavButtonStyles} ${
+              rootPath === href ? 'bg-orange-500' : 'hover:bg-gray-700'
+            }`}
           >
-            <span className="hidden sm:block">+ New Recipe</span>
-            <span className="block sm:hidden">+ New</span>
+            {label}
           </Link>
-        )}
+        ))}
+
+        <div className="flex ml-auto">
+          {rootPath === '/recipes' && (
+            <Link
+              href="/recipes/new" 
+              className={`${sharedNavButtonStyles} ml-auto !mr-0 bg-green-600 hover:bg-green-500`}
+            >
+              <span className="hidden sm:block">+ New Recipe</span>
+              <span className="block sm:hidden">+ New</span>
+            </Link>
+          )}
+        </div>
       </div>
     </nav>
   );
