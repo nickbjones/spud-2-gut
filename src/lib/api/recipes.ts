@@ -54,7 +54,7 @@ function formatDynamoDbRecipes(recipesRaw: RecipeType[]): RecipeType[] {
 // but in this case it's probably fine because we should only be fetching O(100) items.
 export async function getAllRecipes(): Promise<RecipeType[]> {
   const cached = cache.get(CACHE_KEY); // get cache
-  if (cached) return cached;
+  if (cached) return cached as RecipeType[];
   console.log('[api/recipes::getAllRecipes] REFETCHING recipes');
 
   const command = new ScanCommand({

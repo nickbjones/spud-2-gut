@@ -42,7 +42,7 @@ function formatDynamoDbTags(tagsRaw: TagType[]): TagType[] {
 // but in this case it's probably fine because we should only be fetching O(100) items.
 export async function getAllTags(): Promise<TagType[]> {
   const cached = cache.get(CACHE_KEY); // get cache
-  if (cached) return cached;
+  if (cached) return cached as TagType[];
   console.log('[api/tags::getAllTags] REFETCHING tags');
 
   const command = new ScanCommand({
