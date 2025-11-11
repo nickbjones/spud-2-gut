@@ -43,7 +43,7 @@ function formatDynamoDbTags(tagsRaw: TagType[]): TagType[] {
 export async function getAllTags(): Promise<TagType[]> {
   const cached = cache.get(CACHE_KEY); // get cache
   if (cached) return cached as TagType[];
-  console.log('[api/tags::getAllTags] REFETCHING tags');
+  console.log('[Cache] MISS — fetching tags from DB');
 
   const command = new ScanCommand({
     TableName: AWS_RECIPES_TABLENAME,

@@ -55,7 +55,7 @@ function formatDynamoDbRecipes(recipesRaw: RecipeType[]): RecipeType[] {
 export async function getAllRecipes(): Promise<RecipeType[]> {
   const cached = cache.get(CACHE_KEY); // get cache
   if (cached) return cached as RecipeType[];
-  console.log('[api/recipes::getAllRecipes] REFETCHING recipes');
+  console.log('[Cache] MISS — fetching recipes from DB');
 
   const command = new ScanCommand({
     TableName: AWS_RECIPES_TABLENAME,
