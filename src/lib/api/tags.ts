@@ -5,6 +5,9 @@ import { dynamoDbClient } from '@/lib/aws/dynamoClient';
 const docClient = DynamoDBDocumentClient.from(dynamoDbClient);
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
 
+import { cache } from '../cache';
+const CACHE_KEY = 'allTags';
+
 const emptyTag: TagType = {
   id: '',
   uid: '',
@@ -38,6 +41,10 @@ function formatDynamoDbTags(tagsRaw: TagType[]): TagType[] {
 // QueryCommand is more efficient for fetching items with a specific partition key,
 // but in this case it's probably fine because we should only be fetching O(100) items.
 export async function getAllTags(): Promise<TagType[]> {
+  const cached = cache.get(CACHE_KEY); // get cache
+  if (cached) return cached as TagType[];
+  console.log('[Cache] MISS — fetching tags from DB');
+
   const command = new ScanCommand({
     TableName: AWS_RECIPES_TABLENAME,
     FilterExpression: 'begins_with(#id, :prefix)',
@@ -54,14 +61,16 @@ export async function getAllTags(): Promise<TagType[]> {
     if (!Items || Items.length === 0) return [];
 
     const tagsRaw = Items as TagType[];
-    return formatDynamoDbTags(tagsRaw);
+    const formattedTagData = formatDynamoDbTags(tagsRaw);
+    cache.set(CACHE_KEY, formattedTagData); // set cache
+    return formattedTagData;
   } catch (error) {
     console.error('Error fetching tags:', error);
     return [];
   }
 }
 
-// Would be better to use GetCommand instead of calling getAllRecipes(), but I'm a dumbass and didn't set a PK on the DB.
+// Would be better to use GetCommand instead of calling getAllTags(), but I'm a dumbass and didn't set a PK on the DB.
 // It's not possible to add a PK, so the DB will have to be rebuilt, which is too much effort.
 // The better solution would be to remove uid from the db and query by PK, for example:
 // instead of: "/tags/savory" mapping to "TAG#014" and uid "savory"
@@ -85,25 +94,11 @@ export async function createTag(tag: TagType) {
     });
 
     await docClient.send(command);
+    cache.delete(CACHE_KEY); // invalidate cache
     return tag;
   } catch (error) {
     console.error('Error saving tag:', error);
     throw new Error('Failed to save tag');
-  }
-}
-
-export async function deleteTag(id: string) {
-  try {
-    const command = new DeleteCommand({
-      TableName: AWS_RECIPES_TABLENAME,
-      Key: { id },
-    });
-
-    await docClient.send(command);
-    return true;
-  } catch (error) {
-    console.error('Error deleting tag:', error);
-    throw new Error('Failed to delete tag');
   }
 }
 
@@ -115,9 +110,26 @@ export async function updateTag(tag: TagType) {
     });
 
     await docClient.send(command);
+    cache.delete(CACHE_KEY); // invalidate cache
     return tag;
   } catch (error) {
     console.error('Error updating tag:', error);
     throw new Error('Failed to update tag');
+  }
+}
+
+export async function deleteTag(id: string) {
+  try {
+    const command = new DeleteCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+      Key: { id },
+    });
+
+    await docClient.send(command);
+    cache.delete(CACHE_KEY); // invalidate cache
+    return true;
+  } catch (error) {
+    console.error('Error deleting tag:', error);
+    throw new Error('Failed to delete tag');
   }
 }
