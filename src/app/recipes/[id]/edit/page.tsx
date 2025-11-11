@@ -129,7 +129,6 @@ export default function EditRecipePage() {
       <form onSubmit={handleSubmit}>
         <div className="inline-block flex items-center mb-4">
           <InputField id="title" name="title" value={formData.title} onChange={handleGeneralFieldChange} className="!mb-0" />
-          <SubmitButton disabled={isSaving} styles="!my-0 ml-10 text-sm" text={isSaving ? 'Saving...' : 'Save'} />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <TextAreaField
@@ -164,6 +163,7 @@ export default function EditRecipePage() {
         />}
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
         <Uid uid={formData.uid} />
+        <SubmitButton disabled={isSaving} styles="fixed bottom-6 right-2 !py-1" text={isSaving ? 'Saving...' : 'Save'} />
       </form>
       <SharedLink text="Delete recipe" styles="text-red-800 hover:text-red-400" onClick={confirmDeletion} />
     </div>
