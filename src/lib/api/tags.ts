@@ -70,7 +70,7 @@ export async function getAllTags(): Promise<TagType[]> {
   }
 }
 
-// Would be better to use GetCommand instead of calling getAllRecipes(), but I'm a dumbass and didn't set a PK on the DB.
+// Would be better to use GetCommand instead of calling getAllTags(), but I'm a dumbass and didn't set a PK on the DB.
 // It's not possible to add a PK, so the DB will have to be rebuilt, which is too much effort.
 // The better solution would be to remove uid from the db and query by PK, for example:
 // instead of: "/tags/savory" mapping to "TAG#014" and uid "savory"
@@ -102,22 +102,6 @@ export async function createTag(tag: TagType) {
   }
 }
 
-export async function deleteTag(id: string) {
-  try {
-    const command = new DeleteCommand({
-      TableName: AWS_RECIPES_TABLENAME,
-      Key: { id },
-    });
-
-    await docClient.send(command);
-    cache.delete(CACHE_KEY); // invalidate cache
-    return true;
-  } catch (error) {
-    console.error('Error deleting tag:', error);
-    throw new Error('Failed to delete tag');
-  }
-}
-
 export async function updateTag(tag: TagType) {
   try {
     const command = new PutCommand({
@@ -131,5 +115,21 @@ export async function updateTag(tag: TagType) {
   } catch (error) {
     console.error('Error updating tag:', error);
     throw new Error('Failed to update tag');
+  }
+}
+
+export async function deleteTag(id: string) {
+  try {
+    const command = new DeleteCommand({
+      TableName: AWS_RECIPES_TABLENAME,
+      Key: { id },
+    });
+
+    await docClient.send(command);
+    cache.delete(CACHE_KEY); // invalidate cache
+    return true;
+  } catch (error) {
+    console.error('Error deleting tag:', error);
+    throw new Error('Failed to delete tag');
   }
 }
