@@ -3,24 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const sharedNavButtonStyles = `
-  flex
-  items-center
-  justify-center
-  mr-2
-  px-3
-  p-1
-  sm:py-2
-  rounded-md
-  transition
-`;
+const sharedNavButtonStyles = `flex items-center justify-center mr-2 px-3 p-1 sm:py-2 rounded-md transition`;
 
 export default function Navbar() {
   const pathname = usePathname();
   const rootPath = `/${pathname.split('/')[1]}`;
 
   const navItems = [
-    // { href: '/home', label: 'Home' },
     { href: '/recipes', label: 'Recipes' },
     { href: '/tags', label: 'Tags' },
   ];
