@@ -126,7 +126,7 @@ export default function EditRecipePage() {
 
   return (
     <div className="max-w-4xl mx-auto p-3 sm:px-5">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="relative">
         <div className="inline-block flex items-center mb-4">
           <InputField id="title" name="title" value={formData.title} onChange={handleGeneralFieldChange} className="!mb-0" />
         </div>
@@ -163,11 +163,11 @@ export default function EditRecipePage() {
         />}
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
         <Uid uid={formData.uid} />
-        <div className="sticky bottom-4 flex justify-end">
-          <SubmitButton disabled={isSaving} styles="translate-x-2 my-0 py-1" text={isSaving ? 'Saving...' : 'Save'} />
+        <SharedLink text="Delete recipe" styles="absolute mt-2 text-red-800 hover:text-red-400" onClick={confirmDeletion} />
+        <div className="sticky bottom-2 flex justify-end">
+          <SubmitButton disabled={isSaving} styles="translate-x-1 my-0" text={isSaving ? 'Saving...' : 'Save'} />
         </div>
       </form>
-      <SharedLink text="Delete recipe" styles="text-red-800 hover:text-red-400" onClick={confirmDeletion} />
     </div>
   );
 }
