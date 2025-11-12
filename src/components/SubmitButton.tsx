@@ -2,7 +2,10 @@ const SubmitButtonStyles = `
   my-4
   bg-blue-500
   text-white
-  p-2
+  px-2
+  py-1
+  sm:px-2
+  sm:py-2
   rounded
   hover:bg-blue-600
   disabled:bg-gray-400
