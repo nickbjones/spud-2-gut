@@ -27,7 +27,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-800 text-white">
-      <div className="max-w-4xl mx-auto py-4 px-3 sm:px-5 flex">
+      <div className="max-w-5xl mx-auto py-4 px-3 sm:px-6 flex">
         {navItems.map(({ href, label }) => (
           <Link
             key={href} 
