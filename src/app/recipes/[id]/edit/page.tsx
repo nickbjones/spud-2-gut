@@ -164,7 +164,7 @@ export default function EditRecipePage() {
         <InputField id="reference" name="reference" label="Reference" value={formData.reference} onChange={handleGeneralFieldChange} />
         <Uid uid={formData.uid} />
         <SharedLink text="Delete recipe" styles="absolute mt-2 text-red-800 hover:text-red-400" onClick={confirmDeletion} />
-        <div className="sticky -bottom-2 flex justify-end">
+        <div className="sticky -bottom-4 flex justify-end">
           <SubmitButton disabled={isSaving} styles="translate-x-1 lg:translate-x-20 -translate-y-4 my-0" text={isSaving ? 'Saving...' : 'Save'} />
         </div>
       </form>
