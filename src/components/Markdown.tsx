@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
 
 type MdProps = {
   children: string;
   className?: string;
 };
+
+const remarkPlugins = [remarkGfm, remarkBreaks];
 
 // Why does this need to be so complicated? 🤮
 // Because we want to support task lists with interactive checkboxes,
@@ -85,7 +88,7 @@ export default function Md({ children, className = '' }: MdProps) {
                 // render markdown inside the label so inline formatting works
                 style={{ flex: 1 }}
               >
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                <ReactMarkdown remarkPlugins={remarkPlugins}>
                   {node.label || '' /* allow empty label */}
                 </ReactMarkdown>
               </div>
@@ -96,7 +99,7 @@ export default function Md({ children, className = '' }: MdProps) {
         // markdown chunk
         return (
           <div key={`md-${idx}`} className="prose my-2">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <ReactMarkdown remarkPlugins={remarkPlugins}>
               {node.text || ''}
             </ReactMarkdown>
           </div>
