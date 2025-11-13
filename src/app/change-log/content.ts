@@ -1,5 +1,95 @@
 const content = [
   {
+    date: '2025-11-13',
+    logs: [
+      'clear application cache button',
+    ],
+  },
+  {
+    date: '2025-11-12',
+    logs: [
+      'edit recipe: save button styling',
+    ],
+  },
+  {
+    date: '2025-11-11',
+    logs: [
+      'nav bar has same container width as main content',
+      'edit recipe: making save button stick to bottom',
+      'formatting api/tags',
+      'server-side caching',
+    ],
+  },
+  {
+    date: '2025-11-10',
+    logs: [
+      'checkbox styling',
+    ],
+  },
+  {
+    date: '2025-11-05',
+    logs: [
+      'restyling pin button',
+      'recipes pg: pinned recipes restyling',
+      'edit recipe pg: remove pin check',
+      'pin button minor style changes',
+    ],
+  },
+  {
+    date: '2025-11-04',
+    logs: [
+      'PinCheck improvements',
+      'add pin to recipe page',
+    ],
+  },
+  {
+    date: '2025-11-03',
+    logs: [
+      'md checkboxes',
+    ],
+  },
+  {
+    date: '2025-11-01',
+    logs: [
+      'making new & edit recipe pgs wider',
+      'new/edit recipe pg: description textareas restyling',
+      'adding missing name attr on search input',
+      'bug: clear search X is misaligned',
+      'custom 404 page',
+      'footer (sp): x padd sb aligned w content above',
+      'bug: edit recipe pg: pin btn sb same width always',
+      'bug: clear search X is misaligned',
+      'bugfix: recipes not wrapping correctly',
+      'create/edit tag pg: shrink description textarea',
+      'create/edit recipe pg: stack textareas',
+      'change edit button text',
+      'tag pg: recipe list needs inner spacing',
+      'date: add ml-auto',
+      'cookCounter btn: add ml-auto',
+    ],
+  },
+  {
+    date: '2025-10-28',
+    logs: [
+      'checkpist typo',
+      'recipe pg: adding comments',
+    ],
+  },
+  {
+    date: '2025-10-25',
+    logs: [
+      'adding CookCounterButton component',
+      'cook counter - add to recipe list screen',
+      'cook counter BE & UI changes',
+    ],
+  },
+  {
+    date: '2025-10-24',
+    logs: [
+      'cook counter UI',
+    ],
+  },
+  {
     date: '2025-10-21',
     logs: [
       'adding shadow to search box',
