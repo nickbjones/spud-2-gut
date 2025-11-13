@@ -14,7 +14,7 @@ export const ClearCacheButton: React.FC = () => {
 
   return (
     <>
-      <p className="mt-8 mb-2 text-gray-400">Refresh the application's in-memory data.</p>
+      <p className="mt-8 mb-2 text-gray-400">Refresh application in-memory data.</p>
       <button
         onClick={handleClick}
         disabled={disabled}
