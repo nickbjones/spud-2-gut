@@ -27,11 +27,8 @@ export const miniTagStyles = `
   py-0
   px-1
   text-center
-  text-xs
-  sm:text-sm
-  text-white
-  bg-blue-400
-  rounded-md
+  text-[10px]
+  rounded-lg
 `;
 
 type TagProps = {
