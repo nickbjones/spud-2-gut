@@ -1,4 +1,4 @@
-import { ClearCacheButton } from "@/components/ClearCacheButton";
+import { ClearCacheButton } from '@/components/ClearCacheButton';
 
 export default function SettingsPage() {
   return (

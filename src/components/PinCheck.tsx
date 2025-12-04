@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const sharedPinStyles = 'block w-[100] mt-4 mb-8 px-3 py-1 text-sm text-center rounded-full border cursor-pointer';
 const isPinnedStyles = 'border-orange-400 bg-orange-200 hover:bg-orange-300';

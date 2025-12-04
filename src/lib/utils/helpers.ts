@@ -1,6 +1,6 @@
-import { RecipeType } from "@/types/recipe";
-import { TagType } from "@/types/tag";
-import { defaultTagColor, initialTagValues } from "../initialValues";
+import { RecipeType } from '@/types/recipe';
+import { TagType } from '@/types/tag';
+import { defaultTagColor, initialTagValues } from '../initialValues';
 
 export const uidRules = /[^a-z0-9 ]/g;
 

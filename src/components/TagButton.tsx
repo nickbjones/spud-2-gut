@@ -1,5 +1,5 @@
-import { getTextColorForBackground } from "@/lib/utils/helpers";
-import { sharedTagStyles, selectedTagStyles, unselectedTagStyles } from "./Tag";
+import { getTextColorForBackground } from '@/lib/utils/helpers';
+import { sharedTagStyles, selectedTagStyles, unselectedTagStyles } from './Tag';
 
 type TagButtonType = {
   uid: string;

@@ -2,7 +2,7 @@ import { generateUid, getNewId } from '@/lib/utils/helpers';
 import type { TagType } from '@/types/tag';
 import { useRef, useState } from 'react';
 import TagButton from './TagButton';
-import { sharedTagStyles, selectedTagStyles, unselectedTagStyles } from "./Tag";
+import { sharedTagStyles, selectedTagStyles, unselectedTagStyles } from './Tag';
 import SharedButton from './SharedButton';
 import { defaultTagColor } from '@/lib/initialValues';
 

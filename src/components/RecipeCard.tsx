@@ -1,9 +1,9 @@
-import { RecipeType } from "@/types/recipe";
-import { TagType } from "@/types/tag";
+import { RecipeType } from '@/types/recipe';
+import { TagType } from '@/types/tag';
 import { getTagByUid, getTagColor, getTitleByUid } from '@/lib/utils/helpers';
 import { miniTagStyles } from '@/components/Tag';
-import Link from "next/link";
-import CookCounter from "./CookCounter";
+import Link from 'next/link';
+import CookCounter from './CookCounter';
 
 type RecipeCardProps = {
   recipe: RecipeType;
