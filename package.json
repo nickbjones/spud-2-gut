@@ -12,6 +12,7 @@
     "@aws-sdk/client-dynamodb": "^3.749.0",
     "@aws-sdk/lib-dynamodb": "^3.749.0",
     "@tailwindcss/typography": "^0.5.16",
+    "@tanstack/react-query": "^5.90.12",
     "next": "15.1.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

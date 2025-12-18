@@ -1,27 +1,32 @@
 'use client';
 
-import useSWR from 'swr';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-const fetcher = (url: string) => fetch(url).then(res => {
+const fetcher = async <T>(url: string): Promise<T> => {
+  const res = await fetch(url);
   if (!res.ok) throw new Error('Failed to fetch');
   return res.json();
-});
+};
 
 export function useData<T>(url: string, fallbackData?: T) {
-  const {
-    data,
-    error,
-    isLoading,
-    mutate,
-  } = useSWR<T>(url, fetcher, {
-    fallbackData,
-    revalidateOnMount: fallbackData === undefined, // avoid refetch if fallback is used
+  const queryClient = useQueryClient();
+
+  const query = useQuery<T>({
+    queryKey: [url],
+    queryFn: () => fetcher<T>(url),
+    initialData: fallbackData,
+    enabled: fallbackData === undefined, // mirrors revalidateOnMount logic
   });
 
+  const mutate = (data?: T) => {
+    queryClient.setQueryData([url], data);
+    return queryClient.invalidateQueries({ queryKey: [url] });
+  };
+
   return {
-    data,
-    error,
-    isLoading,
+    data: query.data,
+    error: query.error,
+    isLoading: query.isLoading,
     mutate,
   };
 }
