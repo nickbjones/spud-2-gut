@@ -1,5 +1,5 @@
 /**
- * Recipes page
+ * Archive page
  */
 'use client';
 
@@ -19,8 +19,8 @@ const SectionTitle = ({ text }: { text: string }) => (
   <h2 className="mt-3 ml-1 text-xl font-bold text-white" style={{ textShadow: '0 1px 14px #666' }}>{text}</h2>
 );
 
-export default function RecipesPage() {
-  usePageTitle('Recipes');
+export default function ArchivePage() {
+  usePageTitle('Archive');
 
   // Fetch all recipes
   const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
@@ -59,10 +59,6 @@ export default function RecipesPage() {
   // sort recipes by date
   const sortedRecipes = [...filteredRecipes].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  // separate pinned and unpinned recipes
-  const pinnedRecipes = sortedRecipes.filter(r => r.isPinned);
-  const unpinnedRecipes = sortedRecipes.filter(r => !r.isPinned);
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-100 to-orange-300 bg-fixed">
       <div className="max-w-5xl mx-auto -mb-12 p-3 sm:p-6 pb-12 sm:pb-24">
@@ -70,7 +66,7 @@ export default function RecipesPage() {
           <div className="relative w-auto flex-grow">
             <input
               type="text"
-              placeholder="Search recipes..."
+              placeholder="Search archived recipes..."
               value={search}
               name="search-recipes"
               onChange={(e) => setSearch(e.target.value)}
@@ -87,30 +83,11 @@ export default function RecipesPage() {
           </div>
         </div>
         {sortedRecipes.length === 0 && <p>No recipes!</p>}
-        {/* pinned recipes */}
-        {pinnedRecipes.length > 0 && (
-          <>
-            <SectionTitle text="Pinned" />
-            <ul className={listStyles}>
-              {pinnedRecipes.map((recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  tags={tags ?? []}
-                  search={search}
-                  matchSources={recipe.matchSources}
-                />
-              ))}
-            </ul>
-          </>
-        )}
-        {(pinnedRecipes.length > 0) && (unpinnedRecipes.length > 0) && (
-          <SectionTitle text="All Others" />
-        )}
+        <SectionTitle text="Archived Recipes" />
         {/* unpinned recipes */}
-        {unpinnedRecipes.length > 0 && (
+        {sortedRecipes.length > 0 && (
           <ul className={listStyles}>
-            {unpinnedRecipes.map((recipe) => (
+            {sortedRecipes.map((recipe) => (
               <RecipeCard
                 key={recipe.id}
                 recipe={recipe}
