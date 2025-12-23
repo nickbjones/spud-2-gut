@@ -2,9 +2,9 @@
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-const fetcher = async <T>(url: string): Promise<T> => {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('Failed to fetch');
+const fetcher = async <T>(url: string, signal?: AbortSignal): Promise<T> => {
+  const res = await fetch(url, { signal });
+  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
   return res.json();
 };
 
@@ -13,11 +13,12 @@ export function useData<T>(url: string, fallbackData?: T) {
 
   const query = useQuery<T>({
     queryKey: [url],
-    queryFn: () => fetcher<T>(url),
+    queryFn: ({ signal }) => fetcher<T>(url, signal),
     initialData: fallbackData,
-    enabled: fallbackData === undefined, // mirrors revalidateOnMount logic
+    enabled: true, // always fetch new data; control revalidation elsewhere
   });
 
+  // Manually updates the cache for the given URL and triggers revalidation.
   const mutate = (data?: T) => {
     queryClient.setQueryData([url], data);
     return queryClient.invalidateQueries({ queryKey: [url] });
