@@ -14,6 +14,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const recipe = await req.json();
+    console.log('POST: Creating recipe with data:', recipe);
     const newRecipe = await createRecipe(recipe);
     return NextResponse.json(newRecipe, { status: 201 });
   } catch (error) {
