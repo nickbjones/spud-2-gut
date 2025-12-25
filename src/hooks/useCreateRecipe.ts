@@ -4,7 +4,7 @@ import { queryKeys } from '@/lib/queryKeys';
 import { RecipeType } from '@/types/recipe';
 
 export function useCreateRecipe() {
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: Partial<RecipeType>) =>
@@ -13,8 +13,18 @@ export function useCreateRecipe() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       }),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: queryKeys.recipes });
+
+    onSuccess: (recipe) => {
+      // Seed the cache for the detail page
+      queryClient.setQueryData(
+        queryKeys.recipe(recipe.id),
+        recipe,
+      );
+
+      // Refresh the list page eventually
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.recipes,
+      });
     },
   });
 }
