@@ -12,12 +12,12 @@ export function useCreateRecipe() {
 
   const mutation = useMutation({
     mutationFn: (data: Partial<RecipeType>) =>
-      fetchJSON('/api/recipes', {
+      fetchJSON<RecipeType>('/api/recipes', {
         method: 'POST',
         body: JSON.stringify(data),
       }),
 
-    // 1️⃣ optimistic insert
+    // optimistic insert
     onMutate: async (newRecipe) => {
       await queryClient.cancelQueries({
         queryKey: queryKeys.recipes,
@@ -33,7 +33,6 @@ export function useCreateRecipe() {
       const optimisticRecipe: RecipeType = {
         ...(newRecipe as RecipeType),
         uid: tempId,
-        createdAt: new Date().toISOString(),
       };
 
       queryClient.setQueryData(
@@ -45,7 +44,7 @@ export function useCreateRecipe() {
       return { previousRecipes, tempId };
     },
 
-    // 2️⃣ rollback
+    // rollback
     onError: (_err, _vars, context) => {
       if (context?.previousRecipes) {
         queryClient.setQueryData(
@@ -55,8 +54,8 @@ export function useCreateRecipe() {
       }
     },
 
-    // 3️⃣ replace temp with real
-    onSuccess: (createdRecipe, _vars, context) => {
+    // replace temp with real
+    onSuccess: (createdRecipe: RecipeType, _vars, context) => {
       queryClient.setQueryData(
         queryKeys.recipes,
         (old: RecipeType[] | undefined) =>
