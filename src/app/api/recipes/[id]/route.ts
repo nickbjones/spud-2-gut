@@ -24,6 +24,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const id = (await params).id;
 
+  console.log('DELETE request, id:', id);
+
   if (!id) {
     return NextResponse.json({ error: 'Recipe ID is required' }, { status: 400 });
   }
