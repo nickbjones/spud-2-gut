@@ -1,30 +1,82 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchJSON } from '@/lib/fetchJSON';
 import { queryKeys } from '@/lib/queryKeys';
 import { RecipeType } from '@/types/recipe';
 
 export function useCreateRecipe() {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: (data: Partial<RecipeType>) =>
-      fetchJSON<RecipeType>('/api/recipes', {
+      fetchJSON('/api/recipes', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       }),
 
-    onSuccess: (recipe) => {
-      // Seed the cache for the detail page
-      queryClient.setQueryData(
-        queryKeys.recipe(recipe.id),
-        recipe,
-      );
-
-      // Refresh the list page eventually
-      queryClient.invalidateQueries({
+    // 1️⃣ optimistic insert
+    onMutate: async (newRecipe) => {
+      await queryClient.cancelQueries({
         queryKey: queryKeys.recipes,
       });
+
+      const previousRecipes =
+        queryClient.getQueryData<RecipeType[]>(
+          queryKeys.recipes
+        );
+
+      const tempId = `temp-${crypto.randomUUID()}`;
+
+      const optimisticRecipe: RecipeType = {
+        ...(newRecipe as RecipeType),
+        uid: tempId,
+        createdAt: new Date().toISOString(),
+      };
+
+      queryClient.setQueryData(
+        queryKeys.recipes,
+        (old: RecipeType[] | undefined) =>
+          old ? [optimisticRecipe, ...old] : [optimisticRecipe]
+      );
+
+      return { previousRecipes, tempId };
+    },
+
+    // 2️⃣ rollback
+    onError: (_err, _vars, context) => {
+      if (context?.previousRecipes) {
+        queryClient.setQueryData(
+          queryKeys.recipes,
+          context.previousRecipes
+        );
+      }
+    },
+
+    // 3️⃣ replace temp with real
+    onSuccess: (createdRecipe, _vars, context) => {
+      queryClient.setQueryData(
+        queryKeys.recipes,
+        (old: RecipeType[] | undefined) =>
+          old?.map((r) =>
+            r.uid === context?.tempId ? createdRecipe : r
+          )
+      );
+
+      // seed single-recipe cache
+      queryClient.setQueryData(
+        queryKeys.recipe(createdRecipe.uid),
+        createdRecipe
+      );
+
+      router.push(`/recipes/${createdRecipe.uid}`);
     },
   });
+
+  return {
+    createRecipe: mutation.mutate,
+    isCreating: mutation.isPending,
+  };
 }

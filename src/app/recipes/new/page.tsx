@@ -2,14 +2,13 @@
  * New Recipe page
  */
 'use client';
+
 import { useCreateRecipe } from '@/hooks/useCreateRecipe';
-import { useRouter } from 'next/navigation';
 
 export default function NewRecipePage() {
-  const router = useRouter();
-  const createRecipe = useCreateRecipe();
+  const { createRecipe, isCreating } = useCreateRecipe();
 
-  const id = '0839';
+  const id = '0840';
   const mockData = {
     id: `RECIPE#${id}`,
     title: `new ${id}`,
@@ -24,13 +23,9 @@ export default function NewRecipePage() {
     cookCount: ''
   };
 
-  async function handleSubmit() {
-    try {
-      const recipe = await createRecipe.mutateAsync(mockData);
-      router.push(`/recipes/${recipe.uid}`); // cache is primed; navigate immediately
-    } catch {
-      alert('Failed to create recipe'); // handle error appropriately
-    }
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    createRecipe(mockData);
   }
 
   return (
@@ -40,9 +35,9 @@ export default function NewRecipePage() {
       <button
         className="bg-blue-500 text-white py-1 px-2 rounded"
         onClick={handleSubmit}
-        disabled={createRecipe.isPending}
+        disabled={isCreating}
       >
-        {createRecipe.isPending ? 'Creating…' : 'Create'}
+        {isCreating ? 'Creating…' : 'Create'}
       </button>
     </div>
   );
