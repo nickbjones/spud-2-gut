@@ -67,7 +67,9 @@ export function useEditRecipe(uid: string) {
 
   const deleteMutation = useMutation({
     mutationFn: async () => {
-      await fetchJSON(`/api/recipes/${recipe?.id}`, {
+      if (!recipe) throw new Error('No recipe to delete');
+      // this sucks because uid vs id nonsense
+      await fetchJSON(`/api/recipes/${encodeURIComponent(recipe.id)}`, {
         method: 'DELETE',
       });
     },
