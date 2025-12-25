@@ -1,17 +1,24 @@
 /**
- * Edit Recipe page
+ * Edit Recipe server page
  */
-'use client';
-import { useParams } from 'next/navigation';
-import { useRecipe } from '@/hooks/useRecipe';
-import { useUpdateRecipe } from '@/hooks/useUpdateRecipe';
+import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { fetchJSON } from '@/lib/fetchJSON';
+import { queryKeys } from '@/lib/queryKeys';
+import EditRecipeClient from './EditRecipeClient';
 
-export default function EditRecipePage() {
-  const { id } = useParams<{ id: string }>();
-  const { data } = useRecipe(id);
-  const update = useUpdateRecipe(id);
+export default async function EditRecipePage({ params }: { params: { id: string } }) {
+  const { id } = await params;
 
-  if (!data) return null;
+  const queryClient = new QueryClient();
 
-  return <button onClick={() => update.mutate({ title: 'Updated' })}>Save</button>;
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.recipe(id),
+    queryFn: () => fetchJSON(`/api/recipes/${id}`),
+  });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <EditRecipeClient uid={id} />
+    </HydrationBoundary>
+  );
 }

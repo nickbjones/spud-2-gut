@@ -7,16 +7,18 @@ import { queryKeys } from '@/lib/queryKeys';
 import RecipeClientPage from './RecipeClientPage';
 
 export default async function RecipePage({ params }: { params: { id: string } }) {
+  const { id } = await params;
+
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: queryKeys.recipe(params.id),
-    queryFn: () => fetchJSON(`/api/recipes/${params.id}`),
+    queryKey: queryKeys.recipe(id),
+    queryFn: () => fetchJSON(`/api/recipes/${id}`),
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <RecipeClientPage id={params.id} />
+      <RecipeClientPage id={id} />
     </HydrationBoundary>
   );
 }
