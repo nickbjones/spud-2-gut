@@ -9,7 +9,7 @@ export default function NewRecipePage() {
   const router = useRouter();
   const createRecipe = useCreateRecipe();
 
-  const id = '0838';
+  const id = '0839';
   const mockData = {
     id: `RECIPE#${id}`,
     title: `new ${id}`,

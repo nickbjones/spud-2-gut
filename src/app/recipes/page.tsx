@@ -1,19 +1,22 @@
 /**
- * Recipes page
+ * Recipes server page
  */
-'use client';
-import { useRecipes } from '@/hooks/useRecipes';
+import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { fetchJSON } from '@/lib/fetchJSON';
+import { queryKeys } from '@/lib/queryKeys';
+import RecipesClientPage from './RecipesClientPage';
 
-export default function RecipesPage() {
-  const { data, isLoading } = useRecipes();
-  if (isLoading) return null;
+export default async function RecipesPage() {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.recipes,
+    queryFn: () => fetchJSON('/api/recipes'),
+  });
+
   return (
-    <ul>
-      {data?.map(r => (
-        <li key={r.id}>
-          <a href={`/recipes/${r.uid}`}>{r.title}</a>
-        </li>
-      ))}
-    </ul>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <RecipesClientPage />
+    </HydrationBoundary>
   );
 }
