@@ -3,12 +3,11 @@
  */
 'use client';
 
-
 import { useState } from 'react';
-// import type { TagType } from '@/types/tag';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useRecipes } from '@/hooks/useRecipes';
 import { RecipeType } from '@/types/recipe';
+// import type { TagType } from '@/types/tag';
 // import LoadingMessage from '@/components/LoadingMessage';
 // import ErrorMessage from '@/components/ErrorMessage';
 import RecipeCard from '@/components/RecipeCard';
