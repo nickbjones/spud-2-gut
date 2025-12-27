@@ -3,41 +3,42 @@
  */
 'use client';
 
-import { API } from '@/lib/constants';
-import { useData } from '@/hooks/useData';
+// import { API } from '@/lib/constants';
+// import { useData } from '@/hooks/useData';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { RecipeType } from '@/types/recipe';
-import type { TagType} from '@/types/tag';
-import { getRecipesByTag } from '@/lib/utils/helpers';
-import LoadingMessage from '@/components/LoadingMessage';
-import ErrorMessage from '@/components/ErrorMessage';
-import Tag, { selectedTagStyles } from '@/components/Tag';
+// import { RecipeType } from '@/types/recipe';
+// import type { TagType} from '@/types/tag';
+// import { getRecipesByTag } from '@/lib/utils/helpers';
+// import LoadingMessage from '@/components/LoadingMessage';
+// import ErrorMessage from '@/components/ErrorMessage';
+// import Tag, { selectedTagStyles } from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
 
 export default function TagsPage() {
   usePageTitle('Tags');
 
   // Fetch all tags
-  const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
+  // const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
   
   // Fetch all recipes
-  const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
+  // const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
-  const error = recipesError?.message || tagsError?.message || '';
-  const loading = loadingRecipes || loadingTags;
+  // const error = recipesError?.message || tagsError?.message || '';
+  // const loading = loadingRecipes || loadingTags;
 
-  if (loading) return <LoadingMessage />;
-  if (error) return <ErrorMessage text={error} />;
-  if (!tags || tags.length < 1) return <ErrorMessage text="No tags!" />;
+  // if (loading) return <LoadingMessage />;
+  // if (error) return <ErrorMessage text={error} />;
+  // if (!tags || tags.length < 1) return <ErrorMessage text="No tags!" />;
 
-  const sortedTags = [...tags].sort((a, b) => a.uid.localeCompare(b.uid));
+  // const sortedTags = [...tags].sort((a, b) => a.uid.localeCompare(b.uid));
 
   return (
     <div className="max-w-5xl mx-auto p-3 sm:p-6">
       <SharedLink text="+ New Tag" href="/tags/new" />
       {/* tags list */}
       <div className="flex flex-wrap gap-2 mt-3">
-        {sortedTags.map((tag: TagType) => {
+        <p>Placeholder for the Tags page.</p>
+        {/* {sortedTags.map((tag: TagType) => {
           const recipesWithThisTag = getRecipesByTag(recipes || [], tag.uid).length;
           return (
             <Tag
@@ -50,7 +51,7 @@ export default function TagsPage() {
               <span className="block text-[8px]/[8px]">({recipesWithThisTag} recipes)</span>
             </Tag>
           );
-        })}
+        })} */}
       </div>
     </div>
   );

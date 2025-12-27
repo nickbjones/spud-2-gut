@@ -3,133 +3,134 @@
  */
 'use client';
 
-import { API } from '@/lib/constants';
-import { useData } from '@/hooks/useData';
-import { usePageTitle } from '@/hooks/usePageTitle';
-import { useState, useEffect } from 'react';
-import { useRouter, useParams, notFound } from 'next/navigation';
-import type { TagType } from '@/types/tag';
-import { RecipeType } from '@/types/recipe';
-import { initialTagValues } from '@/lib/initialValues';
-import { getRecipesByTag, doesTagTitleExist } from '@/lib/utils/helpers';
-import InputField from '@/components/InputField';
-import TextAreaField from '@/components/TextAreaField';
-import LoadingMessage from '@/components/LoadingMessage';
-import ErrorMessage from '@/components/ErrorMessage';
-import SubmitButton from '@/components/SubmitButton';
-import SharedLink from '@/components/SharedLink';
-import ColorPicker from '@/components/ColorPicker';
-import Uid from '@/components/Uid';
+// import { API } from '@/lib/constants';
+// import { useData } from '@/hooks/useData';
+// import { usePageTitle } from '@/hooks/usePageTitle';
+// import { useState, useEffect } from 'react';
+// import { useRouter, useParams, notFound } from 'next/navigation';
+// import type { TagType } from '@/types/tag';
+// import { RecipeType } from '@/types/recipe';
+// import { initialTagValues } from '@/lib/initialValues';
+// import { getRecipesByTag, doesTagTitleExist } from '@/lib/utils/helpers';
+// import InputField from '@/components/InputField';
+// import TextAreaField from '@/components/TextAreaField';
+// import LoadingMessage from '@/components/LoadingMessage';
+// import ErrorMessage from '@/components/ErrorMessage';
+// import SubmitButton from '@/components/SubmitButton';
+// import SharedLink from '@/components/SharedLink';
+// import ColorPicker from '@/components/ColorPicker';
+// import Uid from '@/components/Uid';
 
 export default function EditTagPage() {
-  const router = useRouter();
-  const { id: uid } = useParams() as { id: string };
+  // const router = useRouter();
+  // const { id: uid } = useParams() as { id: string };
 
   // Fetch tag
-  const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`);
+  // const { data: tag, error: tagError, isLoading: loadingTag } = useData<TagType>(`${API.tags}/${encodeURIComponent(uid)}`);
 
-  // Fetch all tags
-  const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
+  // // Fetch all tags
+  // const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
 
-  // Fetch all recipes
-  const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
+  // // Fetch all recipes
+  // const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
 
-  const [formData, setFormData] = useState<TagType>(initialTagValues);
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [submitError, setSubmitError] = useState<string>('');
-  const [isTitleExisting, setIsTitleExisting] = useState<boolean>(false);
-  const [recipesWithThisTag, setRecipesWithThisTag] = useState<RecipeType[]>([]);
+  // const [formData, setFormData] = useState<TagType>(initialTagValues);
+  // const [isSaving, setIsSaving] = useState<boolean>(false);
+  // const [submitError, setSubmitError] = useState<string>('');
+  // const [isTitleExisting, setIsTitleExisting] = useState<boolean>(false);
+  // const [recipesWithThisTag, setRecipesWithThisTag] = useState<RecipeType[]>([]);
 
-  usePageTitle(tag?.title);
+  // usePageTitle(tag?.title);
 
-  useEffect(() => {
-    if (tag) {
-      setFormData(tag);
-    }
-  }, [tag]);
+  // useEffect(() => {
+  //   if (tag) {
+  //     setFormData(tag);
+  //   }
+  // }, [tag]);
 
-  useEffect(() => {
-    setRecipesWithThisTag(getRecipesByTag(recipes || [], uid));
-  }, [recipes, uid]);
+  // useEffect(() => {
+  //   setRecipesWithThisTag(getRecipesByTag(recipes || [], uid));
+  // }, [recipes, uid]);
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value;
+  // const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newTitle = e.target.value;
 
-    if (!tag || newTitle !== tag?.title) {
-      setIsTitleExisting(doesTagTitleExist(tags, newTitle));
-    }
+  //   if (!tag || newTitle !== tag?.title) {
+  //     setIsTitleExisting(doesTagTitleExist(tags, newTitle));
+  //   }
 
-    setFormData((prev) => ({
-      ...prev,
-      title: newTitle,
-    }));
-  };
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     title: newTitle,
+  //   }));
+  // };
 
-  const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  // const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [e.target.name]: e.target.value,
+  //   }));
+  // };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSaving(true);
-    setSubmitError('');
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsSaving(true);
+  //   setSubmitError('');
 
-    try {
-      const res = await fetch(`/api/tags/${encodeURIComponent(formData.id)}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+  //   try {
+  //     const res = await fetch(`/api/tags/${encodeURIComponent(formData.id)}`, {
+  //       method: 'PUT',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(formData),
+  //     });
 
-      if (!res.ok) {
-        throw new Error('Failed to update tag');
-      };
+  //     if (!res.ok) {
+  //       throw new Error('Failed to update tag');
+  //     };
 
-      router.push(`/tags/${uid}`);
-    } catch (err) {
-      setSubmitError(`Error saving tag. ${(err as Error).message}`);
-    } finally {
-      setIsSaving(false);
-    }
-  }
+  //     router.push(`/tags/${uid}`);
+  //   } catch (err) {
+  //     setSubmitError(`Error saving tag. ${(err as Error).message}`);
+  //   } finally {
+  //     setIsSaving(false);
+  //   }
+  // }
 
-  const deleteTag = async () => {
-    if (!confirm(`Are you sure you want to delete the tag "${formData.title}"?`)) return;
+  // const deleteTag = async () => {
+  //   if (!confirm(`Are you sure you want to delete the tag "${formData.title}"?`)) return;
 
-    // check here if this tag exists in any recipes
-    // if so, show a warning and do not delete
-    // for now, just confirm deletion
-    try {
-      if (!formData) throw new Error('Tag not found');
+  //   // check here if this tag exists in any recipes
+  //   // if so, show a warning and do not delete
+  //   // for now, just confirm deletion
+  //   try {
+  //     if (!formData) throw new Error('Tag not found');
 
-      const res = await fetch(`/api/tags/${encodeURIComponent(formData.id)}`, {
-        method: 'DELETE',
-      });
+  //     const res = await fetch(`/api/tags/${encodeURIComponent(formData.id)}`, {
+  //       method: 'DELETE',
+  //     });
 
-      if (!res.ok) {
-        throw new Error('Failed to delete tag');
-      };
+  //     if (!res.ok) {
+  //       throw new Error('Failed to delete tag');
+  //     };
 
-      // Redirect to tags list after deletion
-      window.location.href = '/tags';
-    } catch (err) {
-      setSubmitError((err as Error).message);
-    }
-  };
+  //     // Redirect to tags list after deletion
+  //     window.location.href = '/tags';
+  //   } catch (err) {
+  //     setSubmitError((err as Error).message);
+  //   }
+  // };
 
-  const error = submitError || tagsError?.message || tagError?.message || recipesError?.message || '';
-  const loading = loadingTags || loadingTag || loadingRecipes;
+  // const error = submitError || tagsError?.message || tagError?.message || recipesError?.message || '';
+  // const loading = loadingTags || loadingTag || loadingRecipes;
 
-  if (loading) return <LoadingMessage />;
-  if (!formData) return notFound();
-  if (error) return <ErrorMessage text={error} />;
+  // if (loading) return <LoadingMessage />;
+  // if (!formData) return notFound();
+  // if (error) return <ErrorMessage text={error} />;
 
   return (
     <div className="max-w-2xl mx-auto p-3 sm:p-6">
-      <form onSubmit={handleSubmit}>
+      <h1>Placeholder for the Tag edit page.</h1>
+      {/* <form onSubmit={handleSubmit}>
         <div className="inline-block flex items-center mb-6">
           <InputField id="title" name="title" value={formData.title} onChange={handleTitleChange} className="!mb-0" />
           {isTitleExisting && (
@@ -171,7 +172,7 @@ export default function EditTagPage() {
             <p>Remove this tag from these recipes before deleting.</p>
           </div>
         : <SharedLink text="Delete tag" styles="text-red-800 hover:text-red-400" onClick={deleteTag} />
-      }
+      } */}
     </div>
   );
 }

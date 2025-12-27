@@ -20,7 +20,7 @@ export default function Navbar() {
         >
           <span>Recipes</span>
         </Link>
-        {/* {(rootPath === '/recipes' || rootPath === '/archive') && (
+        {(rootPath === '/recipes' || rootPath === '/archive') && (
           <Link
             href="/archive" 
             className={`${sharedNavButtonStyles} ${
@@ -29,15 +29,15 @@ export default function Navbar() {
           >
             <span>Archive</span>
           </Link>
-        )} */}
-        {/* <Link
+        )}
+        <Link
           href="/tags" 
           className={`${sharedNavButtonStyles} ${
             rootPath === '/tags' ? 'bg-orange-500' : 'hover:bg-gray-700'
           }`}
         >
           <span>Tags</span>
-        </Link> */}
+        </Link>
         <div className="flex ml-auto">
           {rootPath === '/recipes' && (
             <Link
