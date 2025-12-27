@@ -6,7 +6,7 @@ import { fetchJSON } from '@/lib/fetchJSON';
 import { queryKeys } from '@/lib/queryKeys';
 import EditRecipeClient from './EditRecipeClient';
 
-export default async function EditRecipePage({ params }: { params: { id: string } }) {
+export default async function EditRecipePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   const queryClient = new QueryClient();
