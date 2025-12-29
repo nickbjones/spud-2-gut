@@ -3,31 +3,24 @@
  */
 'use client';
 
-import { useState } from 'react';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import { useTags } from '@/hooks/useTags';
+import { useRecipes } from '@/hooks/useRecipes';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import type { TagType} from '@/types/tag';
-// import { getRecipesByTag } from '@/lib/utils/helpers';
+import { getRecipesByTag } from '@/lib/utils/helpers';
 import Tag, { selectedTagStyles } from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
+import LoadingMessage from '@/components/LoadingMessage';
 
 export default function TagsPage() {
   usePageTitle('Tags');
   
-  const { tags } = useTags();
+  const { tags, isLoading: loadingTags } = useTags();
+  const { data: recipes, isLoading: loadingRecipes } = useRecipes();
 
-  // Fetch all tags
-  // const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
-  
-  // Fetch all recipes
-  // const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
+  const isLoading = loadingRecipes || loadingTags;
 
-  // const error = recipesError?.message || tagsError?.message || '';
-  // const loading = loadingRecipes || loadingTags;
-
-  // if (loading) return <LoadingMessage />;
-  // if (error) return <ErrorMessage text={error} />;
-  // if (!tags || tags.length < 1) return <ErrorMessage text="No tags!" />;
+  if (isLoading) return <LoadingMessage />;
 
   const sortedTags = [...(tags || [])].sort((a, b) => a.uid.localeCompare(b.uid));
 
@@ -37,7 +30,7 @@ export default function TagsPage() {
       {/* tags list */}
       <div className="flex flex-wrap gap-2 mt-3">
         {sortedTags.map((tag: TagType) => {
-          // const recipesWithThisTag = getRecipesByTag(recipes || [], tag.uid).length;
+          const recipesWithThisTag = getRecipesByTag(recipes || [], tag.uid).length;
           return (
             <Tag
               key={tag.uid}
@@ -46,7 +39,7 @@ export default function TagsPage() {
               className={`${selectedTagStyles} border-none`}
             >
               <span className="block">{tag.title}</span>
-              {/* <span className="block text-[8px]/[8px]">({recipesWithThisTag} recipes)</span> */}
+              <span className="block text-[8px]/[8px]">({recipesWithThisTag} recipes)</span>
             </Tag>
           );
         })}
