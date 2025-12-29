@@ -37,9 +37,6 @@ export default function TagPage({ id }: { id: string }) {
   if (loadingTag) return <LoadingMessage />;
   if (!tag) return notFound();
 
-  console.log('tag:', tag);
-  console.log('recipes:', recipes);
-
   const recipesWithThisTag = getRecipesByTag(recipes || [], id);
 
   // sort recipes by date
