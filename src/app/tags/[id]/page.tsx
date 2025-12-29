@@ -11,10 +11,21 @@ export default async function TagPage({ params }: { params: Promise<{ id: string
 
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: queryKeys.recipe(id),
-    queryFn: () => fetchJSON(`/api/tags/${id}`),
-  });
+  // await queryClient.prefetchQuery({
+  //   queryKey: queryKeys.recipe(id),
+  //   queryFn: () => fetchJSON(`/api/tags/${id}`),
+  // });
+
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.tag(id),
+      queryFn: () => fetchJSON(`/api/tags/${id}`),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.recipes,
+      queryFn: () => fetchJSON('/api/recipes'),
+    }),
+  ]);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
