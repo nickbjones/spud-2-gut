@@ -2,14 +2,13 @@
  * Recipe client page
  */
 'use client';
+
 import { useRecipe } from '@/hooks/useRecipe';
 import { notFound } from 'next/navigation';
-
 import Md from '@/components/Markdown';
 import { usePageTitle } from '@/hooks/usePageTitle';
 // import Tag, { selectedTagStyles } from '@/components/Tag';
 import LoadingMessage from '@/components/LoadingMessage';
-// import ErrorMessage from '@/components/ErrorMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
 import CookCounterButton from '@/components/CookCounterButton';
