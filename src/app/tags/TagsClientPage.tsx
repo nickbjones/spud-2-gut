@@ -14,7 +14,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 
 export default function TagsPage() {
   usePageTitle('Tags');
-  
+
   const { tags, isLoading: loadingTags } = useTags();
   const { data: recipes, isLoading: loadingRecipes } = useRecipes();
 
