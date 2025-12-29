@@ -6,10 +6,7 @@
 import { useState } from 'react';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useRecipes } from '@/hooks/useRecipes';
-import { RecipeType } from '@/types/recipe';
-// import type { TagType } from '@/types/tag';
-// import LoadingMessage from '@/components/LoadingMessage';
-// import ErrorMessage from '@/components/ErrorMessage';
+import type { RecipeType } from '@/types/recipe';
 import RecipeCard from '@/components/RecipeCard';
 
 const listStyles = 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 items-start';
