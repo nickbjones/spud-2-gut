@@ -1,58 +1,23 @@
 /**
- * Tags page
+ * Tags server page
  */
-'use client';
 
-// import { API } from '@/lib/constants';
-// import { useData } from '@/hooks/useData';
-import { usePageTitle } from '@/hooks/usePageTitle';
-// import { RecipeType } from '@/types/recipe';
-// import type { TagType} from '@/types/tag';
-// import { getRecipesByTag } from '@/lib/utils/helpers';
-// import LoadingMessage from '@/components/LoadingMessage';
-// import ErrorMessage from '@/components/ErrorMessage';
-// import Tag, { selectedTagStyles } from '@/components/Tag';
-import SharedLink from '@/components/SharedLink';
+import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { fetchJSON } from '@/lib/fetchJSON';
+import { queryKeys } from '@/lib/queryKeys';
+import TagsClientPage from './TagsClientPage';
 
-export default function TagsPage() {
-  usePageTitle('Tags');
+export default async function TagsPage() {
+  const queryClient = new QueryClient();
 
-  // Fetch all tags
-  // const { data: tags, error: tagsError, isLoading: loadingTags } = useData<TagType[]>(API.tags);
-  
-  // Fetch all recipes
-  // const { data: recipes, error: recipesError, isLoading: loadingRecipes } = useData<RecipeType[]>(API.recipes);
-
-  // const error = recipesError?.message || tagsError?.message || '';
-  // const loading = loadingRecipes || loadingTags;
-
-  // if (loading) return <LoadingMessage />;
-  // if (error) return <ErrorMessage text={error} />;
-  // if (!tags || tags.length < 1) return <ErrorMessage text="No tags!" />;
-
-  // const sortedTags = [...tags].sort((a, b) => a.uid.localeCompare(b.uid));
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.tags,
+    queryFn: () => fetchJSON('/api/tags'),
+  });
 
   return (
-    <div className="max-w-5xl mx-auto p-3 sm:p-6">
-      <SharedLink text="+ New Tag" href="/tags/new" />
-      {/* tags list */}
-      <div className="flex flex-wrap gap-2 mt-3">
-        <p>Placeholder for the Tags page.</p>
-        {/* {sortedTags.map((tag: TagType) => {
-          const recipesWithThisTag = getRecipesByTag(recipes || [], tag.uid).length;
-          return (
-            <Tag
-              key={tag.uid}
-              uid={tag.uid}
-              color={tag.color}
-              className={`${selectedTagStyles} border-none`}
-            >
-              <span className="block">{tag.title}</span>
-              <span className="block text-[8px]/[8px]">({recipesWithThisTag} recipes)</span>
-            </Tag>
-          );
-        })} */}
-      </div>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <TagsClientPage />
+    </HydrationBoundary>
   );
 }
