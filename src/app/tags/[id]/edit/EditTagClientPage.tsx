@@ -8,6 +8,7 @@ import { useTags } from '@/hooks/useTags';
 import { useRecipes } from '@/hooks/useRecipes';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
+import { TagType } from '@/types/tag';
 import type { RecipeType } from '@/types/recipe';
 import { getRecipesByTag, doesTagTitleExist } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
@@ -17,12 +18,7 @@ import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 import ColorPicker from '@/components/ColorPicker';
 import Uid from '@/components/Uid';
-
-type FormState = {
-  title: string;
-  description: string | undefined;
-  color: string | undefined;
-};
+import { initialTagValues } from '@/lib/initialValues';
 
 export default function EditTagClientPage({ uid }: { uid: string }) {
   const { tag, isLoadingTag } = useTag(uid);
@@ -32,21 +28,12 @@ export default function EditTagClientPage({ uid }: { uid: string }) {
   usePageTitle(tag?.title);
 
   // form state
-  const [form, setForm] = useState<FormState>({
-    title: '',
-    description: '',
-    color: '',
-  });
+  const [form, setForm] = useState<TagType>(initialTagValues);
 
   // populate form when recipe loads
   useEffect(() => {
     if (!tag) return;
-
-    setForm({
-      title: tag.title,
-      description: tag.description,
-      color: tag.color,
-    });
+    setForm(tag);
   }, [tag]);
 
   const [isTitleExisting, setIsTitleExisting] = useState<boolean>(false);
