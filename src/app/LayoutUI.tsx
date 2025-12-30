@@ -1,10 +1,10 @@
-import Navbar from '@/components/Navbar';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export default function LayoutUI({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Navbar />
+      <Header />
       <main className="flex-grow">{children}</main>
       <Footer />
     </>

@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 
 const sharedNavButtonStyles = `flex items-center justify-center mr-2 px-3 p-1 sm:py-2 rounded-md transition`;
 
-export default function Navbar() {
+export default function Header() {
   const pathname = usePathname();
   const rootPath = `/${pathname.split('/')[1]}`;
 
