@@ -1,19 +1,21 @@
 /**
- * Edit Recipe page
+ * Edit Recipe client page
  */
 'use client';
 
+import { useTags } from '@/hooks/useTags';
+import { useRecipe } from '@/hooks/useRecipe';
+import { useRecipes } from '@/hooks/useRecipes';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
-// import TagButtons from '@/components/TagButtons';
-// import LoadingMessage from '@/components/LoadingMessage';
+import TagButtons from '@/components/TagButtons';
+import LoadingMessage from '@/components/LoadingMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 import Uid from '@/components/Uid';
-import { useEditRecipe } from '@/hooks/useEditRecipe';
 
 type FormState = {
   title: string;
@@ -28,22 +30,14 @@ function safeRedirect(path: string | null, fallback = '/') {
 }
 
 export default function EditRecipeClientPage({ uid }: { uid: string }) {
-  // this hook provides recipe data and mutation functions
-  const {
-    recipe,
-    updateRecipe,
-    deleteRecipe,
-    isSaving,
-    // isDeleting,
-  } = useEditRecipe(uid);
+  const { recipe, isLoadingRecipe } = useRecipe(uid);
+  const { updateRecipe, isUpdatingRecipe, deleteRecipe } = useRecipes();
+  const { tags, isLoadingTags } = useTags();
 
   // redirect if passed redirect param
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect');
-
-  // set page title
-  usePageTitle(recipe?.title);
 
   // form state
   const [form, setForm] = useState<FormState>({
@@ -69,6 +63,9 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
 
   if (!recipe) return null;
 
+  // set page title
+  usePageTitle(recipe.title);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     updateRecipe({ ...recipe, ...form });
@@ -80,12 +77,18 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
     }
   };
 
+  const handleTagChange = (tag: string) => {
+    // Handle tag change logic here
+    console.log('Tag changed:', tag);
+  };
+
   const handleDelete = () => {
     if (confirm('Delete this recipe?')) {
-      // deleteRecipe();
-      deleteRecipe({ id: recipe.id });
+      deleteRecipe(recipe.id);
     }
   };
+
+  if (isLoadingRecipe) return <LoadingMessage />;
 
   return (
     <div className="max-w-4xl mx-auto p-3 sm:px-5">
@@ -126,10 +129,10 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
           textAreaClassName="h-32"
           wrapperClassName="mt-3 mb-6"
         />
-        {/* {loadingTags
+        {isLoadingTags
           ? <LoadingMessage />
-          : <TagButtons name="tags" tags={tags || []} selectedTags={recipe.tags} onChange={handleTagChange}
-        />} */}
+          : <TagButtons name="tags" tags={tags || []} selectedTags={recipe.tags} onChange={handleTagChange} />
+        }
         <InputField
           id="reference"
           name="reference"
@@ -140,7 +143,11 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
         <Uid uid={recipe.uid} />
         <SharedLink text="Delete recipe" styles="mt-2 text-red-800 hover:text-red-400" onClick={handleDelete} />
         <div className="flex justify-end">
-          <SubmitButton disabled={isSaving} styles="translate-x-1 lg:translate-x-20 -translate-y-7 my-0" text={isSaving ? 'Saving...' : 'Save'} />
+          <SubmitButton
+            disabled={isUpdatingRecipe}
+            styles="translate-x-1 lg:translate-x-20 -translate-y-7 my-0"
+            text={isUpdatingRecipe ? 'Saving...' : 'Save'}
+          />
         </div>
       </form>
     </div>
