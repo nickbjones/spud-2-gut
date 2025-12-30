@@ -41,7 +41,7 @@ export function useTags() {
 
   const remove = useMutation({
     mutationFn: (id: string) =>
-      fetchJSON<TagType>(`/api/tags/${id}`, {
+      fetchJSON<TagType>(`/api/tags/${encodeURIComponent(id)}`, {
         method: 'DELETE'
       }),
     onSuccess: (_data, id) => {
