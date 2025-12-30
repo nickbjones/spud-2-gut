@@ -65,6 +65,9 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
 
   if (!recipe) return null;
 
+  const handleTagChange = (tag: string) => {
+    console.log('Tag changed:', tag);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,15 +80,9 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
     }
   };
 
-  const handleTagChange = (tag: string) => {
-    // Handle tag change logic here
-    console.log('Tag changed:', tag);
-  };
-
   const handleDelete = () => {
-    if (confirm('Delete this recipe?')) {
-      deleteRecipe(recipe.id);
-    }
+    if (!confirm('Delete this recipe?')) return;
+    deleteRecipe(recipe.id);
   };
 
   if (isLoadingRecipe) return <LoadingMessage />;
