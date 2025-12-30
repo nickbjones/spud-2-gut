@@ -25,16 +25,14 @@ const bigTagStyles = `
   rounded-xl
 `;
 
-export default function TagPage({ id }: { id: string }) {
-  const { data: tag, isLoading: loadingTag } = useTag(id);
-  // TODO: fix "data" vs "tags" naming inconsistency
-  const { tags, isLoading: loadingTags } = useTags();
-  const { data: recipes, isLoading: loadingRecipes } = useRecipes();
+export default function TagClientPage({ id }: { id: string }) {
+  const { tag, isLoadingTag } = useTag(id);
+  const { recipes, isLoadingRecipes } = useRecipes();
+  const { tags, isLoadingTags } = useTags();
 
   usePageTitle(tag?.title);
 
-  // TODO: add message
-  if (loadingTag) return <LoadingMessage />;
+  if (isLoadingTag) return <LoadingMessage />;
   if (!tag) return notFound();
 
   const recipesWithThisTag = getRecipesByTag(recipes || [], id);
@@ -49,8 +47,7 @@ export default function TagPage({ id }: { id: string }) {
         <SharedLink href={`${tag.uid}/edit`} text="Edit tag" styles="text-sm text-right" />
       </div>
       {tag.description && <p>{tag.description}</p>}
-      {/* TODO: add message */}
-      {loadingRecipes ? <LoadingMessage /> : (
+      {isLoadingRecipes ? <LoadingMessage /> : (
         <div className="mt-4">
           <p className="mb-2">{sortedRecipes.length > 0 ? `Recipes with this tag (${sortedRecipes.length}):` : 'No recipes with this tag'}</p>
           {sortedRecipes.length > 0 &&
