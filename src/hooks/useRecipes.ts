@@ -41,11 +41,14 @@ export function useRecipes() {
 
   const remove = useMutation({
     mutationFn: (id: string) =>
-      fetchJSON<RecipeType>(`/api/recipes/${id}`, {
+      fetchJSON<RecipeType>(`/api/recipes/${encodeURIComponent(id)}`, {
         method: 'DELETE'
       }),
-    onSuccess: (_data) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.recipes });
+    onSuccess: (_data, id) => {
+      // remove the deleted recipe from the cached list
+      queryClient.setQueryData<RecipeType[]>(queryKeys.recipes, (old) =>
+        old?.filter((r) => r.uid !== id) ?? []
+      );
       router.push('/recipes');
     },
   });

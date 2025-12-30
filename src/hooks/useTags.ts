@@ -44,8 +44,11 @@ export function useTags() {
       fetchJSON<TagType>(`/api/tags/${id}`, {
         method: 'DELETE'
       }),
-    onSuccess: (_data) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.tags });
+    onSuccess: (_data, id) => {
+      // remove the deleted tag from the cached list
+      queryClient.setQueryData<TagType[]>(queryKeys.tags, (old) =>
+        old?.filter((r) => r.uid !== id) ?? []
+      );
       router.push('/tags');
     },
   });
