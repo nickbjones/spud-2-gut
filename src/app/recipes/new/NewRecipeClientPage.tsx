@@ -4,7 +4,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// import { useRouter } from 'next/navigation';
 import { useTags } from '@/hooks/useTags';
 import { useRecipes } from '@/hooks/useRecipes';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -22,8 +21,6 @@ export default function NewRecipeClientPage() {
   const { tags, isLoadingTags } = useTags();
 
   usePageTitle('New Recipe');
-
-  // const router = useRouter();
 
   // form state
   const [form, setForm] = useState<RecipeType>(initialRecipeValues);
