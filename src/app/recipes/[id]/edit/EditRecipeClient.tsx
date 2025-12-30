@@ -9,6 +9,8 @@ import { useRecipes } from '@/hooks/useRecipes';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { RecipeType } from '@/types/recipe';
+import { initialRecipeValues } from '@/lib/initialValues';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import TagButtons from '@/components/TagButtons';
@@ -16,14 +18,6 @@ import LoadingMessage from '@/components/LoadingMessage';
 import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 import Uid from '@/components/Uid';
-
-type FormState = {
-  title: string;
-  ingredients: string;
-  instructions: string;
-  description: string;
-  reference: string;
-};
 
 function safeRedirect(path: string | null, fallback = '/') {
   return path?.startsWith('/') && !path.startsWith('//') ? path : fallback;
@@ -42,31 +36,23 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
   const redirect = searchParams.get('redirect');
 
   // form state
-  const [form, setForm] = useState<FormState>({
-    title: '',
-    ingredients: '',
-    instructions: '',
-    description: '',
-    reference: '',
-  });
+  const [form, setForm] = useState<RecipeType>(initialRecipeValues);
 
   // populate form when recipe loads
   useEffect(() => {
     if (!recipe) return;
-
-    setForm({
-      title: recipe.title,
-      ingredients: recipe.ingredients,
-      instructions: recipe.instructions,
-      description: recipe.description,
-      reference: recipe.reference,
-    });
+    setForm(recipe);
   }, [recipe]);
 
   if (!recipe) return null;
 
-  const handleTagChange = (tag: string) => {
-    console.log('Tag changed:', tag);
+  const handleTagChange = (tagUid: string) => {
+    setForm(f => ({
+      ...f,
+      tags: f.tags.includes(tagUid)
+        ? f.tags.filter((t) => t !== tagUid) // remove if already selected
+        : [...f.tags, tagUid], // add if not already selected
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -128,7 +114,7 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
         />
         {isLoadingTags
           ? <LoadingMessage />
-          : <TagButtons name="tags" tags={tags || []} selectedTags={recipe.tags} onChange={handleTagChange} />
+          : <TagButtons name="tags" tags={tags || []} selectedTags={form.tags} onChange={handleTagChange} />
         }
         <InputField
           id="reference"
