@@ -16,7 +16,6 @@ const Footer = () => (
       </div>
       <div className={footerBlockStyles}>
         <FooterLink href="/settings" label="Settings" />
-        <FooterLink href="/change-log" label="Change log" />
       </div>
       <p className="my-6 mx-5 text-xs text-gray-400">© {new Date().getFullYear()} Spud2Gut. All rights reserved.</p>
     </div>
