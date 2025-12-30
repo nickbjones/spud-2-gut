@@ -3,11 +3,14 @@
  */
 'use client';
 
+import { useTags } from '@/hooks/useTags';
 import { useRecipe } from '@/hooks/useRecipe';
+import { useRecipes } from '@/hooks/useRecipes';
 import { notFound } from 'next/navigation';
 import Md from '@/components/Markdown';
 import { usePageTitle } from '@/hooks/usePageTitle';
-// import Tag, { selectedTagStyles } from '@/components/Tag';
+import { getRecipesByTag, getTagByUid, getTitleByUid } from '@/lib/utils/helpers';
+import Tag, { selectedTagStyles } from '@/components/Tag';
 import LoadingMessage from '@/components/LoadingMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
@@ -15,55 +18,54 @@ import CookCounterButton from '@/components/CookCounterButton';
 // import PinCheck from '@/components/PinCheck';
 
 export default function RecipeClientPage({ id }: { id: string }) {
-  const { data: recipe, isLoading } = useRecipe(id);
+  const { recipe, isLoadingRecipe } = useRecipe(id);
+  const { recipes, isLoadingRecipes } = useRecipes();
+  const { tags, isLoadingTags } = useTags();
 
   usePageTitle(recipe?.title);
 
-  if (isLoading) return <LoadingMessage />;
+  if (isLoadingRecipe) return <LoadingMessage />;
   if (!recipe) return notFound();
+
+  const sortedTags = [...recipe.tags].sort((a, b) => a.localeCompare(b));
 
   return (
     <>
-      {/* <div className="max-w-5xl mx-auto py-4 px-3 sm:px-6">
-        <p>
-          <span className="text-xl font-bold mr-2">{data.title}</span>
-          <span className="text-blue-600 underline"><a href={`/recipes/${data.uid}/edit`}>Edit</a></span>
-        </p>
-        <pre className="mb-5">{JSON.stringify(data, null, 2)}</pre>
-      </div> */}
-      
       <div className="max-w-5xl mx-auto p-3 sm:p-6">
         <div className="flex items-end my-3">
           {/* title row */}
           <SharedHeading text={recipe.title} styles="!my-0" />
           {/* temporarily removed */}
-          {/* {recipe.isPinned && (
+          {recipe.isPinned && (
             <span className="inline-block mb-1 mx-2 sm:mx-4 px-1 text-xs text-center rounded-full border border-orange-300 bg-orange-200">
               Pinned
             </span>
-          )} */}
+          )}
           <SharedLink href={`${recipe.uid}/edit`} text="Edit recipe" styles="text-sm ml-auto text-right" />
         </div>
         <div className="flex items-end justify-between">
           {/* tags list */}
-          {/* {(sortedTags.length > 0) &&
-            <div className="flex flex-wrap mt-3 gap-1 sm:gap-2 whitespace-nowrap overflow-x-auto no-scrollbar">
-              {sortedTags.map((uid: string) => {
-                const count = getRecipesByTag(recipes ?? [], uid).length;
-                return (
-                  <Tag
-                    key={uid}
-                    uid={uid}
-                    className={`${selectedTagStyles} border-none`}
-                    color={getTagByUid(uid, tags || []).color}
-                  >
-                    <span className="block">{getTitleByUid(uid, tags ?? [])}</span>
-                    <span className="block text-[8px]/[8px]">({count} recipes)</span>
-                  </Tag>
-                );
-              })}
-            </div>
-          } */}
+          {(isLoadingTags || isLoadingRecipes)
+            ? <LoadingMessage />
+            : (sortedTags.length > 0)
+              ? <div className="flex flex-wrap mt-3 gap-1 sm:gap-2 whitespace-nowrap overflow-x-auto no-scrollbar">
+                {sortedTags.map((uid: string) => {
+                  const count = getRecipesByTag(recipes ?? [], uid).length;
+                  return (
+                    <Tag
+                      key={uid}
+                      uid={uid}
+                      className={`${selectedTagStyles} border-none`}
+                      color={getTagByUid(uid, tags || []).color}
+                    >
+                      <span className="block">{getTitleByUid(uid, tags ?? [])}</span>
+                      <span className="block text-[8px]/[8px]">({count} recipes)</span>
+                    </Tag>
+                  );
+                })}
+              </div>
+              : <p className="text-gray-400 italic">No tags</p>
+          }
           {/* pin */}
           {/* <PinCheck isPinned={recipe.isPinned} onChange={handlePinChange} isMiniPin={true} /> */}
           {/* cook counter */}
