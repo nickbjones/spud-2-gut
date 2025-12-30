@@ -4,10 +4,12 @@
 'use client';
 
 import { useState } from 'react';
-import { usePageTitle } from '@/hooks/usePageTitle';
+import { useTags } from '@/hooks/useTags';
 import { useRecipes } from '@/hooks/useRecipes';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import type { RecipeType } from '@/types/recipe';
 import RecipeCard from '@/components/RecipeCard';
+import LoadingMessage from '@/components/LoadingMessage';
 
 const listStyles = 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 items-start';
 
@@ -18,9 +20,14 @@ const SectionTitle = ({ text }: { text: string }) => (
 export default function RecipesClientPage() {
   usePageTitle('Recipes');
 
-  const { data: recipes } = useRecipes();
+  const { tags, isLoadingTags } = useTags();
+  const { recipes, isLoadingRecipes } = useRecipes();
 
   const [search, setSearch] = useState('');
+
+  const isLoading = isLoadingRecipes || isLoadingTags;
+
+  if (isLoading) return <LoadingMessage />;
 
   const lowerSearch = search.toLowerCase();
 
@@ -83,8 +90,8 @@ export default function RecipesClientPage() {
                 <RecipeCard
                   key={recipe.id}
                   recipe={recipe}
-                  // tags={tags ?? []}
-                  tags={[]}
+                  tags={tags ?? []}
+                  // tags={[]}
                   search={search}
                   matchSources={recipe.matchSources}
                 />
@@ -102,8 +109,8 @@ export default function RecipesClientPage() {
               <RecipeCard
                 key={recipe.id}
                 recipe={recipe}
-                // tags={tags ?? []}
-                tags={[]}
+                tags={tags ?? []}
+                // tags={[]}
                 search={search}
                 matchSources={recipe.matchSources}
               />
