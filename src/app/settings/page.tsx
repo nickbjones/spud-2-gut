@@ -1,3 +1,8 @@
+/**
+ * Archive page
+ */
+'use client';
+
 import { ClearCacheButton } from '@/components/ClearCacheButton';
 
 export default function SettingsPage() {
