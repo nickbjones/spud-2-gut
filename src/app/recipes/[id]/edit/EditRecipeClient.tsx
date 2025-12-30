@@ -34,6 +34,8 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
   const { updateRecipe, isUpdatingRecipe, deleteRecipe } = useRecipes();
   const { tags, isLoadingTags } = useTags();
 
+  usePageTitle(recipe?.title);
+
   // redirect if passed redirect param
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -63,8 +65,6 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
 
   if (!recipe) return null;
 
-  // set page title
-  usePageTitle(recipe.title);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

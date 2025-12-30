@@ -13,10 +13,10 @@ import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 
 export default function TagsClientPage() {
-  usePageTitle('Tags');
-
   const { tags, isLoadingTags } = useTags();
   const { recipes, isLoadingRecipes } = useRecipes();
+
+  usePageTitle('Tags');
 
   const isLoading = isLoadingRecipes || isLoadingTags;
 

@@ -18,10 +18,10 @@ const SectionTitle = ({ text }: { text: string }) => (
 );
 
 export default function RecipesClientPage() {
-  usePageTitle('Recipes');
-
   const { tags, isLoadingTags } = useTags();
   const { recipes, isLoadingRecipes } = useRecipes();
+  
+  usePageTitle('Recipes');
 
   const [search, setSearch] = useState('');
 
