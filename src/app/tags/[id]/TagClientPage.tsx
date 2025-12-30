@@ -28,7 +28,7 @@ const bigTagStyles = `
 export default function TagClientPage({ id }: { id: string }) {
   const { tag, isLoadingTag } = useTag(id);
   const { recipes, isLoadingRecipes } = useRecipes();
-  const { tags, isLoadingTags } = useTags();
+  const { tags } = useTags();
 
   usePageTitle(tag?.title);
 
