@@ -3,10 +3,11 @@
  */
 'use client';
 
+import { useTag } from '@/hooks/useTag';
+import { useTags } from '@/hooks/useTags';
+import { useRecipes } from '@/hooks/useRecipes';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
-// import { useRouter, useParams, notFound } from 'next/navigation';
-// import type { TagType } from '@/types/tag';
 import type { RecipeType } from '@/types/recipe';
 import { getRecipesByTag, doesTagTitleExist } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
@@ -16,9 +17,6 @@ import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 import ColorPicker from '@/components/ColorPicker';
 import Uid from '@/components/Uid';
-import { useTag } from '@/hooks/useTag';
-import { useTags } from '@/hooks/useTags';
-import { useRecipes } from '@/hooks/useRecipes';
 
 type FormState = {
   title: string;
@@ -26,20 +24,11 @@ type FormState = {
   color: string | undefined;
 };
 
-export default function EditTagPage({ uid }: { uid: string }) {
-  const { data: tag, error: tagError, isLoading: loadingTag } = useTag(uid);
-  const { tags, isLoading: loadingTags } = useTags();
-  const { data: recipes, isLoading: loadingRecipes } = useRecipes();
+export default function EditTagClientPage({ uid }: { uid: string }) {
+  const { tag, isLoadingTag } = useTag(uid);
+  const { tags, isLoadingTags, updateTag, isUpdatingTag, deleteTag } = useTags();
+  const { recipes, isLoadingRecipes } = useRecipes();
 
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  // const [submitError, setSubmitError] = useState<string>('');
-  const [isTitleExisting, setIsTitleExisting] = useState<boolean>(false);
-  const [recipesWithThisTag, setRecipesWithThisTag] = useState<RecipeType[]>([]);
-
-  // const router = useRouter();
-  // const { id: uid } = useParams() as { id: string };
-
-  // set page title
   usePageTitle(tag?.title);
 
   // form state
@@ -60,11 +49,15 @@ export default function EditTagPage({ uid }: { uid: string }) {
     });
   }, [tag]);
 
-  if (!tag) return null;
+  const [isTitleExisting, setIsTitleExisting] = useState<boolean>(false);
+  const [recipesWithThisTag, setRecipesWithThisTag] = useState<RecipeType[]>([]);
 
+  // get recipes that use this tag
   useEffect(() => {
     setRecipesWithThisTag(getRecipesByTag(recipes || [], uid));
   }, [recipes, uid]);
+
+  if (!tag) return null;
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
@@ -77,56 +70,15 @@ export default function EditTagPage({ uid }: { uid: string }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // setIsSaving(true);
-    // setSubmitError('');
-
-    // setIsSaving(false);
-    return false;
-    // try {
-    //   const res = await fetch(`/api/tags/${encodeURIComponent(formData.id)}`, {
-    //     method: 'PUT',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(formData),
-    //   });
-
-    //   if (!res.ok) {
-    //     throw new Error('Failed to update tag');
-    //   };
-
-    //   router.push(`/tags/${uid}`);
-    // } catch (err) {
-    //   setSubmitError(`Error saving tag. ${(err as Error).message}`);
-    // } finally {
-    //   setIsSaving(false);
-    // }
+    updateTag({ ...tag, ...form });
   }
 
-  const deleteTag = async () => {
+  const handleDelete = async () => {
     if (!confirm(`Are you sure you want to delete the tag "${form.title}"?`)) return;
-
-    return false;
-    // // check here if this tag exists in any recipes
-    // // if so, show a warning and do not delete
-    // // for now, just confirm deletion
-    // try {
-    //   if (!formData) throw new Error('Tag not found');
-
-    //   const res = await fetch(`/api/tags/${encodeURIComponent(formData.id)}`, {
-    //     method: 'DELETE',
-    //   });
-
-    //   if (!res.ok) {
-    //     throw new Error('Failed to delete tag');
-    //   };
-
-    //   // Redirect to tags list after deletion
-    //   window.location.href = '/tags';
-    // } catch (err) {
-    //   setSubmitError((err as Error).message);
-    // }
+    deleteTag(tag.id);
   };
 
-  const loading = loadingTags || loadingTag || loadingRecipes;
+  const loading = isLoadingTags || isLoadingTag || isLoadingRecipes;
   if (loading) return <LoadingMessage />;
 
   return (
@@ -145,7 +97,7 @@ export default function EditTagPage({ uid }: { uid: string }) {
               <p className="text-xs text-red-700">Title exists already!</p>
             </div>
           )}
-          <SubmitButton disabled={isSaving} styles="!my-0 ml-10 text-sm" text={isSaving ? 'Saving...' : 'Save'} />
+          <SubmitButton disabled={isUpdatingTag} styles="!my-0 ml-10 text-sm" text={isUpdatingTag ? 'Saving...' : 'Save'} />
         </div>
         <TextAreaField
           id="description"
@@ -178,7 +130,7 @@ export default function EditTagPage({ uid }: { uid: string }) {
             </p>
             <p>Remove this tag from these recipes before deleting.</p>
           </div>
-        : <SharedLink text="Delete tag" styles="text-red-800 hover:text-red-400" onClick={deleteTag} />
+        : <SharedLink text="Delete tag" styles="text-red-800 hover:text-red-400" onClick={handleDelete} />
       }
     </div>
   );
