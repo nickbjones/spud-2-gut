@@ -12,13 +12,13 @@ import Tag, { selectedTagStyles } from '@/components/Tag';
 import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 
-export default function TagsPage() {
+export default function TagsClientPage() {
   usePageTitle('Tags');
 
-  const { tags, isLoading: loadingTags } = useTags();
-  const { data: recipes, isLoading: loadingRecipes } = useRecipes();
+  const { tags, isLoadingTags } = useTags();
+  const { recipes, isLoadingRecipes } = useRecipes();
 
-  const isLoading = loadingRecipes || loadingTags;
+  const isLoading = isLoadingRecipes || isLoadingTags;
 
   if (isLoading) return <LoadingMessage />;
 
