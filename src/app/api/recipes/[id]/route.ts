@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getOneRecipe, deleteRecipe, updateRecipe } from '@/lib/api/recipes';
 
+// Get a recipe
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const id = (await params).id;
 
@@ -21,27 +22,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const id = (await params).id;
-
-  if (!id) {
-    return NextResponse.json({ error: 'Recipe ID is required' }, { status: 400 });
-  }
-
-  try {
-    // Assuming deleteRecipe is a function that deletes a recipe by ID
-    const result = await deleteRecipe(id);
-    if (!result) {
-      return NextResponse.json({ error: 'Recipe not found or could not be deleted' }, { status: 404 });
-    }
-
-    return NextResponse.json({ message: 'Recipe deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting recipe:', error);
-    return NextResponse.json({ error: 'Failed to delete recipe' }, { status: 500 });
-  }
-}
-
+// Update a recipe
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const id = (await params).id;
 
@@ -64,5 +45,27 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   } catch (error) {
     console.error('Error updating recipe:', error);
     return NextResponse.json({ error: 'Failed to update recipe' }, { status: 500 });
+  }
+}
+
+// Delete a recipe
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const id = (await params).id;
+
+  if (!id) {
+    return NextResponse.json({ error: 'Recipe ID is required' }, { status: 400 });
+  }
+
+  try {
+    // Assuming deleteRecipe is a function that deletes a recipe by ID
+    const result = await deleteRecipe(id);
+    if (!result) {
+      return NextResponse.json({ error: 'Recipe not found or could not be deleted' }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: 'Recipe deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting recipe:', error);
+    return NextResponse.json({ error: 'Failed to delete recipe' }, { status: 500 });
   }
 }

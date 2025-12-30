@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAllRecipes, createRecipe } from '@/lib/api/recipes';
 
+// Get all recipes
 export async function GET() {
   try {
     const recipes = await getAllRecipes();
@@ -11,6 +12,7 @@ export async function GET() {
   }
 }
 
+// Create a new recipe
 export async function POST(req: Request) {
   try {
     const recipe = await req.json();
