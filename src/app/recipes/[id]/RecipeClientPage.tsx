@@ -15,11 +15,11 @@ import LoadingMessage from '@/components/LoadingMessage';
 import SharedHeading from '@/components/SharedHeading';
 import SharedLink from '@/components/SharedLink';
 import CookCounterButton from '@/components/CookCounterButton';
-// import PinCheck from '@/components/PinCheck';
+import PinCheck from '@/components/PinCheck';
 
 export default function RecipeClientPage({ id }: { id: string }) {
   const { recipe, isLoadingRecipe } = useRecipe(id);
-  const { recipes, isLoadingRecipes } = useRecipes();
+  const { recipes, isLoadingRecipes, updateRecipe } = useRecipes();
   const { tags, isLoadingTags } = useTags();
 
   usePageTitle(recipe?.title);
@@ -28,6 +28,11 @@ export default function RecipeClientPage({ id }: { id: string }) {
   if (!recipe) return notFound();
 
   const sortedTags = [...recipe.tags].sort((a, b) => a.localeCompare(b));
+
+  const handlePinChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedRecipe = { ...recipe, isPinned: e.target.checked };
+    updateRecipe(updatedRecipe);
+  };
 
   return (
     <>
@@ -67,7 +72,7 @@ export default function RecipeClientPage({ id }: { id: string }) {
               : <p className="text-gray-400 italic">No tags</p>
           }
           {/* pin */}
-          {/* <PinCheck isPinned={recipe.isPinned} onChange={handlePinChange} isMiniPin={true} /> */}
+          <PinCheck isPinned={recipe.isPinned} onChange={handlePinChange} isMiniPin={true} />
           {/* cook counter */}
           <CookCounterButton recipe={recipe} className="ml-1" />
         </div>
