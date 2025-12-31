@@ -131,6 +131,7 @@ export async function updateRecipe(recipe: RecipeType) {
 }
 
 export async function deleteRecipe(id: string) {
+  console.log('lib/api: deleteRecipe, id:', id);
   try {
     const command = new DeleteCommand({
       TableName: AWS_RECIPES_TABLENAME,

@@ -1,4 +1,9 @@
-import Link from 'next/link'
+/**
+ * Not found page
+ */
+'use client';
+
+import Link from 'next/link';
 
 export default function NotFound() {
   return (

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAllTags, createTag } from '@/lib/api/tags';
 
+// Get all tags
 export async function GET() {
   try {
     const tags = await getAllTags();
@@ -11,6 +12,7 @@ export async function GET() {
   }
 }
 
+// Create a new tag
 export async function POST(req: Request) {
   try {
     const tag = await req.json();

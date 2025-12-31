@@ -7,16 +7,16 @@ export const defaultTagColor = '#ffffff';
 
 export const initialRecipeValues: RecipeType = {
   id: '',
-  title: '',
   uid: '',
-  tags: [],
-  date: dateToday,
+  title: '',
   description: '',
   ingredients: '',
   instructions: '',
   reference: '',
+  tags: [],
+  date: dateToday,
   isPinned: false,
-  cookCount: '',
+  cookCount: '0',
 };
 
 export const initialTagValues: TagType = {

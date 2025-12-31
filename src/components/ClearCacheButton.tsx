@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { cache } from '@/lib/cache';
+import { useRefreshAllCache } from '@/hooks/useRefreshCache';
 
 export const ClearCacheButton: React.FC = () => {
   const [disabled, setDisabled] = useState(false);
+  const refreshAll = useRefreshAllCache();
 
   const handleClick = () => {
-    cache.clear();
+    refreshAll();
     setDisabled(true);
     setTimeout(() => setDisabled(false), 3000); // Re-enable after 3s
   };
