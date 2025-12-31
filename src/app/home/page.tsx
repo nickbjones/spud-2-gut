@@ -1,3 +1,8 @@
+/**
+ * Home page
+ */
+'use client';
+
 import Link from 'next/link';
 
 const sharedCtaStyles = 'm-2 px-6 py-3 text-white font-semibold rounded-lg shadow-md transition-all';

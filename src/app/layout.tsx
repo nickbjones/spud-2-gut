@@ -1,8 +1,5 @@
 import { Providers } from './providers';
 import type { Metadata } from 'next';
-import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { fetchJSON } from '@/lib/fetchJSON';
-import { queryKeys } from '@/lib/queryKeys';
 import { Geist, Geist_Mono } from 'next/font/google';
 import LayoutUI from './LayoutUI';
 
@@ -16,28 +13,11 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const queryClient = new QueryClient();
-
-  await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: queryKeys.tags,
-      queryFn: () => fetchJSON('/api/tags'),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: queryKeys.recipes,
-      queryFn: () => fetchJSON('/api/recipes'),
-    }),
-  ]);
-
-  const dehydratedState = dehydrate(queryClient);
-
   return (
     <html lang="en">
       <body className={`flex flex-col min-h-screen antialiased ${geistSans.variable} ${geistMono.variable}`}>
         <Providers>
-          <HydrationBoundary state={dehydratedState}>
-            <LayoutUI>{children}</LayoutUI>
-          </HydrationBoundary>
+          <LayoutUI>{children}</LayoutUI>
         </Providers>
       </body>
     </html>

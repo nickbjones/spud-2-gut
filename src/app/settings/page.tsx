@@ -1,5 +1,5 @@
 /**
- * Archive page
+ * Settings page
  */
 'use client';
 
