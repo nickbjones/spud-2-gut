@@ -8,7 +8,7 @@ import { useRecipe } from '@/hooks/useRecipe';
 import { useRecipes } from '@/hooks/useRecipes';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+// import { useSearchParams } from 'next/navigation';
 import { RecipeType } from '@/types/recipe';
 import { initialRecipeValues } from '@/lib/initialValues';
 import InputField from '@/components/InputField';
@@ -32,7 +32,7 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
 
   // redirect if passed redirect param
   // const router = useRouter();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   // const redirect = searchParams.get('redirect');
 
   // form state
