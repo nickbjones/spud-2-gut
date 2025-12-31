@@ -8,7 +8,7 @@ import { useRecipe } from '@/hooks/useRecipe';
 import { useRecipes } from '@/hooks/useRecipes';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { RecipeType } from '@/types/recipe';
 import { initialRecipeValues } from '@/lib/initialValues';
 import InputField from '@/components/InputField';
@@ -19,9 +19,9 @@ import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 import Uid from '@/components/Uid';
 
-function safeRedirect(path: string | null, fallback = '/') {
-  return path?.startsWith('/') && !path.startsWith('//') ? path : fallback;
-}
+// function safeRedirect(path: string | null, fallback = '/') {
+//   return path?.startsWith('/') && !path.startsWith('//') ? path : fallback;
+// }
 
 export default function EditRecipeClientPage({ uid }: { uid: string }) {
   const { recipe, isLoadingRecipe } = useRecipe(uid);
@@ -31,9 +31,9 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
   usePageTitle(recipe?.title);
 
   // redirect if passed redirect param
-  const router = useRouter();
+  // const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect');
+  // const redirect = searchParams.get('redirect');
 
   // form state
   const [form, setForm] = useState<RecipeType>(initialRecipeValues);
@@ -61,13 +61,7 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    updateRecipe({ ...recipe, ...form });
-
-    if (redirect) {
-      router.push(safeRedirect(redirect, '/recipes'));
-    } else {
-      router.push(`/recipes/${uid}`);
-    }
+    updateRecipe(form);
   };
 
   const handleDelete = () => {

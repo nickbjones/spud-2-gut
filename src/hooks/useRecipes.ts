@@ -29,7 +29,7 @@ export function useRecipes() {
 
   const update = useMutation({
     mutationFn: (recipe: RecipeType) =>
-      fetchJSON<RecipeType>(`/api/recipes/${recipe.id}`, {
+      fetchJSON<RecipeType>(`/api/recipes/${recipe.uid}`, {
         method: 'PUT',
         body: JSON.stringify(recipe),
       }),
@@ -42,18 +42,18 @@ export function useRecipes() {
       const previousDetail =
         queryClient.getQueryData<RecipeType>([
           ...queryKeys.recipes,
-          incoming.id,
+          incoming.uid,
         ]);
 
       // Optimistically update list
       queryClient.setQueryData<RecipeType[]>(
         queryKeys.recipes,
-        (old) => old?.map((r) => r.id === incoming.id ? { ...r, ...incoming } : r),
+        (old) => old?.map((r) => r.uid === incoming.uid ? { ...r, ...incoming } : r),
       );
 
       // Optimistically update recipe detail
       queryClient.setQueryData<RecipeType>(
-        [...queryKeys.recipes, incoming.id],
+        [...queryKeys.recipes, incoming.uid],
         incoming,
       );
 
@@ -68,7 +68,7 @@ export function useRecipes() {
 
       if (ctx?.previousDetail) {
         queryClient.setQueryData(
-          [...queryKeys.recipes, incoming.id],
+          [...queryKeys.recipes, incoming.uid],
           ctx.previousDetail
         );
       }
@@ -78,12 +78,12 @@ export function useRecipes() {
       // Update recipe list
       queryClient.setQueryData<RecipeType[]>(
         queryKeys.recipes,
-        (old) => old?.map((r) => r.id === incoming.id ? incoming : r),
+        (old) => old?.map((r) => r.uid === incoming.uid ? incoming : r),
       );
 
       // Update recipe detail
       queryClient.setQueryData<RecipeType>(
-        [...queryKeys.recipes, incoming.id],
+        [...queryKeys.recipes, incoming.uid],
         incoming,
       );
 
@@ -93,14 +93,14 @@ export function useRecipes() {
   });
 
   const remove = useMutation({
-    mutationFn: (id: string) =>
-      fetchJSON<RecipeType>(`/api/recipes/${encodeURIComponent(id)}`, {
+    mutationFn: (uid: string) =>
+      fetchJSON<RecipeType>(`/api/recipes/${encodeURIComponent(uid)}`, {
         method: 'DELETE'
       }),
-    onSuccess: (_data, id) => {
+    onSuccess: (_data, uid) => {
       // remove the deleted recipe from the cached list
       queryClient.setQueryData<RecipeType[]>(queryKeys.recipes, (old) =>
-        old?.filter((r) => r.uid !== id) ?? []
+        old?.filter((r) => r.uid !== uid) ?? []
       );
       router.push('/recipes');
     },
