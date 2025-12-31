@@ -38,15 +38,11 @@ export default function EditRecipeClientPage({ uid }: { uid: string }) {
   // form state
   const [form, setForm] = useState<RecipeType>(initialRecipeValues);
 
-  const [initialized, setInitialized] = useState(false);
-
   // populate form when recipe loads
   useEffect(() => {
-    if (!recipe || initialized) return;
-
+    if (!recipe) return;
     setForm(recipe);
-    setInitialized(true);
-  }, [recipe, initialized]);
+  }, [recipe]);
 
   if (!recipe) return null;
 
