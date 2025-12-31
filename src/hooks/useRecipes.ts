@@ -33,9 +33,62 @@ export function useRecipes() {
         method: 'PUT',
         body: JSON.stringify(recipe),
       }),
-    onSuccess: (updatedRecipe: RecipeType) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.recipes });
-      router.push(`/recipes/${updatedRecipe.uid}`);
+
+    onMutate: async (incoming) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.recipes });
+
+      const previousList = queryClient.getQueryData<RecipeType[]>(queryKeys.recipes);
+
+      const previousDetail =
+        queryClient.getQueryData<RecipeType>([
+          ...queryKeys.recipes,
+          incoming.id,
+        ]);
+
+      // Optimistically update list
+      queryClient.setQueryData<RecipeType[]>(
+        queryKeys.recipes,
+        (old) => old?.map((r) => r.id === incoming.id ? { ...r, ...incoming } : r),
+      );
+
+      // Optimistically update recipe detail
+      queryClient.setQueryData<RecipeType>(
+        [...queryKeys.recipes, incoming.id],
+        incoming,
+      );
+
+      return { previousList, previousDetail };
+    },
+
+    onError: (_err, incoming, ctx) => {
+      // Roll back both
+      if (ctx?.previousList) {
+        queryClient.setQueryData(queryKeys.recipes, ctx.previousList);
+      }
+
+      if (ctx?.previousDetail) {
+        queryClient.setQueryData(
+          [...queryKeys.recipes, incoming.id],
+          ctx.previousDetail
+        );
+      }
+    },
+
+    onSuccess: (incoming) => {
+      // Update recipe list
+      queryClient.setQueryData<RecipeType[]>(
+        queryKeys.recipes,
+        (old) => old?.map((r) => r.id === incoming.id ? incoming : r),
+      );
+
+      // Update recipe detail
+      queryClient.setQueryData<RecipeType>(
+        [...queryKeys.recipes, incoming.id],
+        incoming,
+      );
+
+      // Navigate to updated recipe
+      router.push(`/recipes/${incoming.uid}`);
     },
   });
 
