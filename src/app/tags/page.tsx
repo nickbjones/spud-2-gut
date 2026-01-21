@@ -1,8 +1,49 @@
 /**
- * Tags server page
+ * Tags page
  */
-import TagsClientPage from './TagsClientPage';
+'use client';
 
-export default async function TagsPage() {
-  return <TagsClientPage />;
+import { useTags } from '@/hooks/useTags';
+import { useRecipes } from '@/hooks/useRecipes';
+import { usePageTitle } from '@/hooks/usePageTitle';
+import type { TagType} from '@/types/tag';
+import { getRecipesByTag } from '@/lib/utils/helpers';
+import Tag, { selectedTagStyles } from '@/components/Tag';
+import SharedLink from '@/components/SharedLink';
+import LoadingMessage from '@/components/LoadingMessage';
+
+export default function TagsPage() {
+  const { data: tags, isLoading: isLoadingTags } = useTags();
+  const { data: recipes, isLoading: isLoadingRecipes } = useRecipes();
+
+  usePageTitle('Tags');
+
+  const isLoading = isLoadingRecipes || isLoadingTags;
+
+  if (isLoading) return <LoadingMessage />;
+
+  const sortedTags = [...(tags || [])].sort((a, b) => a.uid.localeCompare(b.uid));
+
+  return (
+    <div className="max-w-5xl mx-auto p-3 sm:p-6">
+      <SharedLink text="+ New Tag" href="/tags/new" />
+      {/* tags list */}
+      <div className="flex flex-wrap gap-2 mt-3">
+        {sortedTags.map((tag: TagType) => {
+          const recipesWithThisTag = getRecipesByTag(recipes || [], tag.uid).length;
+          return (
+            <Tag
+              key={tag.uid}
+              uid={tag.uid}
+              color={tag.color}
+              className={`${selectedTagStyles} border-none`}
+            >
+              <span className="block">{tag.title}</span>
+              <span className="block text-[8px]/[8px]">({recipesWithThisTag} recipes)</span>
+            </Tag>
+          );
+        })}
+      </div>
+    </div>
+  );
 }

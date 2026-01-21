@@ -1,66 +1,165 @@
 'use client';
 
-import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { fetchJSON } from '@/lib/fetchJSON';
-import { queryKeys } from '@/lib/queryKeys';
-import { TagType } from '@/types/tag';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
+
+import { TagType, CreateTagInput, UpdateTagInput } from '@/types/tag';
+
+// Generic API helper
+async function api<T>(url: string, options?: RequestInit): Promise<T> {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options?.headers || {}),
+    },
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || 'API request failed');
+  }
+
+  return res.json() as Promise<T>;
+}
+
+// Query Keys
+const keys = {
+  all: ['tags'] as const,
+  one: (id: string) => ['tags', id] as const,
+};
 
 export function useTags() {
+  return useQuery<TagType[]>({
+    queryKey: keys.all,
+    queryFn: () => api<TagType[]>('/api/tags'),
+    staleTime: 1000 * 5,
+  });
+}
+
+export function useTag(id?: string) {
+  return useQuery<TagType>({
+    queryKey: id ? keys.one(id) : ['tags', 'empty'],
+    queryFn: () => api<TagType>(`/api/tags/${id}`),
+    enabled: !!id,
+    staleTime: 1000 * 5,
+  });
+}
+
+export function useCreateTag() {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
-  const tagsQuery = useQuery({
-    queryKey: queryKeys.tags,
-    queryFn: () => fetchJSON<TagType[]>('/api/tags'),
-  });
-
-  const create = useMutation({
-    mutationFn: (tag: TagType) =>
-      fetchJSON<TagType>('/api/tags', {
+  return useMutation({
+    mutationFn: (input: CreateTagInput) =>
+      api<TagType>('/api/tags', {
         method: 'POST',
-        body: JSON.stringify(tag),
+        body: JSON.stringify(input),
       }),
-    onSuccess: (createdTag: TagType) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.tags });
-      router.push(`/tags/${createdTag.uid}`);
-    },
-  });
 
-  const update = useMutation({
-    mutationFn: (tag: TagType) =>
-      fetchJSON<TagType>(`/api/tags/${tag.id}`, {
-        method: 'PUT',
-        body: JSON.stringify(tag),
-      }),
-    onSuccess: (updatedTag: TagType) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.tags });
-      router.push(`/tags/${updatedTag.uid}`);
-    },
-  });
-
-  const remove = useMutation({
-    mutationFn: (id: string) =>
-      fetchJSON<TagType>(`/api/tags/${encodeURIComponent(id)}`, {
-        method: 'DELETE'
-      }),
-    onSuccess: (_data, id) => {
-      // remove the deleted tag from the cached list
-      queryClient.setQueryData<TagType[]>(queryKeys.tags, (old) =>
-        old?.filter((r) => r.uid !== id) ?? []
+    onSuccess: (created) => {
+      // Update list cache immediately
+      queryClient.setQueryData<TagType[]>(keys.all, (old) =>
+        old ? [...old, created] : [created]
       );
-      router.push('/tags');
+
+      // Revalidate list
+      queryClient.invalidateQueries({ queryKey: keys.all });
     },
   });
+}
 
-  return {
-    tags: tagsQuery.data ?? [],
-    createTag: create.mutateAsync,
-    updateTag: update.mutateAsync,
-    deleteTag: remove.mutateAsync,
-    isLoadingTags: tagsQuery.isLoading,
-    isCreatingTag: create.isPending,
-    isUpdatingTag: update.isPending,
-    isDeletingTag: remove.isPending,
-  };
+export function useUpdateTag(id: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (updates: UpdateTagInput) =>
+      api<TagType>(`/api/tags/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(updates),
+      }),
+
+    onMutate: async (updates) => {
+      await queryClient.cancelQueries({ queryKey: keys.all });
+      await queryClient.cancelQueries({ queryKey: keys.one(id) });
+
+      const prevList = queryClient.getQueryData<TagType[]>(keys.all);
+      const prevOne = queryClient.getQueryData<TagType>(keys.one(id));
+
+      // Optimistically update list
+      if (prevList) {
+        queryClient.setQueryData<TagType[]>(keys.all, (old) =>
+          old
+            ? old.map((m) => (m.id === id ? { ...m, ...updates } : m))
+            : old
+        );
+      }
+
+      // Optimistically update single
+      if (prevOne) {
+        queryClient.setQueryData<TagType>(keys.one(id), {
+          ...prevOne,
+          ...updates,
+        });
+      }
+
+      return { prevList, prevOne };
+    },
+
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.prevList) {
+        queryClient.setQueryData(keys.all, ctx.prevList);
+      }
+      if (ctx?.prevOne) {
+        queryClient.setQueryData(keys.one(id), ctx.prevOne);
+      }
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: keys.all });
+      queryClient.invalidateQueries({ queryKey: keys.one(id) });
+    },
+  });
+}
+
+export function useDeleteTag(id: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () =>
+      api(`/api/tags/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      }),
+
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: keys.all });
+
+      const previousList = queryClient.getQueryData<TagType[]>(keys.all);
+
+      // Optimistic remove
+      if (previousList) {
+        queryClient.setQueryData<TagType[]>(keys.all, (old) =>
+          old ? old.filter((m) => m.id !== id) : old
+        );
+      }
+
+      return { previousList };
+    },
+
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.previousList) {
+        queryClient.setQueryData(keys.all, ctx.previousList);
+      }
+    },
+
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: keys.one(id) });
+    },
+
+    onSettled: () => {
+      queryClient.refetchQueries({ queryKey: keys.all });
+    },
+  });
 }

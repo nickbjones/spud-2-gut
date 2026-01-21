@@ -6,12 +6,15 @@ const docClient = DynamoDBDocumentClient.from(dynamoDbClient);
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
 
 import { cache } from '../cache';
+import { getNewId } from '../utils/helpers';
 const CACHE_KEY = 'allTags';
 
 const emptyTag: TagType = {
   id: '',
   uid: '',
   title: '',
+  description: '',
+  color: '',
   date: '',
 };
 
@@ -20,7 +23,7 @@ function formatDynamoDbTag(tagRaw: TagType): TagType {
     return {
       id: tagRaw.id || '',
       uid: tagRaw.uid || '',
-      title: tagRaw.title || '', // || tagRaw.name, // -- FIX
+      title: tagRaw.title || '',
       description: tagRaw.description || '',
       date: tagRaw.date || '',
       color: tagRaw.color || '',
@@ -88,9 +91,12 @@ export async function getOneTag(uid: string): Promise<TagType | undefined> {
 
 export async function createTag(tag: TagType) {
   try {
+    const tags = await getAllTags();
+    const newId = getNewId('TAG', tags || []);
+
     const command = new PutCommand({
       TableName: AWS_RECIPES_TABLENAME,
-      Item: tag,
+      Item: { ...tag, id: newId },
     });
 
     await docClient.send(command);

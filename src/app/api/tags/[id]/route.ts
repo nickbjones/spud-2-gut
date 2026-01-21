@@ -2,16 +2,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getOneTag, deleteTag, updateTag } from '@/lib/api/tags';
 
 // Get a tag
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const id = (await params).id;
-  console.log(`GET /api/tags/[ ${id} ]`);
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id: uid } = await context.params;
+  console.log(`GET /api/tags/[ ${uid} ]`);
 
-  if (!id) {
-    return NextResponse.json({ error: 'Tag ID is required' }, { status: 400 });
+  if (!uid) {
+    return NextResponse.json({ error: 'Tag uid is required' }, { status: 400 });
   }
 
   try {
-    const tag = await getOneTag(id);
+    const tag = await getOneTag(uid);
     if (!tag) {
       return NextResponse.json({ error: 'Tag not found' }, { status: 404 });
     }
@@ -24,12 +27,15 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 }
 
 // Update a tag
-export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const id = (await params).id;
-  console.log(`PUT /api/tags/[ ${id} ]`);
+export async function PUT(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id: uid } = await context.params;
+  console.log(`PUT /api/tags/[ ${uid} ]`);
 
-  if (!id) {
-    return NextResponse.json({ error: 'Tag ID is required' }, { status: 400 });
+  if (!uid) {
+    return NextResponse.json({ error: 'Tag uid is required' }, { status: 400 });
   }
 
   try {
@@ -52,17 +58,20 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 }
 
 // Delete a tag
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const id = (await params).id;
-  console.log(`DELETE /api/tags/[ ${id} ]`);
+export async function DELETE(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id: uid } = await context.params;
+  console.log(`DELETE /api/tags/[ ${uid} ]`);
 
-  if (!id) {
-    return NextResponse.json({ error: 'Tag ID is required' }, { status: 400 });
+  if (!uid) {
+    return NextResponse.json({ error: 'Tag uid is required' }, { status: 400 });
   }
 
   try {
     // Assuming deleteTag is a function that deletes a tag by ID
-    const result = await deleteTag(id);
+    const result = await deleteTag(uid);
     if (!result) {
       return NextResponse.json({ error: 'Tag not found or could not be deleted' }, { status: 404 });
     }

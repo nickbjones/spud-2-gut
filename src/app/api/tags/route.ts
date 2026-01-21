@@ -4,6 +4,7 @@ import { getAllTags, createTag } from '@/lib/api/tags';
 // Get all tags
 export async function GET() {
   try {
+    console.log('GET /api/tags');
     const tags = await getAllTags();
     return NextResponse.json(tags, { status: 200 });
   } catch (error) {
@@ -15,6 +16,7 @@ export async function GET() {
 // Create a new tag
 export async function POST(req: Request) {
   try {
+    console.log('POST /api/tags');
     const tag = await req.json();
     const newTag = await createTag(tag);
     return NextResponse.json(newTag, { status: 201 });
