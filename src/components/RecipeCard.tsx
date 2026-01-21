@@ -12,10 +12,15 @@ type RecipeCardProps = {
   matchSources?: string[];
 }
 
-export default function RecipeCard({ recipe, tags, search, matchSources }: RecipeCardProps) {
-  const noContent = !recipe.ingredients && !recipe.instructions && !recipe.description && !recipe.reference && recipe.tags.length === 0;
+export default function RecipeCard({
+  recipe: { uid, title, description, ingredients, instructions, reference, tags, date, cookCount },
+  tags: allTags,
+  search,
+  matchSources
+}: RecipeCardProps) {
+  const noContent = !ingredients && !instructions && !description && !reference;
 
-  const sortedTags = [...recipe.tags].sort((a, b) => a.localeCompare(b));
+  const sortedTags = [...(tags ?? [])].sort((a, b) => a.localeCompare(b));
   let matchedSourcesToDisplay = '';
 
   if (search && matchSources && matchSources.length > 0) {
@@ -24,11 +29,11 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
 
   return (
     <li className="border rounded-lg shadow-lg bg-white">
-      <Link href={`/recipes/${recipe.uid}`} className="block py-2 px-3">
+      <Link href={`/recipes/${uid}`} className="block py-2 px-3">
         {noContent && <p className="text-red-300 italic">No content!</p>}
         <div className="flex justify-between items-start">
-          <span className="text-base font-semibold">{recipe.title}</span>
-          <CookCounter cookCount={recipe.cookCount || '0'} />
+          <span className="text-base font-semibold">{title}</span>
+          <CookCounter cookCount={cookCount || '0'} />
         </div>
         <div className="flex justify-between items-end">
           {sortedTags.length > 0 &&
@@ -36,15 +41,15 @@ export default function RecipeCard({ recipe, tags, search, matchSources }: Recip
               {sortedTags.map((uid: string) => (
                 <span
                   key={uid}
-                  style={getTagColor(getTagByUid(uid, tags).color || '')}
+                  style={getTagColor(getTagByUid(uid, allTags).color || '')}
                   className={miniTagStyles}
                 >
-                  {getTitleByUid(uid, tags)}
+                  {getTitleByUid(uid, allTags)}
                 </span>
               ))}
             </div>
           }
-          <span className="mt-1 ml-auto text-xs sm:text-sm text-nowrap text-slate-400">{recipe.date}</span>
+          <span className="mt-1 ml-auto text-xs sm:text-sm text-nowrap text-slate-400">{date}</span>
         </div>
         {matchedSourcesToDisplay && (
           <div className="mt-2 text-xs text-gray-400">

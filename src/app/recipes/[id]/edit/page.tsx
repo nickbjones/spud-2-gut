@@ -3,12 +3,12 @@
  */
 'use client';
 
-import { useTags } from '@/hooks/useTags';
-import { useRecipe } from '@/hooks/useRecipe';
-import { useRecipes } from '@/hooks/useRecipes';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
-// import { useSearchParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useTags } from '@/hooks/useTags';
+import { useRecipe, useUpdateRecipe, useDeleteRecipe } from '@/hooks/useRecipes';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { RecipeType } from '@/types/recipe';
 import { initialRecipeValues } from '@/lib/initialValues';
 import InputField from '@/components/InputField';
@@ -19,23 +19,26 @@ import SubmitButton from '@/components/SubmitButton';
 import SharedLink from '@/components/SharedLink';
 import Uid from '@/components/Uid';
 
-// function safeRedirect(path: string | null, fallback = '/') {
-//   return path?.startsWith('/') && !path.startsWith('//') ? path : fallback;
-// }
+function safeRedirect(path: string | null, fallback = '/') {
+  return path?.startsWith('/') && !path.startsWith('//') ? path : fallback;
+}
 
-export default async function EditRecipePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default function EditRecipePage() {
+  const { id: uid } = useParams<{ id: string }>();
+  const router = useRouter();
 
-  const { recipe, isLoadingRecipe } = useRecipe(id); // or uid?
-  const { updateRecipe, isUpdatingRecipe, deleteRecipe } = useRecipes();
-  const { tags, isLoadingTags } = useTags();
+  const { data: recipe, isLoading: isLoadingRecipe } = useRecipe(uid);
+  const { data: tags, isLoading: isLoadingTags } = useTags();
+
+  const updateMutation = useUpdateRecipe(uid);
+  const isUpdatingRecipe = updateMutation.isPending;
+  const deleteMutation = useDeleteRecipe(recipe?.id || '');
 
   usePageTitle(recipe?.title);
 
-  // redirect if passed redirect param
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const redirect = searchParams.get('redirect');
+  // redirect if passed redirect param (from tag page)
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
 
   // form state
   const [form, setForm] = useState<RecipeType>(initialRecipeValues);
@@ -59,12 +62,27 @@ export default async function EditRecipePage({ params }: { params: Promise<{ id:
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    updateRecipe(form);
+    updateMutation.mutate(
+      { ...form },
+      { onSuccess: () => {
+        if (redirect) {
+          return router.push(safeRedirect(redirect, '/recipes'));
+        }
+        return router.push(`/recipes/${uid}`)
+      } },
+    );
   };
 
   const handleDelete = () => {
     if (!confirm('Delete this recipe?')) return;
-    deleteRecipe(recipe.id);
+    return deleteMutation.mutate(undefined, {
+      onSuccess: () => {
+        if (redirect) {
+          return router.push(safeRedirect(redirect, '/recipes'));
+        }
+        return router.push('/recipes')
+      },
+    });
   };
 
   if (isLoadingRecipe) return <LoadingMessage />;

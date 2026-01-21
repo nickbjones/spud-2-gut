@@ -2,70 +2,82 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getOneRecipe, deleteRecipe, updateRecipe } from '@/lib/api/recipes';
 
 // Get a recipe
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const id = (await params).id;
-
-  if (!id) {
-    return NextResponse.json({ error: 'Recipe ID is required' }, { status: 400 });
-  }
-
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const recipe = await getOneRecipe(id);
-    if (!recipe) {
-      return NextResponse.json({ error: 'Recipe not found' }, { status: 404 });
+    const { id: uid } = await context.params;
+    console.log(`GET /api/recipes/[ ${uid} ]`);
+
+    if (!uid) {
+      return new NextResponse('Recipe uid is required', { status: 400 });
     }
 
-    return NextResponse.json(recipe);
+    const recipe = await getOneRecipe(uid);
+
+    if (!recipe) {
+      return new NextResponse('Recipe not found', { status: 404 });
+    }
+
+    return NextResponse.json(recipe, { status: 200 });
   } catch (error) {
-    console.error('Error fetching recipe:', error);
-    return NextResponse.json({ error: 'Failed to fetch recipe.' }, { status: 500 });
+    console.error('GET /api/recipes/[id] error:', error);
+    return new NextResponse('Failed to fetch recipe', { status: 500 });
   }
 }
 
 // Update a recipe
-export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const id = (await params).id;
-
-  if (!id) {
-    return NextResponse.json({ error: 'Recipe ID is required' }, { status: 400 });
-  }
-
+export async function PUT(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id: uid } = await context.params;
+    console.log(`PUT /api/recipes/[ ${uid} ]`);
+
+    if (!uid) {
+      return new NextResponse('Recipe uid is required', { status: 400 });
+    }
+
     const recipeData = await req.json();
     if (!recipeData.title) {
-      return NextResponse.json({ error: 'Title is required' }, { status: 400 });
+      return new NextResponse('Title is required', { status: 400 });
     }
 
     const updated = await updateRecipe(recipeData);
     if (!updated) {
-      return NextResponse.json({ error: 'Recipe not found' }, { status: 404 });
+      return new NextResponse('Recipe not found', { status: 404 });
     }
 
     return NextResponse.json(updated, { status: 200 });
   } catch (error) {
-    console.error('Error updating recipe:', error);
-    return NextResponse.json({ error: 'Failed to update recipe' }, { status: 500 });
+    console.error('PUT /api/recipes/[id] error:', error);
+    return new NextResponse('Failed to update recipe', { status: 500 });
   }
 }
 
 // Delete a recipe
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const id = (await params).id;
-
-  if (!id) {
-    return NextResponse.json({ error: 'Recipe ID is required' }, { status: 400 });
-  }
-
+export async function DELETE(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    // Assuming deleteRecipe is a function that deletes a recipe by ID
+    const { id } = await context.params;
+    console.log(`DELETE /api/recipes/[ ${id} ]`);
+
+    if (!id) {
+      return new NextResponse('Recipe id is required', { status: 400 });
+    }
+
     const result = await deleteRecipe(id);
     if (!result) {
       return NextResponse.json({ error: 'Recipe not found or could not be deleted' }, { status: 404 });
     }
 
-    return NextResponse.json({ message: 'Recipe deleted successfully' });
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting recipe:', error);
-    return NextResponse.json({ error: 'Failed to delete recipe' }, { status: 500 });
+    console.error('DELETE /api/recipes/[id] error:', error);
+    return new NextResponse('Failed to delete recipe', { status: 500 });
   }
 }

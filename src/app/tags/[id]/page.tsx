@@ -3,34 +3,22 @@
  */
 'use client';
 
-import { useTag } from '@/hooks/useTag';
-import { useTags } from '@/hooks/useTags';
+import { useParams, notFound } from 'next/navigation';
+import { useTag, useTags } from '@/hooks/useTags';
 import { useRecipes } from '@/hooks/useRecipes';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import type { RecipeType } from '@/types/recipe';
-import { notFound } from 'next/navigation';
 import { getRecipesByTag, getTagColor } from '@/lib/utils/helpers';
 import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 import RecipeCard from '@/components/RecipeCard';
 
-const bigTagStyles = `
-  !my-0
-  py-2
-  px-4
-  text-2xl
-  text-white
-  font-bold
-  bg-blue-400
-  rounded-xl
-`;
+export default function TagPage() {
+  const { id } = useParams<{ id: string }>();
 
-export default async function TagPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-
-  const { tag, isLoadingTag } = useTag(id);
-  const { recipes, isLoadingRecipes } = useRecipes();
-  const { tags } = useTags();
+  const { data: tag, isLoading: isLoadingTag } = useTag(id);
+  const { data: recipes, isLoading: isLoadingRecipes } = useRecipes();
+  const { data: tags } = useTags();
 
   usePageTitle(tag?.title);
 
@@ -45,7 +33,7 @@ export default async function TagPage({ params }: { params: Promise<{ id: string
   return (
     <div className="max-w-5xl mx-auto p-3 sm:p-6">
       <div className="flex justify-between items-center my-3">
-        <h2 className={bigTagStyles} style={getTagColor(tag.color || '')}>{tag.title}</h2>
+        <h2 className="!my-0 py-2 px-4 text-2xl text-white font-bold bg-blue-400 rounded-xl" style={getTagColor(tag.color || '')}>{tag.title}</h2>
         <SharedLink href={`${tag.uid}/edit`} text="Edit tag" styles="text-sm text-right" />
       </div>
       {tag.description && <p>{tag.description}</p>}

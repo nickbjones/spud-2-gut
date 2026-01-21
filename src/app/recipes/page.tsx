@@ -18,8 +18,8 @@ const SectionTitle = ({ text }: { text: string }) => (
 );
 
 export default function RecipesPage() {
-  const { tags, isLoadingTags } = useTags();
-  const { recipes, isLoadingRecipes } = useRecipes();
+  const { data: recipes, isLoading: isLoadingRecipes } = useRecipes();
+  const { data: tags, isLoading: isLoadingTags } = useTags();
   
   usePageTitle('Recipes');
 

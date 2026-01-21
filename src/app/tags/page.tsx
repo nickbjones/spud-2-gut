@@ -13,8 +13,8 @@ import SharedLink from '@/components/SharedLink';
 import LoadingMessage from '@/components/LoadingMessage';
 
 export default function TagsPage() {
-  const { tags, isLoadingTags } = useTags();
-  const { recipes, isLoadingRecipes } = useRecipes();
+  const { data: tags, isLoading: isLoadingTags } = useTags();
+  const { data: recipes, isLoading: isLoadingRecipes } = useRecipes();
 
   usePageTitle('Tags');
 

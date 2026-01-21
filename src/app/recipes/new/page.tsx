@@ -3,11 +3,12 @@
  */
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useRecipes, useCreateRecipe } from '@/hooks/useRecipes';
 import { useTags } from '@/hooks/useTags';
-import { useRecipes } from '@/hooks/useRecipes';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { uidRules, generateUid, getNewId } from '@/lib/utils/helpers';
+import { uidRules, generateUid } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import TagButtons from '@/components/TagButtons';
@@ -17,19 +18,16 @@ import { initialRecipeValues } from '@/lib/initialValues';
 import type { RecipeType } from '@/types/recipe';
 
 export default function NewRecipePage() {
-  const { recipes, createRecipe, isLoadingRecipes, isCreatingRecipe } = useRecipes();
-  const { tags, isLoadingTags } = useTags();
+  const { data: recipes, isLoading: isLoadingRecipes } = useRecipes();
+  const { data: tags, isLoading: isLoadingTags } = useTags();
 
-  usePageTitle('New Recipe');
+  const create = useCreateRecipe();
+  const isCreatingRecipe = create.isPending;
 
-  // form state
+  const router = useRouter();
   const [form, setForm] = useState<RecipeType>(initialRecipeValues);
-
-  // create new ID on load
-  useEffect(() => {
-    const newId = getNewId('RECIPE', recipes || []);
-    setForm((prev) => ({ ...prev, id: newId }))
-  }, [recipes]);
+  
+  usePageTitle('New Recipe');
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({
@@ -66,10 +64,13 @@ export default function NewRecipePage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createRecipe(form);
+    create.mutate(form, {
+      onSuccess: () => router.push(`/recipes/${form.uid}`),
+    })
   };
 
   if (isLoadingTags || isLoadingRecipes) return <LoadingMessage />;
+  if (isLoadingRecipes) return <LoadingMessage />;
 
   return (
     <div className="max-w-4xl mx-auto p-3 sm:px-5">

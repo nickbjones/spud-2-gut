@@ -4,8 +4,8 @@
 'use client';
 
 import { useTags } from '@/hooks/useTags';
-import { useRecipe } from '@/hooks/useRecipe';
-import { useRecipes } from '@/hooks/useRecipes';
+import { useParams } from 'next/navigation';
+import { useRecipe, useRecipes, useUpdateRecipe } from '@/hooks/useRecipes';
 import { notFound } from 'next/navigation';
 import Md from '@/components/Markdown';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -17,12 +17,13 @@ import SharedLink from '@/components/SharedLink';
 import CookCounterButton from '@/components/CookCounterButton';
 import PinCheck from '@/components/PinCheck';
 
-export default async function RecipePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default function RecipePage() {
+  const { id } = useParams<{ id: string }>();
 
-  const { recipe, isLoadingRecipe } = useRecipe(id);
-  const { recipes, isLoadingRecipes, updateRecipe } = useRecipes();
-  const { tags, isLoadingTags } = useTags();
+  const { data: recipe, isLoading: isLoadingRecipe } = useRecipe(id);
+  const { data: recipes, isLoading: isLoadingRecipes } = useRecipes();
+  const { data: tags, isLoading: isLoadingTags } = useTags();
+  const updateMutation = useUpdateRecipe(id);
 
   usePageTitle(recipe?.title);
 
@@ -33,7 +34,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
 
   const handlePinChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedRecipe = { ...recipe, isPinned: e.target.checked };
-    updateRecipe(updatedRecipe);
+    updateMutation.mutate({ ...updatedRecipe });
   };
 
   return (

@@ -1,6 +1,7 @@
 import { DynamoDBDocumentClient, ScanCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import type { RecipeType } from '@/types/recipe';
 import { dynamoDbClient } from '@/lib/aws/dynamoClient';
+import { getNewId } from '@/lib/utils/helpers';
 
 const docClient = DynamoDBDocumentClient.from(dynamoDbClient);
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
@@ -100,9 +101,12 @@ export async function getOneRecipe(uid: string): Promise<RecipeType | undefined>
 
 export async function createRecipe(recipe: RecipeType) {
   try {
+    const recipes = await getAllRecipes();
+    const newId = getNewId('RECIPE', recipes || []);
+
     const command = new PutCommand({
       TableName: AWS_RECIPES_TABLENAME,
-      Item: recipe,
+      Item: { ...recipe, id: newId },
     });
 
     await docClient.send(command);
@@ -131,7 +135,6 @@ export async function updateRecipe(recipe: RecipeType) {
 }
 
 export async function deleteRecipe(id: string) {
-  console.log('lib/api: deleteRecipe, id:', id);
   try {
     const command = new DeleteCommand({
       TableName: AWS_RECIPES_TABLENAME,

@@ -3,8 +3,8 @@
  */
 'use client';
 
-import { useTag } from '@/hooks/useTag';
-import { useTags } from '@/hooks/useTags';
+import { useParams, useRouter, notFound } from 'next/navigation';
+import { useTag, useTags, useUpdateTag, useDeleteTag } from '@/hooks/useTags';
 import { useRecipes } from '@/hooks/useRecipes';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useState, useEffect } from 'react';
@@ -20,12 +20,17 @@ import ColorPicker from '@/components/ColorPicker';
 import Uid from '@/components/Uid';
 import { initialTagValues } from '@/lib/initialValues';
 
-export default async function EditTagPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default function EditTagPage() {
+  const { id: uid } = useParams<{ id: string }>();
+  const router = useRouter();
 
-  const { tag, isLoadingTag } = useTag(id); // or uid?
-  const { tags, isLoadingTags, updateTag, isUpdatingTag, deleteTag } = useTags();
-  const { recipes, isLoadingRecipes } = useRecipes();
+  const { data: tag, isLoading: isLoadingTag } = useTag(uid);
+  const { data: tags, isLoading: isLoadingTags } = useTags();
+  const { data: recipes, isLoading: isLoadingRecipes } = useRecipes();
+
+  const updateMutation = useUpdateTag(uid);
+  const isUpdatingTag = updateMutation.isPending;
+  const deleteMutation = useDeleteTag(tag?.id || '');
 
   usePageTitle(tag?.title);
 
@@ -43,8 +48,8 @@ export default async function EditTagPage({ params }: { params: Promise<{ id: st
 
   // get recipes that use this tag
   useEffect(() => {
-    setRecipesWithThisTag(getRecipesByTag(recipes || [], id)); // or uid?
-  }, [recipes, id]); // or uid?
+    setRecipesWithThisTag(getRecipesByTag(recipes || [], uid));
+  }, [recipes, uid]);
 
   if (!tag) return null;
 
@@ -59,16 +64,22 @@ export default async function EditTagPage({ params }: { params: Promise<{ id: st
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateTag({ ...tag, ...form });
+    updateMutation.mutate(
+      { ...form },
+      { onSuccess: () => router.push(`/tags/${uid}`) },
+    );
   }
 
   const handleDelete = async () => {
     if (!confirm(`Are you sure you want to delete the tag "${form.title}"?`)) return;
-    deleteTag(tag.id);
+    return deleteMutation.mutate(undefined, {
+      onSuccess: () => router.push('/tags'),
+    });
   };
 
   const loading = isLoadingTags || isLoadingTag || isLoadingRecipes;
   if (loading) return <LoadingMessage />;
+  if (!tag) return notFound();
 
   return (
     <div className="max-w-2xl mx-auto p-3 sm:p-6">

@@ -3,12 +3,13 @@
  */
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useTags } from '@/hooks/useTags';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useTags, useCreateTag } from '@/hooks/useTags';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import type { TagType } from '@/types/tag';
 import { initialTagValues } from '@/lib/initialValues';
-import { uidRules, generateUid, getNewId, doesTagTitleExist } from '@/lib/utils/helpers';
+import { uidRules, generateUid, doesTagTitleExist } from '@/lib/utils/helpers';
 import InputField from '@/components/InputField';
 import TextAreaField from '@/components/TextAreaField';
 import SubmitButton from '@/components/SubmitButton';
@@ -17,20 +18,18 @@ import ErrorMessage from '@/components/ErrorMessage';
 import ColorPicker from '@/components/ColorPicker';
 
 export default function NewTagPage() {
-  const { tags, createTag, isLoadingTags, isCreatingTag } = useTags();
+  const { data: tags, isLoading: isLoadingTags } = useTags();
+
+  const create = useCreateTag();
+  const isCreatingTag = create.isPending;
+
+  const router = useRouter();
 
   usePageTitle('New Tag');
 
-  // form state
   const [form, setForm] = useState<TagType>(initialTagValues);
 
   const [isTitleExisting, setIsTitleExisting] = useState<boolean>(false);
-
-  // create new ID on load
-  useEffect(() => {
-    const newId = getNewId('TAG', tags || []);
-    setForm((prev) => ({ ...prev, id: newId }));
-  }, [tags]);
 
   const handleGeneralFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({
@@ -59,7 +58,9 @@ export default function NewTagPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createTag(form);
+    create.mutate(form, {
+      onSuccess: () => router.push(`/tags/${form.uid}`),
+    })
   };
 
   if (isLoadingTags) return <LoadingMessage />;
