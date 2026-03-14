@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 // import logRequest from '@/middleware/log';
 import authenticate from '@/middleware/auth';
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   // Check if killswitch is active
   if (process.env.APP_KILLSWITCH_ENABLED === 'true') {
     return new NextResponse('The site is temporarily unavailable.', { status: 503 });
