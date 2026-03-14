@@ -6,9 +6,6 @@ import { getNewId } from '@/lib/utils/helpers';
 const docClient = DynamoDBDocumentClient.from(dynamoDbClient);
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
 
-import { cache } from '../cache';
-const CACHE_KEY = 'allRecipes';
-
 const emptyRecipe: RecipeType = {
   id: '',
   uid: '',
@@ -54,29 +51,17 @@ function formatDynamoDbRecipes(recipesRaw: RecipeType[]): RecipeType[] {
 // QueryCommand is more efficient for fetching items with a specific partition key,
 // but in this case it's probably fine because we should only be fetching O(100) items.
 export async function getAllRecipes(): Promise<RecipeType[]> {
-  const cached = cache.get(CACHE_KEY); // get cache
-  if (cached) return cached as RecipeType[];
-  console.log('[Cache] MISS — fetching recipes from DB');
-
   const command = new ScanCommand({
     TableName: AWS_RECIPES_TABLENAME,
     FilterExpression: 'begins_with(#id, :prefix)',
-    ExpressionAttributeNames: {
-      '#id': 'id',
-    },
-    ExpressionAttributeValues: {
-      ':prefix': 'RECIPE#',
-    },
+    ExpressionAttributeNames: { '#id': 'id' },
+    ExpressionAttributeValues: { ':prefix': 'RECIPE#' },
   });
 
   try {
     const { Items } = await docClient.send(command);
     if (!Items || Items.length === 0) return [];
-
-    const recipesRaw = Items as RecipeType[];
-    const formattedRecipeData = formatDynamoDbRecipes(recipesRaw);
-    cache.set(CACHE_KEY, formattedRecipeData); // set cache
-    return formattedRecipeData;
+    return formatDynamoDbRecipes(Items as RecipeType[]);
   } catch (error) {
     console.error('Error fetching recipes:', error);
     return [];
@@ -110,7 +95,6 @@ export async function createRecipe(recipe: RecipeType) {
     });
 
     await docClient.send(command);
-    cache.delete(CACHE_KEY); // invalidate cache
     return recipe;
   } catch (error) {
     console.error('Error saving recipe:', error);
@@ -126,7 +110,6 @@ export async function updateRecipe(recipe: RecipeType) {
     });
 
     await docClient.send(command);
-    cache.delete(CACHE_KEY); // invalidate cache
     return recipe;
   } catch (error) {
     console.error('Error updating recipe:', error);
@@ -142,7 +125,6 @@ export async function deleteRecipe(id: string) {
     });
 
     await docClient.send(command);
-    cache.delete(CACHE_KEY); // invalidate cache
     return true;
   } catch (error) {
     console.error('Error deleting recipe:', error);

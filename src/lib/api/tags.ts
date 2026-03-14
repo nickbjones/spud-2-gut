@@ -5,9 +5,7 @@ import { dynamoDbClient } from '@/lib/aws/dynamoClient';
 const docClient = DynamoDBDocumentClient.from(dynamoDbClient);
 const AWS_RECIPES_TABLENAME = process.env.NEXT_PUBLIC_AWS_RECIPES_TABLENAME ?? '';
 
-import { cache } from '../cache';
 import { getNewId } from '../utils/helpers';
-const CACHE_KEY = 'allTags';
 
 const emptyTag: TagType = {
   id: '',
@@ -44,10 +42,6 @@ function formatDynamoDbTags(tagsRaw: TagType[]): TagType[] {
 // QueryCommand is more efficient for fetching items with a specific partition key,
 // but in this case it's probably fine because we should only be fetching O(100) items.
 export async function getAllTags(): Promise<TagType[]> {
-  const cached = cache.get(CACHE_KEY); // get cache
-  if (cached) return cached as TagType[];
-  console.log('[Cache] MISS — fetching tags from DB');
-
   const command = new ScanCommand({
     TableName: AWS_RECIPES_TABLENAME,
     FilterExpression: 'begins_with(#id, :prefix)',
@@ -65,7 +59,6 @@ export async function getAllTags(): Promise<TagType[]> {
 
     const tagsRaw = Items as TagType[];
     const formattedTagData = formatDynamoDbTags(tagsRaw);
-    cache.set(CACHE_KEY, formattedTagData); // set cache
     return formattedTagData;
   } catch (error) {
     console.error('Error fetching tags:', error);
@@ -100,7 +93,6 @@ export async function createTag(tag: TagType) {
     });
 
     await docClient.send(command);
-    cache.delete(CACHE_KEY); // invalidate cache
     return tag;
   } catch (error) {
     console.error('Error saving tag:', error);
@@ -116,7 +108,6 @@ export async function updateTag(tag: TagType) {
     });
 
     await docClient.send(command);
-    cache.delete(CACHE_KEY); // invalidate cache
     return tag;
   } catch (error) {
     console.error('Error updating tag:', error);
@@ -132,7 +123,6 @@ export async function deleteTag(id: string) {
     });
 
     await docClient.send(command);
-    cache.delete(CACHE_KEY); // invalidate cache
     return true;
   } catch (error) {
     console.error('Error deleting tag:', error);
