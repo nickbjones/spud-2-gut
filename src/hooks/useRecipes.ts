@@ -29,7 +29,7 @@ async function api<T>(url: string, options?: RequestInit): Promise<T> {
 // Query Keys
 const keys = {
   all: ['recipes'] as const,
-  one: (id: string) => ['recipes', id] as const,
+  one: (uid: string) => ['recipes', uid] as const,
 };
 
 export function useRecipes() {
@@ -71,35 +71,31 @@ export function useCreateRecipe() {
   });
 }
 
-export function useUpdateRecipe(id: string) {
+export function useUpdateRecipe(uid: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (updates: UpdateRecipeInput) =>
-      api<RecipeType>(`/api/recipes/${id}`, {
+      api<RecipeType>(`/api/recipes/${uid}`, {
         method: 'PUT',
         body: JSON.stringify(updates),
       }),
 
     onMutate: async (updates) => {
       await queryClient.cancelQueries({ queryKey: keys.all });
-      await queryClient.cancelQueries({ queryKey: keys.one(id) });
+      await queryClient.cancelQueries({ queryKey: keys.one(uid) });
 
       const prevList = queryClient.getQueryData<RecipeType[]>(keys.all);
-      const prevOne = queryClient.getQueryData<RecipeType>(keys.one(id));
+      const prevOne = queryClient.getQueryData<RecipeType>(keys.one(uid));
 
-      // Optimistically update list
       if (prevList) {
         queryClient.setQueryData<RecipeType[]>(keys.all, (old) =>
-          old
-            ? old.map((m) => (m.id === id ? { ...m, ...updates } : m))
-            : old
+          old ? old.map((m) => (m.uid === uid ? { ...m, ...updates } : m)) : old
         );
       }
 
-      // Optimistically update single
       if (prevOne) {
-        queryClient.setQueryData<RecipeType>(keys.one(id), {
+        queryClient.setQueryData<RecipeType>(keys.one(uid), {
           ...prevOne,
           ...updates,
         });
@@ -109,17 +105,13 @@ export function useUpdateRecipe(id: string) {
     },
 
     onError: (_err, _vars, ctx) => {
-      if (ctx?.prevList) {
-        queryClient.setQueryData(keys.all, ctx.prevList);
-      }
-      if (ctx?.prevOne) {
-        queryClient.setQueryData(keys.one(id), ctx.prevOne);
-      }
+      if (ctx?.prevList) queryClient.setQueryData(keys.all, ctx.prevList);
+      if (ctx?.prevOne) queryClient.setQueryData(keys.one(uid), ctx.prevOne);
     },
 
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: keys.all });
-      queryClient.invalidateQueries({ queryKey: keys.one(id) });
+      queryClient.invalidateQueries({ queryKey: keys.one(uid) });
     },
   });
 }
